@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gestione Turni - Natural Flow</title>
+    <style>
+        :root {
+            --color-emp1: #007AFF;
+            --color-emp2: #10b981;
+            --color-both: #8b5cf6;
+            
+            --bg-body: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --primary: #2563eb;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --holiday-bg: #fee2e2;
+            --holiday-border: #fecaca;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            margin: 0; padding: 0;
+            color: var(--text-main);
+            padding-bottom: 60px;
+        }
+
+        /* ==================== 1. UI HEADER RINNOVATO ==================== */
+
+        .app-header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding-bottom: 5px;
+        }
+
+        /* Riga 1: Titolo e Settings */
+        .header-top {
+            padding: 15px 20px 10px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .brand { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; color: #111; }
+        .btn-settings { background: none; border: none; font-size: 1.6rem; padding: 5px; cursor: pointer; color: #444; transition: transform 0.2s; }
+        .btn-settings:active { transform: rotate(45deg); }
+
+        /* Riga 2: Toolbar Navigazione e Azioni */
+        .header-toolbar {
+            padding: 0 15px 15px 15px;
+            display: flex; gap: 10px; flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .group-nav { display: flex; gap: 8px; flex: 1; min-width: 140px; }
+        .group-actions { display: flex; gap: 8px; }
+
+        select {
+            padding: 8px 12px; border-radius: 10px; border: 1px solid #e5e7eb;
+            background: #f9fafb; font-size: 14px; font-weight: 600; color: #374151;
+            width: 100%; -webkit-appearance: none;
+        }
+
+        /* Bottoni Azione Stile "Pill" */
+        .action-btn {
+            border: none; border-radius: 10px; padding: 8px 14px;
+            font-size: 14px; font-weight: 700; color: white;
+            display: flex; align-items: center; gap: 6px;
+            cursor: pointer; transition: transform 0.1s, opacity 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .action-btn:active { transform: scale(0.96); opacity: 0.9; }
+
+        .btn-auto { background: var(--warning); color: #fff; }
+        .btn-reset { background: var(--danger); }
+        .btn-print { background: #1f2937; }
+
+        /* ==================== 2. GRIGLIA & CARD ==================== */
+
+        .main-container {
+            padding: 20px; max-width: 1000px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px;
+        }
+
+        .day-card {
+            background: var(--card-bg); border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f3f4f6;
+            overflow: hidden; display: flex; flex-direction: column;
+        }
+        .day-card.is-holiday { background-color: var(--holiday-bg); border-color: var(--holiday-border); }
+
+        .card-header {
+            padding: 12px 15px; border-bottom: 1px solid #f3f4f6;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .day-card.is-holiday .card-header { background: rgba(255,255,255,0.5); border-color: var(--holiday-border); }
+
+        .date-display { font-size: 1.2rem; font-weight: 800; color: #111; }
+        .day-label { font-size: 0.8rem; text-transform: uppercase; font-weight: 700; color: #9ca3af; letter-spacing: 0.5px; }
+        .holiday-tag { font-size: 0.7rem; background: #dc2626; color: white; padding: 3px 8px; border-radius: 6px; font-weight: 800; text-transform: uppercase; margin-top: 2px; display: inline-block;}
+
+        .card-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+
+        .shift-row {
+            background: #f9fafb; border-radius: 10px; padding: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer; user-select: none; border: 1px solid transparent;
+            transition: background 0.1s;
+        }
+        .day-card.is-holiday .shift-row { background: rgba(255,255,255,0.7); }
+        .shift-row:active { background: #e5e7eb; }
+
+        .shift-info { display: flex; flex-direction: column; }
+        .shift-icon { font-size: 1.2rem; margin-bottom: 2px; }
+        .shift-time { font-size: 0.75rem; color: #6b7280; font-weight: 700; }
+
+        /* BADGES */
+        .badge {
+            padding: 6px 14px; border-radius: 30px; font-weight: 700; font-size: 0.9rem;
+            min-width: 80px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
+        .badge-empty { background: white; border: 2px dashed #e5e7eb; color: #d1d5db; box-shadow: none; }
+        .badge-p1 { background: var(--color-emp1); color: white; }
+        .badge-p2 { background: var(--color-emp2); color: white; }
+        .badge-both { background: var(--color-both); color: white; }
+
+        /* MODALS */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(2px); z-index: 2000; align-items: center; justify-content: center;
+        }
+        .modal-box { background: white; padding: 25px; border-radius: 20px; width: 85%; max-width: 360px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); animation: popIn 0.2s ease-out; }
+        @keyframes popIn { from{transform:scale(0.9);opacity:0} to{transform:scale(1);opacity:1} }
+        
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-weight: 700; margin-bottom: 6px; font-size: 0.9rem; color: #374151; }
+        .input-row { display: flex; gap: 10px; align-items: center; }
+        .input-row input[type="text"] { flex-grow: 1; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 16px; }
+        .input-row input[type="color"] { width: 50px; height: 45px; border: none; background: none; cursor: pointer; }
+        
+        .modal-btns { display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; }
+
+        /* ==================== 3. PRINT LAYOUT ==================== */
+        #print-layout { display: none; }
+
+        @media print {
+            @page { size: A4 landscape; margin: 8mm; }
+            body { background: white; margin: 0; padding: 0; overflow: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .app-header, .main-container, .modal-overlay { display: none !important; }
+            
+            #print-layout { display: block !important; width: 100%; }
+
+            .print-header-title {
+                text-align: center; font-size: 20pt; font-weight: 900; text-transform: uppercase;
+                margin-bottom: 15px; border-bottom: 3px solid #000; padding-bottom: 5px; letter-spacing: 1px;
+            }
+
+            .print-grid { display: flex; gap: 20px; width: 100%; align-items: flex-start; }
+            .print-col { flex: 1; }
+
+            table { width: 100%; border-collapse: collapse; font-family: 'Arial', sans-serif; }
+            th { background: #eee; border: 1px solid #000; font-size: 10pt; padding: 5px; text-transform: uppercase; font-weight: bold; }
+            td { border: 1px solid #000; padding: 2px 5px; height: 25px; vertical-align: middle; font-size: 10pt; text-align: center; }
+
+            .td-date { width: 30px; font-weight: 800; background: #f3f4f6; }
+            .td-day { width: 40px; font-size: 8pt; text-transform: uppercase; color: #444; }
+
+            tr.print-hol-row td { background-color: #fff0f0 !important; }
+            
+            .p-name { font-weight: 800; display: block; width: 100%; }
+            .t-p1 { color: var(--color-emp1); }
+            .t-p2 { color: var(--color-emp2); }
+            .t-both { color: var(--color-both); font-style: italic; }
+
+            .print-footer {
+                margin-top: 15px; font-size: 9pt; color: #444; border-top: 1px solid #ccc; padding-top: 8px;
+                display: flex; justify-content: space-between; font-style: italic;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="settingsModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3>🎨 Personalizzazione</h3>
+            <div class="input-group">
+                <label>Dipendente 1</label>
+                <div class="input-row">
+                    <input type="text" id="inName1" placeholder="Nome">
+                    <input type="color" id="inCol1">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Dipendente 2</label>
+                <div class="input-row">
+                    <input type="text" id="inName2" placeholder="Nome">
+                    <input type="color" id="inCol2">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Colore "Entrambi"</label>
+                <div class="input-row">
+                    <input type="text" value="Entrambi" disabled style="background:#f3f4f6; color:#9ca3af">
+                    <input type="color" id="inColBoth">
+                </div>
+            </div>
+            <div class="modal-btns">
+                <button onclick="toggleSettings(false)" style="padding: 10px 18px; background: #f3f4f6; border:none; border-radius:10px; font-weight:bold; color:#4b5563">Chiudi</button>
+                <button onclick="saveConfig()" style="padding: 10px 18px; background: var(--primary); color:white; border:none; border-radius:10px; font-weight:bold;">Salva</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="resetModal" class="modal-overlay">
+        <div class="modal-box" style="text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🗑️</div>
+            <h3 style="margin-top:0; color: #1f2937">Reset Mese</h3>
+            <p style="color: #6b7280; line-height: 1.5;">Stai per cancellare tutti i turni del mese corrente.<br>Questa azione è irreversibile.</p>
+            <div class="modal-btns" style="justify-content: center; gap: 15px;">
+                <button onclick="toggleReset(false)" style="padding: 12px 20px; background: #f3f4f6; border:none; border-radius:10px; font-weight:bold;">Annulla</button>
+                <button onclick="performReset()" style="padding: 12px 20px; background: var(--danger); color:white; border:none; border-radius:10px; font-weight:bold;">Conferma Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <header class="app-header">
+        <div class="header-top">
+            <div class="brand">📅 Turni<span style="color:var(--primary)">App</span></div>
+            <button class="btn-settings" onclick="toggleSettings(true)">⚙️</button>
+        </div>
+        <div class="header-toolbar">
+            <div class="group-nav">
+                <select id="monthSelect" onchange="renderApp()"></select>
+                <select id="yearSelect" onchange="renderApp()"></select>
+            </div>
+            <div class="group-actions">
+                <button class="action-btn btn-auto" onclick="generateAuto()">🪄 Auto</button>
+                <button class="action-btn btn-reset" onclick="toggleReset(true)">🗑️</button>
+                <button class="action-btn btn-print" onclick="window.print()">🖨️</button>
+            </div>
+        </div>
+    </header>
+
+    <div id="app-grid" class="main-container"></div>
+
+    <div id="print-layout">
+        <div id="print-title" class="print-header-title"></div>
+        <div class="print-grid">
+            <div class="print-col">
+                <table>
+                    <thead><tr><th colspan="2">Data</th><th>Mattina (06-13)</th><th>Pom (15:30-20:30)</th></tr></thead>
+                    <tbody id="tbody-left"></tbody>
+                </table>
+            </div>
+            <div class="print-col">
+                <table>
+                    <thead><tr><th colspan="2">Data</th><th>Mattina (06-13)</th><th>Pom (15:30-20:30)</th></tr></thead>
+                    <tbody id="tbody-right"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="print-footer">
+            <span>Domenica: 07:00 - 13:00</span>
+            <span>Festivi (Rosso): 07:00 - 18:00</span>
+        </div>
+    </div>
+
+    <script>
+        // CONFIG
+        const monthNames = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+        const T_AM = "06:00 - 13:00"; const T_PM = "15:30 - 20:30";
+        const T_DOM = "07:00 - 13:00"; const T_FEST = "07:00 - 18:00";
+
+        let config = { p1: "Naio", c1: "#007AFF", p2: "Davide", c2: "#10b981", cb: "#8b5cf6" };
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        // FESTIVITA
+        function getEaster(year) {
+            const f = Math.floor, G = year % 19, C = f(year / 100), H = (C - f(C / 4) - f((8 * C + 13) / 25) + 19 * G + 15) % 30, I = H - f(H / 28) * (1 - f(29 / (H + 1)) * f((21 - G) / 11)), J = (year + f(year / 4) + I + 2 - C + f(C / 4)) % 7, L = I - J, month = 3 + f((L + 40) / 44), day = L + 28 - 31 * f(month / 4);
+            return { month: month - 1, day: day };
+        }
+        function getHolidayName(date) {
+            const d = date.getDate(); const m = date.getMonth(); const y = date.getFullYear();
+            if (d === 1 && m === 0) return "Capodanno";
+            if (d === 6 && m === 0) return "Epifania";
+            if (d === 25 && m === 3) return "Liberazione";
+            if (d === 1 && m === 4) return "Festa Lavoro";
+            if (d === 2 && m === 5) return "Repubblica";
+            if (d === 15 && m === 7) return "Ferragosto";
+            if (d === 1 && m === 10) return "Ognissanti";
+            if (d === 8 && m === 11) return "Immacolata";
+            if (d === 25 && m === 11) return "Natale";
+            if (d === 26 && m === 11) return "S. Stefano";
+            const E = getEaster(y);
+            if (d === E.day && m === E.month) return "Pasqua";
+            const PM = new Date(y, E.month, E.day + 1);
+            if (d === PM.getDate() && m === PM.getMonth()) return "Pasquetta";
+            return null;
+        }
+
+        // CORE
+        function applyTheme() {
+            const r = document.documentElement.style;
+            r.setProperty('--color-emp1', config.c1);
+            r.setProperty('--color-emp2', config.c2);
+            r.setProperty('--color-both', config.cb);
+        }
+
+        function init() {
+            const saved = localStorage.getItem('turni_cfg_v8');
+            if(saved) config = { ...config, ...JSON.parse(saved) };
+            applyTheme();
+
+            const ms = document.getElementById('monthSelect');
+            const ys = document.getElementById('yearSelect');
+            monthNames.forEach((n, i) => {
+                let op = document.createElement('option'); op.value = i; op.innerText = n;
+                if(i === currentMonth) op.selected = true; ms.appendChild(op);
+            });
+            for(let y = currentYear - 1; y <= currentYear + 2; y++) {
+                let op = document.createElement('option'); op.value = y; op.innerText = y;
+                if(y === currentYear) op.selected = true; ys.appendChild(op);
+            }
+            renderApp();
+        }
+
+        function loadDB() {
+            const data = localStorage.getItem(`turni_db_${currentYear}_${currentMonth}`);
+            return data ? JSON.parse(data) : {};
+        }
+
+        function saveShift(day, slot, val) {
+            let db = loadDB();
+            if(!db[day]) db[day] = {};
+            db[day][slot] = val;
+            localStorage.setItem(`turni_db_${currentYear}_${currentMonth}`, JSON.stringify(db));
+            renderApp(false);
+        }
+
+        // --- NATURAL FLOW ALGORITHM ---
+        function generateAuto() {
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            let db = loadDB();
+            
+            let sundayTurnIndex = 0;
+            
+            // Variabili per il flusso naturale (Mattina)
+            let consecutiveAM = 0;
+            let lastWorkerAM = null;
+            let countAM_P1 = 0;
+            let countAM_P2 = 0;
+
+            for(let i=1; i<=daysInMonth; i++) {
+                const date = new Date(currentYear, currentMonth, i);
+                const dayWeek = date.getDay(); 
+                const isHoliday = (getHolidayName(date) !== null);
+                const isSunday = (dayWeek === 0);
+
+                if(!db[i]) db[i] = {};
+
+                if(isHoliday) {
+                    db[i]['hol'] = 'Entrambi';
+                } else if(isSunday) {
+                    const worker = (sundayTurnIndex % 2 === 0) ? config.p1 : config.p2;
+                    db[i]['hol'] = worker;
+                    sundayTurnIndex++;
+                } else {
+                    // Logica Turni Settimanali (Mattina)
+                    let chosenAM;
+
+                    // 1. Forza cambio se superiamo i 3 consecutivi
+                    if (lastWorkerAM && consecutiveAM >= 3) {
+                        chosenAM = (lastWorkerAM === config.p1) ? config.p2 : config.p1;
+                    }
+                    // 2. Bilanciamento forzato se uno è troppo avanti (diff > 2)
+                    else if (Math.abs(countAM_P1 - countAM_P2) > 2) {
+                        chosenAM = (countAM_P1 < countAM_P2) ? config.p1 : config.p2;
+                    }
+                    // 3. Logica Random "Naturale"
+                    else {
+                        if (!lastWorkerAM) {
+                            chosenAM = Math.random() > 0.5 ? config.p1 : config.p2;
+                        } else {
+                            // Se streak è 1 o 2, alta probabilità di continuare (per creare blocchi 2-3)
+                            // Se streak 1: 70% continua, 30% cambia
+                            // Se streak 2: 40% continua, 60% cambia (per evitare troppi blocchi da 3)
+                            let keepProb = (consecutiveAM < 2) ? 0.7 : 0.4;
+                            chosenAM = Math.random() < keepProb ? lastWorkerAM : (lastWorkerAM === config.p1 ? config.p2 : config.p1);
+                        }
+                    }
+
+                    // Aggiorna contatori
+                    if(chosenAM === lastWorkerAM) consecutiveAM++; else consecutiveAM = 1;
+                    lastWorkerAM = chosenAM;
+                    
+                    if(chosenAM === config.p1) countAM_P1++; else countAM_P2++;
+
+                    // Assegna
+                    db[i]['am'] = chosenAM;
+                    db[i]['pm'] = (chosenAM === config.p1) ? config.p2 : config.p1; // L'altro fa pomeriggio
+                }
+            }
+
+            localStorage.setItem(`turni_db_${currentYear}_${currentMonth}`, JSON.stringify(db));
+            renderApp();
+        }
+
+        function cycle(current, isHolidayMode) {
+            if(current === '-') return config.p1;
+            if(current === config.p1) return config.p2;
+            if(isHolidayMode) {
+                if(current === config.p2) return 'Entrambi';
+                if(current === 'Entrambi') return '-';
+            } else {
+                if(current === config.p2) return '-';
+            }
+            return '-';
+        }
+
+        function toggleReset(s) { document.getElementById('resetModal').style.display = s ? 'flex' : 'none'; }
+        function performReset() { localStorage.removeItem(`turni_db_${currentYear}_${currentMonth}`); toggleReset(false); renderApp(); }
+
+        function toggleSettings(s) {
+            const m = document.getElementById('settingsModal');
+            m.style.display = s ? 'flex' : 'none';
+            if(s) { 
+                document.getElementById('inName1').value = config.p1; document.getElementById('inCol1').value = config.c1;
+                document.getElementById('inName2').value = config.p2; document.getElementById('inCol2').value = config.c2;
+                document.getElementById('inColBoth').value = config.cb;
+            }
+        }
+        function saveConfig() {
+            const n1 = document.getElementById('inName1').value || "Dip. 1"; const c1 = document.getElementById('inCol1').value;
+            const n2 = document.getElementById('inName2').value || "Dip. 2"; const c2 = document.getElementById('inCol2').value;
+            const cb = document.getElementById('inColBoth').value;
+            
+            // Rename logic
+            let db = loadDB(); let changed = false;
+            Object.keys(db).forEach(d => {
+                ['am','pm','hol'].forEach(s => {
+                    if(db[d][s] === config.p1) { db[d][s] = n1; changed=true; }
+                    if(db[d][s] === config.p2) { db[d][s] = n2; changed=true; }
+                });
+            });
+            if(changed) localStorage.setItem(`turni_db_${currentYear}_${currentMonth}`, JSON.stringify(db));
+
+            config = { p1: n1, c1: c1, p2: n2, c2: c2, cb: cb };
+            localStorage.setItem('turni_cfg_v8', JSON.stringify(config));
+            applyTheme(); toggleSettings(false); renderApp();
+        }
+
+        function renderApp() {
+            currentMonth = parseInt(document.getElementById('monthSelect').value);
+            currentYear = parseInt(document.getElementById('yearSelect').value);
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const db = loadDB();
+            
+            const grid = document.getElementById('app-grid');
+            const tbL = document.getElementById('tbody-left');
+            const tbR = document.getElementById('tbody-right');
+            grid.innerHTML = ""; tbL.innerHTML = ""; tbR.innerHTML = "";
+            document.getElementById('print-title').innerText = `${monthNames[currentMonth]} ${currentYear} - TURNI`;
+
+            for(let i=1; i<=daysInMonth; i++) {
+                const date = new Date(currentYear, currentMonth, i);
+                const dayWeek = date.getDay(); 
+                const holName = getHolidayName(date);
+                const isSpecialHoliday = (holName !== null);
+                const isSunday = (dayWeek === 0);
+                const isHolidayMode = isSpecialHoliday || isSunday;
+                const dayShort = date.toLocaleDateString('it-IT', {weekday: 'short'});
+                const rowData = db[i] || {};
+                
+                let tagLabel = "";
+                if(isSpecialHoliday) tagLabel = holName; else if(isSunday) tagLabel = "DOMENICA";
+
+                // CARD
+                const card = document.createElement('div');
+                card.className = `day-card ${isHolidayMode ? 'is-holiday' : ''}`;
+                
+                if(isHolidayMode) {
+                    const worker = rowData['hol'] || '-';
+                    const displayTime = isSpecialHoliday ? T_FEST : T_DOM;
+                    const icon = isSpecialHoliday ? '⭐' : '☕';
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <div><span class="date-display">${i}</span> <span class="holiday-tag" style="${tagLabel?'':'display:none'}">${tagLabel}</span></div>
+                            <span class="day-label">${dayShort}</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="shift-row" onclick="handleClick(${i}, 'hol', '${worker}', true)">
+                                <div class="shift-info"><span class="shift-icon">${icon}</span><span class="shift-time">${displayTime}</span></div>
+                                ${renderBadge(worker)}
+                            </div>
+                        </div>`;
+                } else {
+                    const w1 = rowData['am'] || '-'; const w2 = rowData['pm'] || '-';
+                    card.innerHTML = `
+                        <div class="card-header"><span class="date-display">${i}</span><span class="day-label">${dayShort}</span></div>
+                        <div class="card-body">
+                            <div class="shift-row" onclick="handleClick(${i}, 'am', '${w1}', false)">
+                                <div class="shift-info"><span class="shift-icon">☀️ Mattina</span><span class="shift-time">${T_AM}</span></div>
+                                ${renderBadge(w1)}
+                            </div>
+                            <div class="shift-row" onclick="handleClick(${i}, 'pm', '${w2}', false)">
+                                <div class="shift-info"><span class="shift-icon">🌙 Pom.</span><span class="shift-time">${T_PM}</span></div>
+                                ${renderBadge(w2)}
+                            </div>
+                        </div>`;
+                }
+                grid.appendChild(card);
+
+                // PRINT
+                const tr = document.createElement('tr');
+                if(isHolidayMode) tr.className = 'print-hol-row';
+                const tdDate = `<td class="td-date">${i}</td><td class="td-day">${dayShort.toUpperCase()}</td>`;
+                let tdContent = '';
+                if(isHolidayMode) {
+                    const worker = rowData['hol'] || '-';
+                    const hTxt = isSpecialHoliday ? `<span style="font-size:7pt; color:red; display:block; font-weight:bold">${holName.toUpperCase()}</span>` : '';
+                    let printTime = isSpecialHoliday ? "07-18" : "07-13";
+                    let wTxt = (worker === 'Entrambi') ? `<span class="p-name t-both">ENTRAMBI</span>` : (worker!=='-' ? `<span class="p-name ${getColClass(worker)}">${worker}</span>` : '');
+                    tdContent = `<td colspan="2">${hTxt}Orario ${printTime}: ${wTxt}</td>`;
+                } else {
+                    const w1 = rowData['am'] || '-'; const w2 = rowData['pm'] || '-';
+                    const t1 = (w1 !== '-') ? `<span class="p-name ${getColClass(w1)}">${w1}</span>` : '';
+                    const t2 = (w2 !== '-') ? `<span class="p-name ${getColClass(w2)}">${w2}</span>` : '';
+                    tdContent = `<td>${t1}</td><td>${t2}</td>`;
+                }
+                tr.innerHTML = tdDate + tdContent;
+                if(i <= 16) tbL.appendChild(tr); else tbR.appendChild(tr);
+            }
+        }
+
+        function renderBadge(n) {
+            let cls = 'badge-empty';
+            if(n === config.p1) cls = 'badge-p1'; if(n === config.p2) cls = 'badge-p2'; if(n === 'Entrambi') cls = 'badge-both';
+            return `<span class="badge ${cls}">${n==='-'?'Tocca':n}</span>`;
+        }
+        function getColClass(n) { if(n===config.p1) return 't-p1'; if(n===config.p2) return 't-p2'; if(n==='Entrambi') return 't-both'; return ''; }
+        function handleClick(d, s, v, h) { saveShift(d, s, cycle(v, h)); }
+
+        init();
+    </script>
+</body>
+</html>
