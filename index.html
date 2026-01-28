@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Turni - Accesso Dipendenti</title>
+    <style>
+        :root {
+            --color-emp1: #007AFF;
+            --color-emp2: #10b981;
+            --color-both: #8b5cf6;
+            
+            --bg-body: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --primary: #2563eb;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --warning-light: #fff7ed;
+            --warning-text: #c2410c;
+            --success-bg: #d1fae5;
+            --success-text: #065f46;
+            --holiday-bg: #fee2e2;
+            --holiday-border: #fecaca;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            margin: 0; padding: 0;
+            color: var(--text-main);
+            padding-bottom: 60px;
+        }
+
+        /* HEADER */
+        .app-header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding-bottom: 5px;
+        }
+
+        .header-top {
+            padding: 15px 20px 10px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .brand { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; color: #111; }
+        
+        .btn-help {
+            width: 36px; height: 36px; border-radius: 50%; border: 2px solid #e5e7eb;
+            background: white; color: var(--primary); font-weight: bold; font-size: 1.2rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .header-toolbar {
+            padding: 0 15px 15px 15px;
+            display: flex; gap: 10px; flex-wrap: wrap;
+            justify-content: space-between; align-items: center;
+        }
+
+        .group-nav { display: flex; gap: 8px; flex: 1; min-width: 140px; }
+        .group-actions { display: flex; gap: 8px; }
+
+        select {
+            padding: 8px 12px; border-radius: 10px; border: 1px solid #e5e7eb;
+            background: #f9fafb; font-size: 14px; font-weight: 600; color: #374151;
+            width: 100%; -webkit-appearance: none;
+        }
+
+        .action-btn {
+            border: none; border-radius: 10px; padding: 8px 14px;
+            font-size: 14px; font-weight: 700; color: white;
+            display: flex; align-items: center; gap: 6px;
+            cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .btn-print { background: #1f2937; }
+
+        /* GRIGLIA & CARD */
+        .main-container {
+            padding: 20px; max-width: 1000px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px;
+        }
+
+        .day-card {
+            background: var(--card-bg); border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f3f4f6;
+            overflow: hidden; display: flex; flex-direction: column;
+            position: relative;
+        }
+        
+        .day-card.is-today {
+            border: 3px solid var(--primary) !important;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.25) !important;
+            transform: scale(1.02); z-index: 10;
+        }
+
+        .day-card.is-holiday { background-color: var(--holiday-bg); border-color: var(--holiday-border); }
+
+        .card-header {
+            padding: 10px 15px; border-bottom: 1px solid #f3f4f6;
+            display: flex; justify-content: space-between; align-items: center;
+            background: white;
+        }
+        .day-card.is-holiday .card-header { background: rgba(255,255,255,0.5); border-color: var(--holiday-border); }
+
+        .date-group { display: flex; flex-direction: column; }
+        .date-display { font-size: 1.3rem; font-weight: 800; color: #111; line-height: 1; }
+        .day-label { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: #9ca3af; letter-spacing: 0.5px; margin-top: 2px; }
+        
+        /* PULSANTE SEGNALA E STATO */
+        .header-actions { display: flex; gap: 5px; align-items: center; }
+
+        .btn-flag {
+            background: var(--warning-light); color: var(--warning-text);
+            border: 1px solid #fed7aa; border-radius: 8px;
+            padding: 6px 10px; font-size: 0.75rem; font-weight: 700;
+            display: flex; align-items: center; gap: 5px; cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-flag:hover { background: #ffedd5; }
+        .status-pill {
+            font-size: 0.7rem; padding: 4px 6px; border-radius: 6px; font-weight: bold;
+        }
+        .st-wait { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
+        .st-acc { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+        .st-rej { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+        .card-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+
+        .shift-row {
+            background: #f9fafb; border-radius: 10px; padding: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+            border: 1px solid transparent; opacity: 0.9;
+            pointer-events: none;
+        }
+        .day-card.is-holiday .shift-row { background: rgba(255,255,255,0.7); }
+
+        .shift-info { display: flex; flex-direction: column; }
+        .shift-icon { font-size: 1.2rem; margin-bottom: 2px; }
+        .shift-time { font-size: 0.75rem; color: #6b7280; font-weight: 700; }
+
+        .badge {
+            padding: 6px 14px; border-radius: 30px; font-weight: 700; font-size: 0.9rem;
+            min-width: 80px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
+        .badge-empty { background: white; border: 2px dashed #e5e7eb; color: #d1d5db; box-shadow: none; }
+        .badge-p1 { background: var(--color-emp1); color: white; }
+        .badge-p2 { background: var(--color-emp2); color: white; }
+        .badge-both { background: var(--color-both); color: white; }
+
+        /* MODALS */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(2px); z-index: 2000; align-items: center; justify-content: center;
+        }
+        .modal-box { background: white; padding: 25px; border-radius: 20px; width: 85%; max-width: 360px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); animation: popIn 0.2s ease-out; }
+        @keyframes popIn { from{transform:scale(0.9);opacity:0} to{transform:scale(1);opacity:1} }
+        
+        .req-section { margin-bottom: 20px; }
+        .req-title { font-weight: 700; color: #374151; margin-bottom: 10px; display: block; }
+        
+        .radio-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        .radio-btn {
+            flex: 1; padding: 10px; border: 2px solid #e5e7eb; border-radius: 10px;
+            text-align: center; font-weight: 600; color: #6b7280; cursor: pointer;
+        }
+        .radio-btn.selected { border-color: var(--primary); background: #eff6ff; color: var(--primary); }
+
+        .btn-option {
+            width: 100%; padding: 12px; border: none; border-radius: 10px; margin-bottom: 8px;
+            font-weight: 600; text-align: left; background: #f3f4f6; color: #374151;
+            cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 10px;
+        }
+        .btn-option:hover { background: #e5e7eb; }
+        .btn-option.selected { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+        
+        /* Disabled Option Style */
+        .btn-option.disabled {
+            opacity: 0.5; cursor: not-allowed; background: #e5e7eb; color: #9ca3af; text-decoration: line-through;
+        }
+
+        .modal-btns { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+        .btn-delete { background: var(--danger); color: white; border: none; border-radius: 10px; padding: 10px 18px; font-weight: bold; width: 100%; margin-top: 10px; }
+
+        /* LISTA HELP */
+        .help-list { list-style: none; padding: 0; margin: 0; }
+        .help-list li { margin-bottom: 15px; display: flex; gap: 12px; align-items: flex-start; }
+        .help-icon { font-size: 1.4rem; min-width: 30px; text-align: center; }
+        .help-text h4 { margin: 0 0 4px 0; color: #111; }
+        .help-text p { margin: 0; color: #666; font-size: 0.9rem; line-height: 1.4; }
+
+        /* PRINT */
+        #print-layout { display: none; }
+        @media print {
+            @page { size: A4 landscape; margin: 8mm; }
+            body { background: white; margin: 0; padding: 0; overflow: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .app-header, .main-container, .modal-overlay { display: none !important; }
+            #print-layout { display: block !important; width: 100%; }
+            .print-header-title { text-align: center; font-size: 20pt; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; border-bottom: 3px solid #000; padding-bottom: 5px; }
+            .print-grid { display: flex; gap: 20px; width: 100%; align-items: flex-start; }
+            .print-col { flex: 1; }
+            table { width: 100%; border-collapse: collapse; font-family: 'Arial', sans-serif; }
+            th { background: #eee; border: 1px solid #000; font-size: 10pt; padding: 5px; text-transform: uppercase; font-weight: bold; }
+            td { border: 1px solid #000; padding: 2px 5px; height: 25px; vertical-align: middle; font-size: 10pt; text-align: center; }
+            .td-date { width: 30px; font-weight: 800; background: #f3f4f6; }
+            .td-day { width: 40px; font-size: 8pt; text-transform: uppercase; color: #444; }
+            tr.print-hol-row td { background-color: #fff0f0 !important; }
+            .p-name { font-weight: 800; display: block; width: 100%; }
+            .t-p1 { color: var(--color-emp1); }
+            .t-p2 { color: var(--color-emp2); }
+            .t-both { color: var(--color-both); font-style: italic; }
+            .print-footer { margin-top: 15px; font-size: 9pt; color: #444; border-top: 1px solid #ccc; padding-top: 8px; display: flex; justify-content: space-between; font-style: italic; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="helpModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3>ℹ️ Legenda Segnalazioni</h3>
+            <ul class="help-list">
+                <li>
+                    <div class="help-icon">⏳</div>
+                    <div class="help-text">
+                        <h4>In Attesa</h4>
+                        <p>L'amministratore deve ancora visionare la richiesta.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="help-icon">✅</div>
+                    <div class="help-text">
+                        <h4>Accettata</h4>
+                        <p>La tua richiesta è stata approvata. Il turno è stato modificato.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="help-icon">❌</div>
+                    <div class="help-text">
+                        <h4>Rifiutata</h4>
+                        <p>La richiesta non è stata accettata. Il turno rimane invariato.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="help-icon">🚫</div>
+                    <div class="help-text">
+                        <h4>Bloccato</h4>
+                        <p>Se il collega ha una richiesta accettata, non puoi segnalare la stessa assenza.</p>
+                    </div>
+                </li>
+            </ul>
+            <div class="modal-btns">
+                <button onclick="document.getElementById('helpModal').style.display='none'" style="padding: 10px 18px; background: var(--primary); color:white; border:none; border-radius:10px; font-weight:bold;">Ho capito</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="requestModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3>📢 Gestione Segnalazione</h3>
+            <p id="reqDateTitle" style="color: #6b7280; font-weight: 600; margin-top:-10px; margin-bottom: 20px;"></p>
+
+            <div class="req-section">
+                <span class="req-title">Chi sei?</span>
+                <div class="radio-group" id="userSelectContainer"></div>
+            </div>
+
+            <div id="newRequestOptions">
+                <div class="req-section">
+                    <span class="req-title">Problematica</span>
+                    <button id="opt-am" class="btn-option" onclick="selectIssue('no_am', this)">🌅 Non ci sono di Mattina</button>
+                    <button id="opt-pm" class="btn-option" onclick="selectIssue('no_pm', this)">🌆 Non ci sono di Pomeriggio</button>
+                    <button id="opt-all" class="btn-option" onclick="selectIssue('no_all', this)">🚫 Non ci sono tutto il giorno</button>
+                    <div id="conflictMsg" style="display:none; color:#ef4444; font-size:0.8rem; margin-top:5px; font-weight:bold;">⚠️ Opzioni bloccate: Il collega ha già un permesso approvato.</div>
+                </div>
+                <div class="modal-btns">
+                    <button onclick="toggleReqModal(false)" style="padding: 10px 18px; background: #f3f4f6; border:none; border-radius:10px; font-weight:bold; color:#4b5563">Annulla</button>
+                    <button onclick="submitRequest()" style="padding: 10px 18px; background: var(--warning); color:white; border:none; border-radius:10px; font-weight:bold;">Invia</button>
+                </div>
+            </div>
+
+            <div id="existingRequestInfo" style="display:none; text-align:center;">
+                <p style="color:#374151; font-weight:600;">Hai già inviato una segnalazione:</p>
+                <div id="existingReqDetails" style="background:#fff7ed; padding:10px; border-radius:8px; border:1px solid #fed7aa; margin-bottom:15px; color:#c2410c;"></div>
+                
+                <button id="btnRevoke" class="btn-delete" onclick="deleteRequest()">🗑️ Ritira Segnalazione</button>
+                <p id="revokeMsg" style="display:none; font-size:0.8rem; color:#999; margin-top:5px;">Non puoi ritirare segnalazioni oggi o per il passato.</p>
+                
+                <button onclick="toggleReqModal(false)" style="margin-top:15px; padding: 10px 18px; background: #f3f4f6; border:none; border-radius:10px; font-weight:bold; color:#4b5563; width:100%">Chiudi</button>
+            </div>
+
+        </div>
+    </div>
+
+    <header class="app-header">
+        <div class="header-top">
+            <div class="brand">📅 Turni<span style="color:var(--primary)">Client</span></div>
+            <button class="btn-help" onclick="document.getElementById('helpModal').style.display='flex'">?</button>
+        </div>
+        <div class="header-toolbar">
+            <div class="group-nav">
+                <select id="monthSelect" onchange="renderApp()"></select>
+                <select id="yearSelect" onchange="renderApp()"></select>
+            </div>
+            <div class="group-actions">
+                <button class="action-btn btn-print" onclick="window.print()">🖨️ Stampa</button>
+            </div>
+        </div>
+    </header>
+
+    <div id="app-grid" class="main-container"></div>
+
+    <div id="print-layout">
+        <div id="print-title" class="print-header-title"></div>
+        <div class="print-grid">
+            <div class="print-col">
+                <table>
+                    <thead><tr><th colspan="2">Data</th><th>Mattina (06-13)</th><th>Pom (15:30-20:30)</th></tr></thead>
+                    <tbody id="tbody-left"></tbody>
+                </table>
+            </div>
+            <div class="print-col">
+                <table>
+                    <thead><tr><th colspan="2">Data</th><th>Mattina (06-13)</th><th>Pom (15:30-20:30)</th></tr></thead>
+                    <tbody id="tbody-right"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="print-footer">
+            <span>Domenica: 07:00 - 13:00</span>
+            <span>Festivi (Rosso): 07:00 - 18:00</span>
+        </div>
+    </div>
+
+    <script>
+        // ==================== CONFIGURAZIONE CLOUD ====================
+        const BIN_ID = "6979e5eb43b1c97be9517651";
+        const API_KEY = "$2a$10$LoeF5Ae4yW8YLmCxZF9etOqZpfkhx5zc4u81EreMzPvYRCFztbF0K";
+        const URL_BIN = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+        
+        let cloudData = { config: { p1: "Naio", c1: "#007AFF", p2: "Davide", c2: "#10b981", cb: "#8b5cf6" }, shifts: {} };
+
+        const monthNames = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+        const T_AM = "06:00 - 13:00"; const T_PM = "15:30 - 20:30";
+        const T_DOM = "07:00 - 13:00"; const T_FEST = "07:00 - 18:00";
+
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        let selectedDayForReq = null;
+        let selectedUser = null;
+        let selectedIssueType = null;
+
+        // --- GESTIONE CLOUD ---
+        async function fetchCloudData() {
+            try {
+                const res = await fetch(URL_BIN + '/latest', { headers: { 'X-Master-Key': API_KEY } });
+                if (res.ok) {
+                    const json = await res.json();
+                    if(json.record) cloudData = json.record;
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        async function syncCloud() {
+            try {
+                await fetch(URL_BIN, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+                    body: JSON.stringify(cloudData)
+                });
+            } catch (e) { alert("Errore connessione"); }
+        }
+
+        function loadDB() { return cloudData.shifts[`${currentYear}_${currentMonth}`] || {}; }
+
+        // --- FESTIVITA ---
+        function getEaster(year) {
+            const f = Math.floor, G = year % 19, C = f(year / 100), H = (C - f(C / 4) - f((8 * C + 13) / 25) + 19 * G + 15) % 30, I = H - f(H / 28) * (1 - f(29 / (H + 1)) * f((21 - G) / 11)), J = (year + f(year / 4) + I + 2 - C + f(C / 4)) % 7, L = I - J, month = 3 + f((L + 40) / 44), day = L + 28 - 31 * f(month / 4);
+            return { month: month - 1, day: day };
+        }
+        function getHolidayName(date) {
+            const d = date.getDate(); const m = date.getMonth(); const y = date.getFullYear();
+            if (d === 1 && m === 0) return "Capodanno";
+            if (d === 6 && m === 0) return "Epifania";
+            if (d === 25 && m === 3) return "Liberazione";
+            if (d === 1 && m === 4) return "Festa Lavoro";
+            if (d === 2 && m === 5) return "Repubblica";
+            if (d === 15 && m === 7) return "Ferragosto";
+            if (d === 1 && m === 10) return "Ognissanti";
+            if (d === 8 && m === 11) return "Immacolata";
+            if (d === 25 && m === 11) return "Natale";
+            if (d === 26 && m === 11) return "S. Stefano";
+            const E = getEaster(y);
+            if (d === E.day && m === E.month) return "Pasqua";
+            const PM = new Date(y, E.month, E.day + 1);
+            if (d === PM.getDate() && m === PM.getMonth()) return "Pasquetta";
+            return null;
+        }
+
+        // --- CORE ---
+        function applyTheme() {
+            const r = document.documentElement.style;
+            const cfg = cloudData.config;
+            r.setProperty('--color-emp1', cfg.c1);
+            r.setProperty('--color-emp2', cfg.c2);
+            r.setProperty('--color-both', cfg.cb);
+        }
+
+        async function init() {
+            const ms = document.getElementById('monthSelect');
+            const ys = document.getElementById('yearSelect');
+            monthNames.forEach((n, i) => {
+                let op = document.createElement('option'); op.value = i; op.innerText = n;
+                if(i === currentMonth) op.selected = true; ms.appendChild(op);
+            });
+            for(let y = currentYear - 1; y <= currentYear + 2; y++) {
+                let op = document.createElement('option'); op.value = y; op.innerText = y;
+                if(y === currentYear) op.selected = true; ys.appendChild(op);
+            }
+
+            document.getElementById('app-grid').innerHTML = '<div style="text-align:center; grid-column:1/-1; padding:40px">Caricamento...</div>';
+            await fetchCloudData();
+            applyTheme();
+            renderApp();
+        }
+
+        // --- LOGICA SEGNALAZIONI AVANZATA ---
+        function openReqModal(day) {
+            selectedDayForReq = day; selectedUser = null; selectedIssueType = null;
+            const cfg = cloudData.config;
+            const cont = document.getElementById('userSelectContainer');
+            
+            // Renderizza bottoni utente
+            cont.innerHTML = `
+                <div class="radio-btn" onclick="selectUser('${cfg.p1}', this)">${cfg.p1}</div>
+                <div class="radio-btn" onclick="selectUser('${cfg.p2}', this)">${cfg.p2}</div>
+            `;
+            
+            // Reset UI
+            document.querySelectorAll('.btn-option').forEach(b => {
+                b.classList.remove('selected');
+                b.classList.remove('disabled');
+                b.disabled = false;
+                b.onclick = function() { selectIssue(this.getAttribute('onclick').split("'")[1], this); };
+            });
+            document.getElementById('conflictMsg').style.display = 'none';
+
+            // Reset Visualizzazione (Torna alla vista Nuova Richiesta di default)
+            document.getElementById('newRequestOptions').style.display = 'block';
+            document.getElementById('existingRequestInfo').style.display = 'none';
+            document.getElementById('reqDateTitle').innerText = `${day} ${monthNames[currentMonth]} ${currentYear}`;
+            
+            toggleReqModal(true);
+        }
+
+function selectUser(name, el) {
+            selectedUser = name;
+            document.querySelectorAll('.radio-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+
+            const db = loadDB();
+            const dayData = db[selectedDayForReq] || {};
+            const reqs = dayData.requests || [];
+            
+            // Trova richiesta esistente del mio utente
+            const myReq = reqs.find(r => r.who === name);
+
+            if(myReq) {
+                // --- MOSTRA DETTAGLI RICHIESTA ESISTENTE ---
+                document.getElementById('newRequestOptions').style.display = 'none';
+                document.getElementById('existingRequestInfo').style.display = 'block';
+                
+                // Dizionario per testi leggibili
+                const dictType = { 
+                    'no_am': 'Assenza Mattina (06:00 - 13:00)', 
+                    'no_pm': 'Assenza Pomeriggio (15:30 - 20:30)', 
+                    'no_all': 'Assenza Tutto il Giorno' 
+                };
+
+                let statusHtml = "";
+                let bgStyle = "";
+                
+                if(myReq.status === 'accepted') {
+                    statusHtml = `<h3 style="margin:0 0 5px 0; color:#065f46">✅ Accettata</h3><p style="margin:0; font-size:0.9rem">L'amministratore ha confermato.</p>`;
+                    bgStyle = "background:#d1fae5; border-color:#a7f3d0; color:#065f46";
+                } else if(myReq.status === 'rejected') {
+                    statusHtml = `<h3 style="margin:0 0 5px 0; color:#991b1b">❌ Rifiutata</h3><p style="margin:0; font-size:0.9rem">La richiesta non è stata accolta.</p>`;
+                    bgStyle = "background:#fee2e2; border-color:#fecaca; color:#991b1b";
+                } else {
+                    statusHtml = `<h3 style="margin:0 0 5px 0; color:#b45309">⏳ In Attesa</h3><p style="margin:0; font-size:0.9rem">In attesa di approvazione.</p>`;
+                    bgStyle = "background:#fff7ed; border-color:#fed7aa; color:#c2410c";
+                }
+                
+                document.getElementById('existingReqDetails').style.cssText = `padding:15px; border-radius:12px; border:1px solid; margin-bottom:15px; text-align:left; ${bgStyle}`;
+                document.getElementById('existingReqDetails').innerHTML = `
+                    ${statusHtml}
+                    <hr style="border:0; border-top:1px solid rgba(0,0,0,0.1); margin:10px 0;">
+                    <strong>Cosa hai chiesto:</strong><br>
+                    ${dictType[myReq.type]}
+                `;
+
+                // Logica tasto Ritiro (fino a ieri)
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                const shiftDate = new Date(currentYear, currentMonth, selectedDayForReq);
+                
+                if(shiftDate > today) {
+                    document.getElementById('btnRevoke').style.display = 'block';
+                    document.getElementById('revokeMsg').style.display = 'none';
+                } else {
+                    document.getElementById('btnRevoke').style.display = 'none';
+                    document.getElementById('revokeMsg').style.display = 'block';
+                }
+
+            } else {
+                // --- MOSTRA NUOVA RICHIESTA ---
+                document.getElementById('newRequestOptions').style.display = 'block';
+                document.getElementById('existingRequestInfo').style.display = 'none';
+
+                // Controllo conflitti con l'altro collega
+                const cfg = cloudData.config;
+                const otherUser = (name === cfg.p1) ? cfg.p2 : cfg.p1;
+                const otherReq = reqs.find(r => r.who === otherUser && r.status === 'accepted');
+
+                // Reset pulsanti
+                document.getElementById('conflictMsg').style.display = 'none';
+                ['opt-am', 'opt-pm', 'opt-all'].forEach(id => {
+                    const btn = document.getElementById(id);
+                    btn.classList.remove('disabled');
+                    btn.disabled = false;
+                    btn.onclick = function() { selectIssue(this.id.replace('opt-','no_'), this); }; // Fix restore onclick
+                });
+
+                if (otherReq) {
+                    document.getElementById('conflictMsg').style.display = 'block';
+                    const disableBtn = (id) => {
+                        const btn = document.getElementById(id);
+                        btn.classList.add('disabled');
+                        btn.disabled = true;
+                        btn.onclick = null;
+                    };
+
+                    if (otherReq.type === 'no_am') {
+                        disableBtn('opt-am');
+                        disableBtn('opt-all');
+                    } else if (otherReq.type === 'no_pm') {
+                        disableBtn('opt-pm');
+                        disableBtn('opt-all');
+                    } else if (otherReq.type === 'no_all') {
+                        disableBtn('opt-am');
+                        disableBtn('opt-pm');
+                        disableBtn('opt-all');
+                        document.getElementById('conflictMsg').innerText = "⚠️ Il collega manca tutto il giorno. Impossibile richiedere permessi.";
+                    }
+                }
+            }
+        }
+
+        function selectIssue(type, el) {
+            selectedIssueType = type;
+            document.querySelectorAll('.btn-option').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function submitRequest() {
+            if(!selectedUser || !selectedIssueType) { alert("Seleziona chi sei e qual è il problema."); return; }
+            const key = `${currentYear}_${currentMonth}`;
+            if(!cloudData.shifts[key]) cloudData.shifts[key] = {};
+            if(!cloudData.shifts[key][selectedDayForReq]) cloudData.shifts[key][selectedDayForReq] = {};
+            
+            let dayObj = cloudData.shifts[key][selectedDayForReq];
+            if(!dayObj.requests) dayObj.requests = [];
+
+            // Aggiungi nuova richiesta (status undefined = pending)
+            dayObj.requests.push({ who: selectedUser, type: selectedIssueType, ts: new Date().toISOString() });
+            
+            syncCloud(); toggleReqModal(false); renderApp();
+        }
+
+        function deleteRequest() {
+            if(!selectedUser) return;
+            const key = `${currentYear}_${currentMonth}`;
+            let dayObj = cloudData.shifts[key][selectedDayForReq];
+            if(dayObj && dayObj.requests) {
+                // Filtra via la richiesta dell'utente corrente
+                dayObj.requests = dayObj.requests.filter(r => r.who !== selectedUser);
+                syncCloud(); toggleReqModal(false); renderApp();
+            }
+        }
+
+        function toggleReqModal(s) { document.getElementById('requestModal').style.display = s ? 'flex' : 'none'; }
+
+        // --- RENDER UI ---
+        function renderApp() {
+            currentMonth = parseInt(document.getElementById('monthSelect').value);
+            currentYear = parseInt(document.getElementById('yearSelect').value);
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const db = loadDB();
+            const grid = document.getElementById('app-grid');
+            const tbL = document.getElementById('tbody-left');
+            const tbR = document.getElementById('tbody-right');
+            grid.innerHTML = ""; tbL.innerHTML = ""; tbR.innerHTML = "";
+            document.getElementById('print-title').innerText = `${monthNames[currentMonth]} ${currentYear} - TURNI`;
+
+            const today = new Date();
+
+            for(let i=1; i<=daysInMonth; i++) {
+                const date = new Date(currentYear, currentMonth, i);
+                const dayWeek = date.getDay(); 
+                const holName = getHolidayName(date);
+                const isSpecialHoliday = (holName !== null);
+                const isSunday = (dayWeek === 0);
+                const isHolidayMode = isSpecialHoliday || isSunday;
+                const dayShort = date.toLocaleDateString('it-IT', {weekday: 'short'});
+                const rowData = db[i] || {};
+                
+                const isToday = (i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear());
+                
+                // LOGICA STATO SEGNALAZIONE
+                // Controlliamo se ci sono richieste e ne prendiamo lo stato
+                // Nota: potrebbero esserci 2 richieste. Ne mostriamo una o un indicatore generico?
+                // Mostriamo badge se esiste almeno una richiesta
+                let requestBadge = "";
+                // Stile cursore per far capire che è cliccabile
+                const badgeStyle = "cursor:pointer; transition:transform 0.1s;";
+                const clickAttr = `onclick="event.stopPropagation(); openReqModal(${i})"`;
+
+                if (rowData.requests && rowData.requests.length > 0) {
+                    const acc = rowData.requests.find(r => r.status === 'accepted');
+                    const rej = rowData.requests.find(r => r.status === 'rejected');
+                    const pen = rowData.requests.find(r => !r.status); 
+
+                    if (acc) requestBadge = `<span class="status-pill st-acc" style="${badgeStyle}" ${clickAttr} onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'">✅ OK</span>`;
+                    else if (pen) requestBadge = `<span class="status-pill st-wait" style="${badgeStyle}" ${clickAttr}>⏳ Attesa</span>`;
+                    else if (rej) requestBadge = `<span class="status-pill st-rej" style="${badgeStyle}" ${clickAttr}>❌ NO</span>`;
+                }
+
+                let tagLabel = "";
+                if(isSpecialHoliday) tagLabel = holName; else if(isSunday) tagLabel = "DOMENICA";
+
+                // CARD
+                const card = document.createElement('div');
+                card.className = `day-card ${isHolidayMode ? 'is-holiday' : ''} ${isToday ? 'is-today' : ''}`;
+                
+                const headerHtml = `
+                    <div class="card-header">
+                        <div class="date-group">
+                            <span class="date-display">${i}</span>
+                            <span class="day-label">${dayShort}</span>
+                        </div>
+                        <div class="header-actions">
+                            ${requestBadge}
+                            <button class="btn-flag" onclick="openReqModal(${i})">⚑</button>
+                        </div>
+                    </div>`;
+
+                if(isHolidayMode) {
+                    const worker = rowData['hol'] || '-';
+                    card.innerHTML = `${headerHtml}
+                        <div class="card-body">
+                            <div class="shift-row">
+                                <div class="shift-info"><span class="shift-icon">${isSpecialHoliday?'⭐':'☕'}</span><span class="shift-time">${isSpecialHoliday?T_FEST:T_DOM}</span></div>
+                                ${renderBadge(worker)}
+                            </div>
+                        </div>`;
+                } else {
+                    const w1 = rowData['am'] || '-'; const w2 = rowData['pm'] || '-';
+                    card.innerHTML = `${headerHtml}
+                        <div class="card-body">
+                            <div class="shift-row">
+                                <div class="shift-info"><span class="shift-icon">☀️ Mattina</span><span class="shift-time">${T_AM}</span></div>
+                                ${renderBadge(w1)}
+                            </div>
+                            <div class="shift-row">
+                                <div class="shift-info"><span class="shift-icon">🌙 Pom.</span><span class="shift-time">${T_PM}</span></div>
+                                ${renderBadge(w2)}
+                            </div>
+                        </div>`;
+                }
+                grid.appendChild(card);
+
+                // PRINT (Logica standard)
+                const tr = document.createElement('tr');
+                if(isHolidayMode) tr.className = 'print-hol-row';
+                const tdDate = `<td class="td-date">${i}</td><td class="td-day">${dayShort.toUpperCase()}</td>`;
+                let tdContent = '';
+                if(isHolidayMode) {
+                    const worker = rowData['hol'] || '-';
+                    const hTxt = isSpecialHoliday ? `<span style="font-size:7pt; color:red; display:block; font-weight:bold">${holName.toUpperCase()}</span>` : '';
+                    let printTime = isSpecialHoliday ? "07-18" : "07-13";
+                    let wTxt = (worker === 'Entrambi') ? `<span class="p-name t-both">ENTRAMBI</span>` : (worker!=='-' ? `<span class="p-name ${getColClass(worker)}">${worker}</span>` : '');
+                    tdContent = `<td colspan="2">${hTxt}Orario ${printTime}: ${wTxt}</td>`;
+                } else {
+                    const w1 = rowData['am'] || '-'; const w2 = rowData['pm'] || '-';
+                    const t1 = (w1 !== '-') ? `<span class="p-name ${getColClass(w1)}">${w1}</span>` : '';
+                    const t2 = (w2 !== '-') ? `<span class="p-name ${getColClass(w2)}">${w2}</span>` : '';
+                    tdContent = `<td>${t1}</td><td>${t2}</td>`;
+                }
+                tr.innerHTML = tdDate + tdContent;
+                if(i <= 16) tbL.appendChild(tr); else tbR.appendChild(tr);
+            }
+        }
+
+        function renderBadge(n) {
+            const cfg = cloudData.config;
+            let cls = 'badge-empty';
+            if(n === cfg.p1) cls = 'badge-p1'; if(n === cfg.p2) cls = 'badge-p2'; if(n === 'Entrambi') cls = 'badge-both';
+            return `<span class="badge ${cls}">${n==='-'?'Libero':n}</span>`;
+        }
+        function getColClass(n) { const cfg = cloudData.config; if(n===cfg.p1) return 't-p1'; if(n===cfg.p2) return 't-p2'; if(n==='Entrambi') return 't-both'; return ''; }
+
+        init();
+    </script>
+</body>
+</html>
