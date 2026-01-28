@@ -17,6 +17,7 @@
             --danger: #ef4444;
             --success: #10b981;
             --warning: #f59e0b;
+            --swap: #8b5cf6; /* Colore viola per swap */
             --holiday-bg: #fee2e2;
             --holiday-border: #fecaca;
         }
@@ -71,27 +72,14 @@
         .btn-reset { background: var(--danger); }
         .btn-print { background: #1f2937; }
 
-        /* BOTTONI HEADER (Impostazioni + Help) */
-        .header-actions-group {
-            display: flex;
-            gap: 10px;
-        }
-
+        .header-actions-group { display: flex; gap: 10px; }
         .btn-icon-head {
-            width: 38px; height: 38px; 
-            border-radius: 50%; 
-            border: 2px solid #e5e7eb;
-            background: white; 
-            color: var(--primary); 
-            font-weight: bold; font-size: 1.2rem;
-            cursor: pointer; 
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: transform 0.1s;
+            width: 38px; height: 38px; border-radius: 50%; border: 2px solid #e5e7eb;
+            background: white; color: var(--primary); font-weight: bold; font-size: 1.2rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.1s;
         }
-
         .btn-icon-head:active { transform: scale(0.95); }
-        .btn-icon-head:hover { background: #f9fafb; }
 
         /* GRIGLIA & CARD */
         .main-container {
@@ -111,7 +99,6 @@
             box-shadow: 0 8px 25px rgba(37, 99, 235, 0.25) !important;
             transform: scale(1.02); z-index: 10;
         }
-
         .day-card.is-holiday { background-color: var(--holiday-bg); border-color: var(--holiday-border); }
 
         .card-header {
@@ -160,12 +147,10 @@
             transition: opacity 0.2s; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
         }
         .warning-triangle:hover { opacity: 0.8; }
-        
         .warning-symbol {
             position: absolute; top: 5px; right: 7px;
             font-size: 14px; color: black; font-weight: 900; pointer-events: none;
         }
-        @media (prefers-color-scheme: dark) { .warning-symbol { color: white; } }
 
         /* MODALS */
         .modal-overlay {
@@ -184,21 +169,15 @@
         .modal-btns { display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; }
 
         /* STILE LISTA RICHIESTE */
-        .req-container {
-            max-height: 60vh; overflow-y: auto; padding-right: 5px;
-        }
-        .req-empty-state {
-            text-align: center; padding: 40px 20px; color: #9ca3af; font-style: italic;
-            background: #f9fafb; border-radius: 12px; border: 2px dashed #e5e7eb;
-        }
+        .req-container { max-height: 60vh; overflow-y: auto; padding-right: 5px; }
+        .req-empty-state { text-align: center; padding: 40px 20px; color: #9ca3af; font-style: italic; background: #f9fafb; border-radius: 12px; border: 2px dashed #e5e7eb; }
         .req-card {
             background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 15px; margin-bottom: 12px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); position: relative; overflow: hidden;
         }
-        .req-card::before {
-            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--warning);
-        }
-        /* Card per le richieste GIA' processate */
+        .req-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--warning); }
+        .req-card.type-swap::before { background: var(--swap); } /* Viola per swap */
+        
         .req-card.done::before { background: #9ca3af; }
         .req-card.done { opacity: 0.8; }
 
@@ -218,13 +197,6 @@
         .btn-act:active { transform: scale(0.96); }
         .btn-acc { background: #10b981; color: white; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
         .btn-rej { background: white; border: 2px solid #ef4444; color: #ef4444; }
-
-        /* STILE HELP */
-        .help-list { list-style: none; padding: 0; margin: 0; }
-        .help-list li { margin-bottom: 15px; display: flex; gap: 12px; align-items: flex-start; }
-        .help-icon { font-size: 1.4rem; min-width: 30px; text-align: center; }
-        .help-text h4 { margin: 0 0 4px 0; color: #111; }
-        .help-text p { margin: 0; color: #666; font-size: 0.9rem; line-height: 1.4; }
 
         /* PRINT */
         #print-layout { display: none; }
@@ -252,64 +224,14 @@
 </head>
 <body>
 
-    <div id="helpModal" class="modal-overlay">
-        <div class="modal-box">
-            <h3>⚙️ Guida Amministratore</h3>
-            <ul class="help-list">
-                <li>
-                    <div class="help-icon">🖱️</div>
-                    <div class="help-text">
-                        <h4>Assegnazione Turni</h4>
-                        <p>Clicca sulle celle per cambiare persona. <strong>ATTENZIONE:</strong> Se una persona ha un'assenza approvata, il sistema ti avviserà prima di assegnarla.</p>
-                    </div>
-                </li>
-                <li>
-                    <div class="help-icon">💾</div>
-                    <div class="help-text">
-                        <h4>Salvataggio</h4>
-                        <p>Le modifiche non sono definitive finché non clicchi su <strong>"Salva Modifiche"</strong> in alto a destra.</p>
-                    </div>
-                </li>
-                <li>
-                    <div class="help-icon">📩</div>
-                    <div class="help-text">
-                        <h4>Richieste Dipendenti</h4>
-                        <p>Clicca sul triangolo giallo per vedere TUTTE le richieste (anche quelle già accettate).</p>
-                    </div>
-                </li>
-            </ul>
-            <div class="modal-btns">
-                <button onclick="document.getElementById('helpModal').style.display='none'" style="padding: 10px 18px; background: var(--primary); color:white; border:none; border-radius:10px; font-weight:bold; width:100%">Ho capito</button>
-            </div>
-        </div>
-    </div>
-
     <div id="settingsModal" class="modal-overlay">
         <div class="modal-box">
             <h3>🎨 Personalizzazione</h3>
-            <div class="input-group">
-                <label>Dipendente 1</label>
-                <div class="input-row">
-                    <input type="text" id="inName1" placeholder="Nome">
-                    <input type="color" id="inCol1">
-                </div>
-            </div>
-            <div class="input-group">
-                <label>Dipendente 2</label>
-                <div class="input-row">
-                    <input type="text" id="inName2" placeholder="Nome">
-                    <input type="color" id="inCol2">
-                </div>
-            </div>
-            <div class="input-group">
-                <label>Colore "Entrambi"</label>
-                <div class="input-row">
-                    <input type="text" value="Entrambi" disabled style="background:#f3f4f6; color:#9ca3af">
-                    <input type="color" id="inColBoth">
-                </div>
-            </div>
+            <div class="input-group"><label>Dipendente 1</label><div class="input-row"><input type="text" id="inName1"><input type="color" id="inCol1"></div></div>
+            <div class="input-group"><label>Dipendente 2</label><div class="input-row"><input type="text" id="inName2"><input type="color" id="inCol2"></div></div>
+            <div class="input-group"><label>Colore "Entrambi"</label><div class="input-row"><input type="text" value="Entrambi" disabled><input type="color" id="inColBoth"></div></div>
             <div class="modal-btns">
-                <button onclick="toggleSettings(false)" style="padding: 10px 18px; background: #f3f4f6; border:none; border-radius:10px; font-weight:bold; color:#4b5563">Chiudi</button>
+                <button onclick="toggleSettings(false)" style="padding: 10px 18px; background: #f3f4f6; border:none; border-radius:10px; font-weight:bold;">Chiudi</button>
                 <button onclick="saveConfig()" style="padding: 10px 18px; background: var(--primary); color:white; border:none; border-radius:10px; font-weight:bold;">Salva</button>
             </div>
         </div>
@@ -318,11 +240,11 @@
     <div id="resetModal" class="modal-overlay">
         <div class="modal-box" style="text-align: center;">
             <div style="font-size: 3rem; margin-bottom: 10px;">🗑️</div>
-            <h3 style="margin-top:0; color: #1f2937">Reset Mese</h3>
-            <p style="color: #6b7280; line-height: 1.5;">Stai per cancellare tutti i turni del mese corrente.<br>Questa azione è irreversibile.</p>
-            <div class="modal-btns" style="justify-content: center; gap: 15px;">
+            <h3>Reset Mese</h3>
+            <p style="color: #6b7280;">Stai per cancellare tutti i turni del mese corrente.</p>
+            <div class="modal-btns" style="justify-content: center;">
                 <button onclick="toggleReset(false)" style="padding: 12px 20px; background: #f3f4f6; border:none; border-radius:10px; font-weight:bold;">Annulla</button>
-                <button onclick="performReset()" style="padding: 12px 20px; background: var(--danger); color:white; border:none; border-radius:10px; font-weight:bold;">Conferma Reset</button>
+                <button onclick="performReset()" style="padding: 12px 20px; background: var(--danger); color:white; border:none; border-radius:10px; font-weight:bold;">Conferma</button>
             </div>
         </div>
     </div>
@@ -331,12 +253,9 @@
         <div class="modal-box">
             <h3>📩 Gestione Richieste</h3>
             <p id="manageReqTitle" style="color: #6b7280; margin-top:-10px; margin-bottom: 15px; font-weight:600"></p>
-            
-            <div id="reqListContainer" class="req-container">
-                </div>
-
+            <div id="reqListContainer" class="req-container"></div>
             <div class="modal-btns">
-                <button onclick="document.getElementById('manageReqModal').style.display='none'; renderApp()" style="padding: 10px 18px; background: #f3f4f6; border:none; border-radius:10px; font-weight:bold; color:#4b5563">Chiudi</button>
+                <button onclick="document.getElementById('manageReqModal').style.display='none'; renderApp()" style="padding: 10px 18px; background: #f3f4f6; border:none; border-radius:10px; font-weight:bold;">Chiudi</button>
             </div>
         </div>
     </div>
@@ -344,10 +263,8 @@
     <header class="app-header">
         <div class="header-top">
             <div class="brand">📅 Turni<span style="color:var(--primary)">Admin</span></div>
-            
             <div class="header-actions-group">
                 <button class="btn-icon-head" onclick="toggleSettings(true)" title="Impostazioni">⚙️</button>
-                <button class="btn-icon-head" onclick="document.getElementById('helpModal').style.display='flex'" title="Guida">?</button>
             </div>
         </div>
         <div class="header-toolbar">
@@ -368,119 +285,62 @@
     <div id="print-layout">
         <div id="print-title" class="print-header-title"></div>
         <div class="print-grid">
-            <div class="print-col">
-                <table>
-                    <thead><tr><th colspan="2">Data</th><th>Mattina (06-13)</th><th>Pom (15:30-20:30)</th></tr></thead>
-                    <tbody id="tbody-left"></tbody>
-                </table>
-            </div>
-            <div class="print-col">
-                <table>
-                    <thead><tr><th colspan="2">Data</th><th>Mattina (06-13)</th><th>Pom (15:30-20:30)</th></tr></thead>
-                    <tbody id="tbody-right"></tbody>
-                </table>
-            </div>
+            <div class="print-col"><table><thead><tr><th colspan="2">Data</th><th>Mattina (06-13)</th><th>Pom (15:30-20:30)</th></tr></thead><tbody id="tbody-left"></tbody></table></div>
+            <div class="print-col"><table><thead><tr><th colspan="2">Data</th><th>Mattina (06-13)</th><th>Pom (15:30-20:30)</th></tr></thead><tbody id="tbody-right"></tbody></table></div>
         </div>
-        <div class="print-footer">
-            <span>Domenica: 07:00 - 13:00</span>
-            <span>Festivi (Rosso): 07:00 - 18:00</span>
-        </div>
+        <div class="print-footer"><span>Domenica: 07:00 - 13:00</span><span>Festivi (Rosso): 07:00 - 18:00</span></div>
     </div>
 
     <script>
-        // ==================== CONFIGURAZIONE CLOUD ====================
+        // CONFIG
         const BIN_ID = "6979e5eb43b1c97be9517651";
         const API_KEY = "$2a$10$LoeF5Ae4yW8YLmCxZF9etOqZpfkhx5zc4u81EreMzPvYRCFztbF0K";
         const URL_BIN = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
         
-        let cloudData = {
-            config: { p1: "Naio", c1: "#007AFF", p2: "Davide", c2: "#10b981", cb: "#8b5cf6" },
-            shifts: {} 
-        };
-
+        let cloudData = { config: { p1: "Naio", c1: "#007AFF", p2: "Davide", c2: "#10b981", cb: "#8b5cf6" }, shifts: {} };
         const monthNames = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
-        const T_AM = "06:00 - 13:00"; const T_PM = "15:30 - 20:30";
-        const T_DOM = "07:00 - 13:00"; const T_FEST = "07:00 - 18:00";
-
+        
         let currentMonth = new Date().getMonth();
         let currentYear = new Date().getFullYear();
         let selectedDayForManage = null;
 
-        // --- GESTIONE CLOUD ---
         async function fetchCloudData() {
             try {
                 const res = await fetch(URL_BIN + '/latest', { headers: { 'X-Master-Key': API_KEY } });
-                if (res.ok) {
-                    const json = await res.json();
-                    if(json.record) cloudData = json.record;
-                }
+                if (res.ok) { const json = await res.json(); if(json.record) cloudData = json.record; }
             } catch (e) { console.error(e); }
         }
-
         async function syncCloud() {
-            try {
-                await fetch(URL_BIN, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
-                    body: JSON.stringify(cloudData)
-                });
-            } catch (e) { alert("Errore salvataggio"); }
+            try { await fetch(URL_BIN, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY }, body: JSON.stringify(cloudData) }); } catch (e) { alert("Errore salvataggio"); }
         }
 
         function loadDB() { return cloudData.shifts[`${currentYear}_${currentMonth}`] || {}; }
         function saveDB(dbObj) { cloudData.shifts[`${currentYear}_${currentMonth}`] = dbObj; renderApp(); syncCloud(); }
 
-        // --- UTILS ---
-        function getEaster(year) {
-            const f = Math.floor, G = year % 19, C = f(year / 100), H = (C - f(C / 4) - f((8 * C + 13) / 25) + 19 * G + 15) % 30, I = H - f(H / 28) * (1 - f(29 / (H + 1)) * f((21 - G) / 11)), J = (year + f(year / 4) + I + 2 - C + f(C / 4)) % 7, L = I - J, month = 3 + f((L + 40) / 44), day = L + 28 - 31 * f(month / 4);
-            return { month: month - 1, day: day };
-        }
+        // UTILS
         function getHolidayName(date) {
-            const d = date.getDate(); const m = date.getMonth(); const y = date.getFullYear();
-            if (d === 1 && m === 0) return "Capodanno";
-            if (d === 6 && m === 0) return "Epifania";
-            if (d === 25 && m === 3) return "Liberazione";
-            if (d === 1 && m === 4) return "Festa Lavoro";
-            if (d === 2 && m === 5) return "Repubblica";
-            if (d === 15 && m === 7) return "Ferragosto";
-            if (d === 1 && m === 10) return "Ognissanti";
-            if (d === 8 && m === 11) return "Immacolata";
-            if (d === 25 && m === 11) return "Natale";
-            if (d === 26 && m === 11) return "S. Stefano";
-            const E = getEaster(y);
-            if (d === E.day && m === E.month) return "Pasqua";
-            const PM = new Date(y, E.month, E.day + 1);
-            if (d === PM.getDate() && m === PM.getMonth()) return "Pasquetta";
+            const d = date.getDate(), m = date.getMonth(), y = date.getFullYear();
+            if (d===1&&m===0) return "Capodanno"; if (d===6&&m===0) return "Epifania"; if (d===25&&m===3) return "Liberazione"; if (d===1&&m===4) return "Festa Lavoro"; if (d===2&&m===5) return "Repubblica"; if (d===15&&m===7) return "Ferragosto"; if (d===1&&m===10) return "Ognissanti"; if (d===8&&m===11) return "Immacolata"; if (d===25&&m===11) return "Natale"; if (d===26&&m===11) return "S. Stefano";
+            const a=y%19, b=Math.floor(y/100), c=y%100, d1=Math.floor(b/4), e=b%4, f=Math.floor((b+8)/25), g=Math.floor((b-f+1)/3), h=(19*a+b-d1-g+15)%30, i=Math.floor(c/4), k=c%4, l=(32+2*e+2*i-h-k)%7, m1=Math.floor((a+11*h+22*l)/451), mon=Math.floor((h+l-7*m1+114)/31)-1, day=((h+l-7*m1+114)%31)+1;
+            if (d===day && m===mon) return "Pasqua"; 
+            const pm = new Date(y, mon, day+1); if(d===pm.getDate() && m===pm.getMonth()) return "Pasquetta";
             return null;
         }
 
-        // --- CORE ---
         function applyTheme() {
-            const r = document.documentElement.style;
-            const cfg = cloudData.config;
-            r.setProperty('--color-emp1', cfg.c1);
-            r.setProperty('--color-emp2', cfg.c2);
-            r.setProperty('--color-both', cfg.cb);
+            const r = document.documentElement.style, c = cloudData.config;
+            r.setProperty('--color-emp1', c.c1); r.setProperty('--color-emp2', c.c2); r.setProperty('--color-both', c.cb);
         }
 
         async function init() {
-            const ms = document.getElementById('monthSelect');
-            const ys = document.getElementById('yearSelect');
-            monthNames.forEach((n, i) => {
-                let op = document.createElement('option'); op.value = i; op.innerText = n;
-                if(i === currentMonth) op.selected = true; ms.appendChild(op);
-            });
-            for(let y = currentYear - 1; y <= currentYear + 2; y++) {
-                let op = document.createElement('option'); op.value = y; op.innerText = y;
-                if(y === currentYear) op.selected = true; ys.appendChild(op);
-            }
-            document.getElementById('app-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">Caricamento...</div>';
-            await fetchCloudData();
-            applyTheme(); renderApp();
+            const ms = document.getElementById('monthSelect'), ys = document.getElementById('yearSelect');
+            monthNames.forEach((n,i)=>{ let op=document.createElement('option'); op.value=i; op.innerText=n; if(i===currentMonth)op.selected=true; ms.appendChild(op); });
+            for(let y=currentYear-1; y<=currentYear+2; y++){ let op=document.createElement('option'); op.value=y; op.innerText=y; if(y===currentYear)op.selected=true; ys.appendChild(op); }
+            document.getElementById('app-grid').innerHTML = '<div style="padding:50px; text-align:center">Caricamento...</div>';
+            await fetchCloudData(); applyTheme(); renderApp();
         }
 
-        // --- LOGICA GESTIONE RICHIESTE ---
-        
+        // REQUESTS
         function openManageModal(day) {
             selectedDayForManage = day;
             document.getElementById('manageReqTitle').innerText = `Richieste del ${day} ${monthNames[currentMonth]}`;
@@ -489,355 +349,214 @@
         }
 
         function renderRequestList() {
-            const list = document.getElementById('reqListContainer');
-            list.innerHTML = "";
+            const list = document.getElementById('reqListContainer'); list.innerHTML = "";
             const db = loadDB();
+            let reqs = (db[selectedDayForManage] && db[selectedDayForManage].requests) ? [...db[selectedDayForManage].requests] : [];
             
-            // PRENDI TUTTE LE RICHIESTE (SENZA FILTRO)
-            let reqs = [];
-            if(db[selectedDayForManage] && db[selectedDayForManage].requests) {
-                reqs = [...db[selectedDayForManage].requests]; // Clona array
-            }
+            if (reqs.length === 0) { list.innerHTML = `<div class="req-empty-state"><div style="font-size:2rem;">🍃</div>Nessuna richiesta</div>`; return; }
 
-            if (reqs.length === 0) {
-                list.innerHTML = `<div class="req-empty-state"><div style="font-size: 2rem; margin-bottom: 10px;">🍃</div>Nessuna richiesta per oggi.</div>`;
-                return;
-            }
+            // Ordina: Pending prima, poi done
+            reqs.sort((a, b) => (!a.status && b.status) ? -1 : 1);
 
-            // ORDINA: Prima le PENDING (undefined/null), poi le altre
-            reqs.sort((a, b) => {
-                if (!a.status && b.status) return -1; // a (pending) prima di b (done)
-                if (a.status && !b.status) return 1;  // b (pending) prima di a (done)
-                return 0;
-            });
-
-            const dict = { 
-                'no_am': 'Non ci sono di ☀️ MATTINA', 
-                'no_pm': 'Non ci sono di 🌙 POMERIGGIO', 
-                'no_all': 'Assente 🚫 TUTTO IL GIORNO' 
-            };
-
-            const allReqs = db[selectedDayForManage].requests;
+            const dict = { 'no_am': 'Non può ☀️ MATTINA', 'no_pm': 'Non può 🌙 POMERIGGIO', 'no_all': 'Assente 🚫 TUTTO GIORNO', 'swap': '🔄 Vuole fare CAMBIO TURNO' };
 
             reqs.forEach(r => {
-                const realIdx = allReqs.indexOf(r); // Trova indice originale
-                const timeStr = r.ts ? new Date(r.ts).toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) : '';
+                const realIdx = db[selectedDayForManage].requests.indexOf(r);
                 const isDone = (r.status === 'accepted' || r.status === 'rejected');
+                const timeStr = r.ts ? new Date(r.ts).toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) : '';
 
                 let actionHtml = '';
                 if(isDone) {
-                    if(r.status === 'accepted') actionHtml = `<span class="req-status" style="color:#059669">✅ Accettata</span>`;
-                    else actionHtml = `<span class="req-status" style="color:#dc2626">❌ Rifiutata</span>`;
+                    actionHtml = `<span class="req-status" style="color:${r.status==='accepted'?'#059669':'#dc2626'}">${r.status==='accepted'?'✅ Accettata':'❌ Rifiutata'}</span>`;
                 } else {
-                    actionHtml = `
-                        <button class="btn-act btn-rej" onclick="processRequest(${realIdx}, 'reject')">Rifiuta</button>
-                        <button class="btn-act btn-acc" onclick="processRequest(${realIdx}, 'accept')">✅ Accetta</button>
-                    `;
+                    actionHtml = `<button class="btn-act btn-rej" onclick="processRequest(${realIdx}, 'reject')">Rifiuta</button>
+                                  <button class="btn-act btn-acc" onclick="processRequest(${realIdx}, 'accept')">✅ Accetta</button>`;
                 }
 
-                const li = document.createElement('div');
-                li.className = `req-card ${isDone ? 'done' : ''}`;
-                li.innerHTML = `
-                    <div class="req-header">
-                        <div class="req-user">👤 ${r.who}</div>
-                        <div class="req-ts">🕒 ${timeStr}</div>
-                    </div>
-                    <div class="req-body">Ha segnalato: <br><strong>${dict[r.type]}</strong></div>
-                    <div class="req-actions">${actionHtml}</div>
-                `;
-                list.appendChild(li);
+                const cardClass = `req-card ${isDone?'done':''} ${r.type==='swap'?'type-swap':''}`;
+
+                const div = document.createElement('div'); div.className = cardClass;
+                div.innerHTML = `
+                    <div class="req-header"><div class="req-user">👤 ${r.who}</div><div class="req-ts">🕒 ${timeStr}</div></div>
+                    <div class="req-body">Richiesta: <br><strong>${dict[r.type]}</strong></div>
+                    <div class="req-actions">${actionHtml}</div>`;
+                list.appendChild(div);
             });
         }
 
         function processRequest(idx, action) {
             let db = loadDB();
             let req = db[selectedDayForManage].requests[idx];
-
-            const dict = { 'no_am': 'Non può coprire la MATTINA', 'no_pm': 'Non può coprire il POMERIGGIO', 'no_all': 'Assente TUTTO IL GIORNO' };
-            const reason = dict[req.type];
             const cfg = cloudData.config;
-            const substitute = (req.who === cfg.p1) ? cfg.p2 : cfg.p1;
 
             if (action === 'accept') {
-                const msg = `Riepilogo Azione:\n\n👤 Dipendente: ${req.who}\n📄 Richiesta: ${reason}\n\n👉 CONSEGUENZA: Il turno verrà assegnato automaticamente a: ${substitute}.\n\nVuoi procedere?`;
+                let msg = "";
+                if (req.type === 'swap') msg = `Confermi il CAMBIO TURNO per ${req.who}?\nIl sistema invertirà automaticamente Mattina e Pomeriggio.`;
+                else msg = `Confermi assenza di ${req.who}?\nIl sistema assegnerà il turno al collega.`;
                 if (!confirm(msg)) return;
             } else {
-                if (!confirm(`Sei sicuro di voler RIFIUTARE la richiesta di ${req.who}?\nMotivo: ${reason}`)) return;
+                if (!confirm("Rifiutare la richiesta?")) return;
             }
 
             req.status = (action === 'accept') ? 'accepted' : 'rejected';
 
             if(action === 'accept') {
-                if(db[selectedDayForManage].hol) {
-                     if(db[selectedDayForManage].hol === req.who || db[selectedDayForManage].hol === 'Entrambi') {
-                         db[selectedDayForManage].hol = substitute;
-                     }
+                // LOGICA ACCETTAZIONE
+                if (req.type === 'swap') {
+                    // INVERTI I TURNI
+                    const oldAm = db[selectedDayForManage].am;
+                    const oldPm = db[selectedDayForManage].pm;
+                    db[selectedDayForManage].am = oldPm;
+                    db[selectedDayForManage].pm = oldAm;
                 } else {
-                    if(req.type === 'no_am' || req.type === 'no_all') {
-                        if(db[selectedDayForManage].am === req.who) db[selectedDayForManage].am = substitute;
-                    }
-                    if(req.type === 'no_pm' || req.type === 'no_all') {
-                        if(db[selectedDayForManage].pm === req.who) db[selectedDayForManage].pm = substitute;
+                    // LOGICA ASSENZA CLASSICA
+                    const substitute = (req.who === cfg.p1) ? cfg.p2 : cfg.p1;
+                    if(db[selectedDayForManage].hol) {
+                         if(db[selectedDayForManage].hol === req.who || db[selectedDayForManage].hol === 'Entrambi') db[selectedDayForManage].hol = substitute;
+                    } else {
+                        if((req.type === 'no_am' || req.type === 'no_all') && db[selectedDayForManage].am === req.who) db[selectedDayForManage].am = substitute;
+                        if((req.type === 'no_pm' || req.type === 'no_all') && db[selectedDayForManage].pm === req.who) db[selectedDayForManage].pm = substitute;
                     }
                 }
             }
-            saveDB(db);
-            if(action === 'accept') alert(`✅ Fatto! Richiesta accettata.\nIl turno è stato aggiornato con ${substitute}.`);
-            renderRequestList(); renderApp();
+            saveDB(db); renderRequestList();
         }
 
-        // --- GESTIONE ASSEGNAZIONE MANUALE (CON BLOCCO) ---
+        // LOGICHE GRID
         function isWorkerAvailable(day, slot, worker) {
             if(worker === '-' || worker === 'Entrambi') return true;
             const db = loadDB();
             if(!db[day] || !db[day].requests) return true;
-            
-            // Cerca se c'è una richiesta ACCETTATA per questo lavoratore
             const req = db[day].requests.find(r => r.who === worker && r.status === 'accepted');
             if(!req) return true;
-
-            // Controlla il tipo di conflitto
+            if(req.type === 'swap') return true; // Swap accettato non è un blocco
             if(req.type === 'no_all') return false;
-            
-            // Turni normali
             if(slot === 'am' && req.type === 'no_am') return false;
             if(slot === 'pm' && req.type === 'no_pm') return false;
-            
-            // Festivi (Assumiamo che se manchi mattina o pom, manchi tutto il festivo "lungo" o crei disagio)
             if(slot === 'hol') return false; 
-
             return true;
         }
 
         function handleClick(d, s, v, h) { 
             const nextVal = cycle(v, h);
-            
-            // CONTROLLO BLOCCO
             if(!isWorkerAvailable(d, s, nextVal)) {
-                // Avviso bloccante ma con override
-                const conf = confirm(`⚠️ ATTENZIONE: ${nextVal} ha una richiesta ACCETTATA di indisponibilità per questo turno!\n\nVuoi forzare comunque l'assegnazione?`);
-                if(!conf) return; // Se annulla, esce e non salva
+                if(!confirm(`⚠️ ${nextVal} ha un'assenza approvata!\nForzare assegnazione?`)) return;
             }
-
-            saveShift(d, s, nextVal); 
+            let db = loadDB(); if(!db[d]) db[d]={}; db[d][s] = nextVal; saveDB(db);
         }
 
-        // --- GESTIONE TURNI STANDARD ---
-        function saveShift(day, slot, val) {
-            let db = loadDB();
-            if(!db[day]) db[day] = {};
-            db[day][slot] = val;
-            saveDB(db);
+        function cycle(cur, isH) {
+            const c = cloudData.config;
+            if(cur==='-') return c.p1; if(cur===c.p1) return c.p2;
+            if(isH) { if(cur===c.p2) return 'Entrambi'; if(cur==='Entrambi') return '-'; }
+            else { if(cur===c.p2) return '-'; }
+            return '-';
         }
 
         function generateAuto() {
             const cfg = cloudData.config;
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const dim = new Date(currentYear, currentMonth+1, 0).getDate();
             let db = loadDB();
-            
-            let sundayTurnIndex = 0;
-            let consecutiveAM = 0;
-            let lastWorkerAM = null;
+            let sunIdx=0, consAM=0, lastAM=null;
 
-            for(let i=1; i<=daysInMonth; i++) {
+            for(let i=1; i<=dim; i++) {
                 const date = new Date(currentYear, currentMonth, i);
-                const dayWeek = date.getDay(); 
-                const isHoliday = (getHolidayName(date) !== null);
-                const isSunday = (dayWeek === 0);
+                const dw = date.getDay(), isHol = (getHolidayName(date)!==null), isSun=(dw===0);
+                if(!db[i]) db[i]={};
 
-                if(!db[i]) db[i] = {};
-
-                if(isHoliday) {
-                    db[i]['hol'] = 'Entrambi';
-                } else if(isSunday) {
-                    db[i]['hol'] = (sundayTurnIndex % 2 === 0) ? cfg.p1 : cfg.p2;
-                    sundayTurnIndex++;
-                } else {
-                    let chosenAM;
-                    if (lastWorkerAM && consecutiveAM >= 3) {
-                        chosenAM = (lastWorkerAM === cfg.p1) ? cfg.p2 : cfg.p1;
-                    } else {
-                        if (!lastWorkerAM) chosenAM = Math.random() > 0.5 ? cfg.p1 : cfg.p2;
+                if(isHol) db[i].hol='Entrambi';
+                else if(isSun) { db[i].hol=(sunIdx%2===0)?cfg.p1:cfg.p2; sunIdx++; }
+                else {
+                    let ch;
+                    if(lastAM && consAM>=3) ch=(lastAM===cfg.p1)?cfg.p2:cfg.p1;
+                    else {
+                        if(!lastAM) ch=(Math.random()>0.5)?cfg.p1:cfg.p2;
                         else {
-                            let keepProb = (consecutiveAM < 2) ? 0.7 : 0.4;
-                            chosenAM = Math.random() < keepProb ? lastWorkerAM : (lastWorkerAM === cfg.p1 ? cfg.p2 : cfg.p1);
+                            let p=(consAM<2)?0.7:0.4;
+                            ch=(Math.random()<p)?lastAM:((lastAM===cfg.p1)?cfg.p2:cfg.p1);
                         }
                     }
-                    if(chosenAM === lastWorkerAM) consecutiveAM++; else consecutiveAM = 1;
-                    lastWorkerAM = chosenAM;
-                    db[i]['am'] = chosenAM;
-                    db[i]['pm'] = (chosenAM === cfg.p1) ? cfg.p2 : cfg.p1;
+                    if(ch===lastAM) consAM++; else consAM=1;
+                    lastAM=ch;
+                    db[i].am=ch; db[i].pm=(ch===cfg.p1)?cfg.p2:cfg.p1;
                 }
             }
             saveDB(db);
         }
 
-        function cycle(current, isHolidayMode) {
-            const cfg = cloudData.config;
-            if(current === '-') return cfg.p1;
-            if(current === cfg.p1) return cfg.p2;
-            if(isHolidayMode) {
-                if(current === cfg.p2) return 'Entrambi';
-                if(current === 'Entrambi') return '-';
-            } else {
-                if(current === cfg.p2) return '-';
-            }
-            return '-';
-        }
-
-        function toggleReset(s) { document.getElementById('resetModal').style.display = s ? 'flex' : 'none'; }
-        function performReset() { const key = `${currentYear}_${currentMonth}`; delete cloudData.shifts[key]; toggleReset(false); renderApp(); syncCloud(); }
+        function toggleReset(s) { document.getElementById('resetModal').style.display=s?'flex':'none'; }
+        function performReset() { delete cloudData.shifts[`${currentYear}_${currentMonth}`]; toggleReset(false); renderApp(); syncCloud(); }
 
         function toggleSettings(s) {
-            const m = document.getElementById('settingsModal');
-            m.style.display = s ? 'flex' : 'none';
-            if(s) { 
-                const cfg = cloudData.config;
-                document.getElementById('inName1').value = cfg.p1; document.getElementById('inCol1').value = cfg.c1;
-                document.getElementById('inName2').value = cfg.p2; document.getElementById('inCol2').value = cfg.c2;
-                document.getElementById('inColBoth').value = cfg.cb;
-            }
+            const m=document.getElementById('settingsModal'); m.style.display=s?'flex':'none';
+            if(s){ const c=cloudData.config; document.getElementById('inName1').value=c.p1; document.getElementById('inCol1').value=c.c1; document.getElementById('inName2').value=c.p2; document.getElementById('inCol2').value=c.c2; document.getElementById('inColBoth').value=c.cb; }
         }
-
         function saveConfig() {
-            const n1 = document.getElementById('inName1').value || "Dip. 1"; const c1 = document.getElementById('inCol1').value;
-            const n2 = document.getElementById('inName2').value || "Dip. 2"; const c2 = document.getElementById('inCol2').value;
-            const cb = document.getElementById('inColBoth').value;
-            const oldP1 = cloudData.config.p1; const oldP2 = cloudData.config.p2;
-            
-            // Rename
-            let shifts = cloudData.shifts;
-            Object.keys(shifts).forEach(key => {
-                let monthData = shifts[key];
-                Object.keys(monthData).forEach(d => {
-                    ['am','pm','hol'].forEach(s => {
-                        if(monthData[d][s] === oldP1) monthData[d][s] = n1;
-                        if(monthData[d][s] === oldP2) monthData[d][s] = n2;
-                    });
-                    if(monthData[d].requests) {
-                        monthData[d].requests.forEach(r => {
-                            if(r.who === oldP1) r.who = n1;
-                            if(r.who === oldP2) r.who = n2;
-                        });
-                    }
-                });
-            });
-
-            cloudData.config = { p1: n1, c1: c1, p2: n2, c2: c2, cb: cb };
+            const n1=document.getElementById('inName1').value, c1=document.getElementById('inCol1').value;
+            const n2=document.getElementById('inName2').value, c2=document.getElementById('inCol2').value;
+            const cb=document.getElementById('inColBoth').value;
+            cloudData.config = { p1:n1, c1:c1, p2:n2, c2:c2, cb:cb };
             applyTheme(); toggleSettings(false); renderApp(); syncCloud();
         }
 
         function renderApp() {
             currentMonth = parseInt(document.getElementById('monthSelect').value);
             currentYear = parseInt(document.getElementById('yearSelect').value);
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const dim = new Date(currentYear, currentMonth+1, 0).getDate();
             const db = loadDB();
             const cfg = cloudData.config;
-            
             const grid = document.getElementById('app-grid');
-            const tbL = document.getElementById('tbody-left');
-            const tbR = document.getElementById('tbody-right');
-            grid.innerHTML = ""; tbL.innerHTML = ""; tbR.innerHTML = "";
-            document.getElementById('print-title').innerText = `${monthNames[currentMonth]} ${currentYear} - TURNI`;
-
+            const tbL = document.getElementById('tbody-left'), tbR = document.getElementById('tbody-right');
+            grid.innerHTML=""; tbL.innerHTML=""; tbR.innerHTML="";
+            document.getElementById('print-title').innerText = `${monthNames[currentMonth]} ${currentYear}`;
+            
             const today = new Date();
 
-            for(let i=1; i<=daysInMonth; i++) {
+            for(let i=1; i<=dim; i++) {
                 const date = new Date(currentYear, currentMonth, i);
-                const dayWeek = date.getDay(); 
-                const holName = getHolidayName(date);
-                const isSpecialHoliday = (holName !== null);
-                const isSunday = (dayWeek === 0);
-                const isHolidayMode = isSpecialHoliday || isSunday;
-                const dayShort = date.toLocaleDateString('it-IT', {weekday: 'short'});
-                const rowData = db[i] || {};
-                
-                const isToday = (i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear());
-                
-                let hasRequests = false;
-                if(rowData.requests && rowData.requests.length > 0) hasRequests = true;
-
-                let tagLabel = "";
-                if(isSpecialHoliday) tagLabel = holName; else if(isSunday) tagLabel = "DOMENICA";
+                const dw = date.getDay(), holName = getHolidayName(date), isHol = (holName!==null), isSun=(dw===0), isModeH = isHol||isSun;
+                const dShort = date.toLocaleDateString('it-IT',{weekday:'short'});
+                const row = db[i]||{};
+                const hasReq = (row.requests && row.requests.length>0);
+                const isToday = (i===today.getDate() && currentMonth===today.getMonth() && currentYear===today.getFullYear());
 
                 const card = document.createElement('div');
-                card.className = `day-card ${isHolidayMode ? 'is-holiday' : ''} ${isToday ? 'is-today' : ''}`;
+                card.className = `day-card ${isModeH?'is-holiday':''} ${isToday?'is-today':''}`;
                 
-                let triangleHTML = "";
-                if(hasRequests) {
-                    triangleHTML = `<div class="warning-triangle" onclick="event.stopPropagation(); openManageModal(${i})"><span class="warning-symbol">!</span></div>`;
-                }
-
-                if(isHolidayMode) {
-                    const worker = rowData['hol'] || '-';
-                    card.innerHTML = `
-                        ${triangleHTML}
-                        <div class="card-header">
-                            <div><span class="date-display">${i}</span> <span class="holiday-tag" style="${tagLabel?'':'display:none'}">${tagLabel}</span></div>
-                            <span class="day-label">${dayShort}</span>
-                        </div>
-                        <div class="card-body">
-                            <div class="shift-row" onclick="handleClick(${i}, 'hol', '${worker}', true)">
-                                <div class="shift-info"><span class="shift-icon">${isSpecialHoliday?'⭐':'☕'}</span><span class="shift-time">${isSpecialHoliday?T_FEST:T_DOM}</span></div>
-                                ${renderBadge(worker)}
-                            </div>
-                        </div>`;
+                let tri = hasReq ? `<div class="warning-triangle" onclick="event.stopPropagation(); openManageModal(${i})"><span class="warning-symbol">!</span></div>` : '';
+                
+                if(isModeH) {
+                    const w = row.hol||'-';
+                    card.innerHTML=`${tri}<div class="card-header"><div><span class="date-display">${i}</span> <span class="holiday-tag" style="${isHol?'':'display:none'}">${holName}</span></div><span class="day-label">${dShort}</span></div>
+                    <div class="card-body"><div class="shift-row" onclick="handleClick(${i},'hol','${w}',true)"><div class="shift-info"><span class="shift-icon">${isHol?'⭐':'☕'}</span><span class="shift-time">07:00 - ${isHol?'18:00':'13:00'}</span></div>${renderBadge(w)}</div></div>`;
                 } else {
-                    const w1 = rowData['am'] || '-'; const w2 = rowData['pm'] || '-';
-                    card.innerHTML = `
-                        ${triangleHTML}
-                        <div class="card-header"><span class="date-display">${i}</span><span class="day-label">${dayShort}</span></div>
-                        <div class="card-body">
-                            <div class="shift-row" onclick="handleClick(${i}, 'am', '${w1}', false)">
-                                <div class="shift-info"><span class="shift-icon">☀️ Mattina</span><span class="shift-time">${T_AM}</span></div>
-                                ${renderBadge(w1)}
-                            </div>
-                            <div class="shift-row" onclick="handleClick(${i}, 'pm', '${w2}', false)">
-                                <div class="shift-info"><span class="shift-icon">🌙 Pom.</span><span class="shift-time">${T_PM}</span></div>
-                                ${renderBadge(w2)}
-                            </div>
-                        </div>`;
+                    const w1 = row.am||'-', w2 = row.pm||'-';
+                    card.innerHTML=`${tri}<div class="card-header"><span class="date-display">${i}</span><span class="day-label">${dShort}</span></div>
+                    <div class="card-body">
+                        <div class="shift-row" onclick="handleClick(${i},'am','${w1}',false)"><div class="shift-info"><span class="shift-icon">☀️</span><span class="shift-time">06:00 - 13:00</span></div>${renderBadge(w1)}</div>
+                        <div class="shift-row" onclick="handleClick(${i},'pm','${w2}',false)"><div class="shift-info"><span class="shift-icon">🌙</span><span class="shift-time">15:30 - 20:30</span></div>${renderBadge(w2)}</div>
+                    </div>`;
                 }
                 grid.appendChild(card);
 
-                const tr = document.createElement('tr');
-                if(isHolidayMode) tr.className = 'print-hol-row';
-                const tdDate = `<td class="td-date">${i}</td><td class="td-day">${dayShort.toUpperCase()}</td>`;
-                let tdContent = '';
-                if(isHolidayMode) {
-                    const worker = rowData['hol'] || '-';
-                    const hTxt = isSpecialHoliday ? `<span style="font-size:7pt; color:red; display:block; font-weight:bold">${holName.toUpperCase()}</span>` : '';
-                    let printTime = isSpecialHoliday ? "07-18" : "07-13";
-                    let wTxt = (worker === 'Entrambi') ? `<span class="p-name t-both">ENTRAMBI</span>` : (worker!=='-' ? `<span class="p-name ${getColClass(worker)}">${worker}</span>` : '');
-                    tdContent = `<td colspan="2">${hTxt}Orario ${printTime}: ${wTxt}</td>`;
+                // Print
+                const tr = document.createElement('tr'); if(isModeH) tr.className='print-hol-row';
+                const tdD = `<td class="td-date">${i}</td><td class="td-day">${dShort.toUpperCase()}</td>`;
+                let tdC = '';
+                if(isModeH) {
+                    const w=row.hol||'-', hT=isHol?`<span style="color:red;font-size:7pt;display:block;font-weight:bold">${holName.toUpperCase()}</span>`:'';
+                    tdC=`<td colspan="2">${hT}Orario ${isHol?'07-18':'07-13'}: <span class="p-name ${getColClass(w)}">${w}</span></td>`;
                 } else {
-                    const w1 = rowData['am'] || '-'; const w2 = rowData['pm'] || '-';
-                    const t1 = (w1 !== '-') ? `<span class="p-name ${getColClass(w1)}">${w1}</span>` : '';
-                    const t2 = (w2 !== '-') ? `<span class="p-name ${getColClass(w2)}">${w2}</span>` : '';
-                    tdContent = `<td>${t1}</td><td>${t2}</td>`;
+                    const w1=row.am||'-', w2=row.pm||'-';
+                    tdC=`<td><span class="p-name ${getColClass(w1)}">${w1}</span></td><td><span class="p-name ${getColClass(w2)}">${w2}</span></td>`;
                 }
-                tr.innerHTML = tdDate + tdContent;
-                if(i <= 16) tbL.appendChild(tr); else tbR.appendChild(tr);
+                tr.innerHTML = tdD+tdC;
+                if(i<=16) tbL.appendChild(tr); else tbR.appendChild(tr);
             }
         }
 
-        function renderBadge(n) {
-            const cfg = cloudData.config;
-            let cls = 'badge-empty';
-            if(n === cfg.p1) cls = 'badge-p1'; if(n === cfg.p2) cls = 'badge-p2'; if(n === 'Entrambi') cls = 'badge-both';
-            return `<span class="badge ${cls}">${n==='-'?'Tocca':n}</span>`;
-        }
-        function getColClass(n) { const cfg = cloudData.config; if(n===cfg.p1) return 't-p1'; if(n===cfg.p2) return 't-p2'; if(n==='Entrambi') return 't-both'; return ''; }
-        function handleClick(d, s, v, h) { 
-            const nextVal = cycle(v, h);
-            
-            // CONTROLLO DISPONIBILITA'
-            if(!isWorkerAvailable(d, s, nextVal)) {
-                const conf = confirm(`⚠️ ATTENZIONE: ${nextVal} ha una richiesta ACCETTATA di indisponibilità per questo turno!\n\nVuoi forzare l'assegnazione?`);
-                if(!conf) return; // Se annulla, esce
-            }
-            saveShift(d, s, nextVal); 
-        }
+        function renderBadge(n) { const c=cloudData.config; let cl='badge-empty'; if(n===c.p1)cl='badge-p1'; if(n===c.p2)cl='badge-p2'; if(n==='Entrambi')cl='badge-both'; return `<span class="badge ${cl}">${n==='-'?'Tocca':n}</span>`; }
+        function getColClass(n) { const c=cloudData.config; if(n===c.p1)return 't-p1'; if(n===c.p2)return 't-p2'; if(n==='Entrambi')return 't-both'; return ''; }
 
         init();
     </script>
