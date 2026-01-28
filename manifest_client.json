@@ -1,0 +1,16 @@
+{
+  "name": "TSCTurni Dipendenti",
+  "short_name": "TSC Turni",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#6366f1",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "TSCIcona_0.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ]
+}
