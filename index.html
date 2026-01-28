@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-   <title>TSCTurni Dipendenti</title>
+    <title>TSCTurni Dipendenti</title>
 
     <link rel="icon" type="image/png" href="TSCIconClient_Clear.png">
     <link rel="icon" type="image/png" href="TSCIconClient_Dark.png" media="(prefers-color-scheme: dark)">
-
     <link rel="apple-touch-icon" href="TSCIconClient_Clear.png">
-
     <link rel="manifest" href="manifest_client.json">
 
     <meta name="theme-color" content="#6366f1">
@@ -75,6 +73,14 @@
         .header-top { padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
         .brand { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; color: #1e293b; }
 
+        .header-right-area { display: flex; gap: 10px; align-items: center; }
+
+        .lang-select {
+            padding: 6px; border-radius: 12px; border: 1px solid #e2e8f0;
+            background: white; font-size: 1rem; cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); outline: none;
+        }
+
         .btn-help-hero {
             background: linear-gradient(135deg, var(--primary), var(--accent-purple));
             color: white; border: none; padding: 8px 16px;
@@ -93,7 +99,7 @@
 
         .header-toolbar { padding: 0 20px 15px 20px; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
         .group-nav { display: flex; gap: 10px; flex-grow: 1; min-width: 200px; }
-        select { flex: 1; width: 100%; padding: 10px 12px; border-radius: 10px; border: 2px solid #e2e8f0; background: white; font-size: 14px; font-weight: 700; color: #475569; -webkit-appearance: none; outline: none; cursor: pointer; }
+        select.date-select { flex: 1; width: 100%; padding: 10px 12px; border-radius: 10px; border: 2px solid #e2e8f0; background: white; font-size: 14px; font-weight: 700; color: #475569; -webkit-appearance: none; outline: none; cursor: pointer; }
 
         .action-btn { border: none; border-radius: 10px; padding: 10px 14px; font-size: 13px; font-weight: 800; color: white; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: transform 0.1s; }
         .action-btn:active { transform: translateY(2px); box-shadow: none !important; }
@@ -223,20 +229,20 @@
 <div id="helpModal" class="modal-overlay">
     <div class="modal-box wide">
         <div class="modal-header">
-            <h3>🎓 Guida Dipendenti</h3>
-            <div class="modal-subtitle">Come usare l'App Turni</div>
+            <h3 data-i18n="guideTitle">🎓 Guida Dipendenti</h3>
+            <div class="modal-subtitle" data-i18n="guideSubtitle">Come usare l'App Turni</div>
         </div>
 
         <div class="guide-container">
             <div class="guide-menu">
                 <div class="guide-menu-item active" onclick="showDemo('req', this)">
-                    <span class="icon">🚩</span> Fare una Segnalazione
+                    <span class="icon">🚩</span> <span data-i18n="demoReport">Fare una Segnalazione</span>
                 </div>
                 <div class="guide-menu-item" onclick="showDemo('swap', this)">
-                    <span class="icon">🔄</span> Cambio Turno
+                    <span class="icon">🔄</span> <span data-i18n="demoSwap">Cambio Turno</span>
                 </div>
                 <div class="guide-menu-item" onclick="showDemo('status', this)">
-                    <span class="icon">🎨</span> Stati Richiesta
+                    <span class="icon">🎨</span> <span data-i18n="demoStatus">Stati Richiesta</span>
                 </div>
             </div>
 
@@ -247,26 +253,26 @@
                         <button class="btn-flag">⚑</button>
                     </div>
                     <div class="cursor-hand">👆</div>
-                    <p style="position:absolute; bottom:10px; font-size:0.8rem; color:#64748b">Tocca la bandierina per iniziare</p>
+                    <p style="position:absolute; bottom:10px; font-size:0.8rem; color:#64748b" data-i18n="demoReportTip">Tocca la bandierina per iniziare</p>
                 </div>
 
                 <div id="demo-swap" class="demo-scene demo-swap">
-                    <button class="fake-swap-btn">🔄 Richiedi Cambio Turno</button>
-                    <p style="margin-top:20px; font-size:0.9rem; color:#64748b">Usa il tasto Viola per chiedere lo scambio.</p>
+                    <button class="fake-swap-btn" data-i18n="reqSwap">🔄 Richiedi Cambio Turno</button>
+                    <p style="margin-top:20px; font-size:0.9rem; color:#64748b" data-i18n="demoSwapTip">Usa il tasto Viola per chiedere lo scambio.</p>
                 </div>
 
                 <div id="demo-status" class="demo-scene">
                     <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start">
-                        <div class="status-demo"><span class="st-pill st-wait">⏳ Attesa</span> <span style="font-size:0.8rem">Inviata</span></div>
-                        <div class="status-demo"><span class="st-pill st-acc">✅ OK</span> <span style="font-size:0.8rem">Accettata</span></div>
-                        <div class="status-demo"><span class="st-pill st-rej">❌ NO</span> <span style="font-size:0.8rem">Rifiutata</span></div>
+                        <div class="status-demo"><span class="st-pill st-wait" data-i18n="msgWait">⏳ Attesa</span> <span style="font-size:0.8rem" data-i18n="demoSent">Inviata</span></div>
+                        <div class="status-demo"><span class="st-pill st-acc" data-i18n="msgOk">✅ OK</span> <span style="font-size:0.8rem" data-i18n="demoAccepted">Accettata</span></div>
+                        <div class="status-demo"><span class="st-pill st-rej" data-i18n="msgNo">❌ NO</span> <span style="font-size:0.8rem" data-i18n="demoRejected">Rifiutata</span></div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="modal-footer">
-            <button class="btn-push btn-primary" onclick="toggleModal('helpModal', false)">Ho capito!</button>
+            <button class="btn-push btn-primary" onclick="toggleModal('helpModal', false)" data-i18n="btnUnderstood">Ho capito!</button>
         </div>
     </div>
 </div>
@@ -274,39 +280,39 @@
 <div id="requestModal" class="modal-overlay">
     <div class="modal-box">
         <div class="modal-header">
-            <h3>📢 Nuova Segnalazione</h3>
+            <h3 data-i18n="reqTitle">📢 Nuova Segnalazione</h3>
             <p id="reqDateTitle" class="modal-subtitle"></p>
         </div>
 
         <div class="modal-body">
             <div class="req-section">
-                <span style="display:block; font-weight:bold; margin-bottom:10px; color:#475569; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.5px">Chi sei?</span>
+                <span style="display:block; font-weight:bold; margin-bottom:10px; color:#475569; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.5px" data-i18n="labelWho">Chi sei?</span>
                 <div class="user-selector" id="userSelectContainer">
                 </div>
             </div>
 
             <div id="newRequestOptions">
-                <span style="display:block; font-weight:bold; margin-bottom:10px; color:#475569; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.5px">Cosa vuoi fare?</span>
+                <span style="display:block; font-weight:bold; margin-bottom:10px; color:#475569; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.5px" data-i18n="labelWhat">Cosa vuoi fare?</span>
                 <div class="option-list">
-                    <button id="opt-swap" class="btn-option swap" onclick="selectIssue('swap', this)"><span>🔄</span> Richiedi Cambio Turno</button>
-                    <button id="opt-am" class="btn-option" onclick="selectIssue('no_am', this)"><span>🌅</span> Assente Mattina</button>
-                    <button id="opt-pm" class="btn-option" onclick="selectIssue('no_pm', this)"><span>🌆</span> Assente Pomeriggio</button>
-                    <button id="opt-all" class="btn-option" onclick="selectIssue('no_all', this)"><span>🚫</span> Assente Tutto il Giorno</button>
+                    <button id="opt-swap" class="btn-option swap" onclick="selectIssue('swap', this)"><span>🔄</span> <span data-i18n="optSwap">Richiedi Cambio Turno</span></button>
+                    <button id="opt-am" class="btn-option" onclick="selectIssue('no_am', this)"><span>🌅</span> <span data-i18n="optAm">Assente Mattina</span></button>
+                    <button id="opt-pm" class="btn-option" onclick="selectIssue('no_pm', this)"><span>🌆</span> <span data-i18n="optPm">Assente Pomeriggio</span></button>
+                    <button id="opt-all" class="btn-option" onclick="selectIssue('no_all', this)"><span>🚫</span> <span data-i18n="optAll">Assente Tutto il Giorno</span></button>
                 </div>
-                <div id="conflictMsg" style="display:none; color:#ef4444; font-size:0.8rem; margin-top:10px; font-weight:bold; background:#fee2e2; padding:10px; border-radius:10px; border:1px solid #fecaca; text-align:center">⚠️ Il collega è già assente per questo turno.</div>
-                <div id="formErrorMsg" style="display:none; color:#ef4444; font-size:0.8rem; margin-top:10px; font-weight:bold; text-align:center">⚠️ Seleziona Chi sei e Cosa vuoi fare.</div>
+                <div id="conflictMsg" style="display:none; color:#ef4444; font-size:0.8rem; margin-top:10px; font-weight:bold; background:#fee2e2; padding:10px; border-radius:10px; border:1px solid #fecaca; text-align:center" data-i18n="msgConflict">⚠️ Il collega è già assente per questo turno.</div>
+                <div id="formErrorMsg" style="display:none; color:#ef4444; font-size:0.8rem; margin-top:10px; font-weight:bold; text-align:center" data-i18n="msgSelectAll">⚠️ Seleziona Chi sei e Cosa vuoi fare.</div>
             </div>
 
             <div id="existingRequestInfo" style="display:none; text-align:center;">
                 <div id="existingReqDetails" style="background:#fff7ed; padding:15px; border-radius:12px; border:1px solid #fed7aa; margin-bottom:15px; color:#c2410c; text-align:left"></div>
-                <button id="btnRevoke" class="btn-push btn-danger" onclick="deleteRequest()">🗑️ Ritira Segnalazione</button>
-                <p id="revokeMsg" style="display:none; font-size:0.8rem; color:#94a3b8; margin-top:5px;">Impossibile ritirare segnalazioni passate.</p>
+                <button id="btnRevoke" class="btn-push btn-danger" onclick="deleteRequest()" data-i18n="btnRevoke">🗑️ Ritira Segnalazione</button>
+                <p id="revokeMsg" style="display:none; font-size:0.8rem; color:#94a3b8; margin-top:5px;" data-i18n="msgNoRevoke">Impossibile ritirare segnalazioni passate.</p>
             </div>
         </div>
 
         <div class="modal-footer">
-            <button class="btn-push btn-secondary" onclick="toggleModal('requestModal', false)" style="width:auto">Annulla</button>
-            <button id="btnSend" class="btn-push btn-primary" onclick="submitRequest()" style="display:none">Invia</button>
+            <button class="btn-push btn-secondary" onclick="toggleModal('requestModal', false)" style="width:auto" data-i18n="btnCancel">Annulla</button>
+            <button id="btnSend" class="btn-push btn-primary" onclick="submitRequest()" style="display:none" data-i18n="btnSend">Invia</button>
         </div>
     </div>
 </div>
@@ -315,31 +321,38 @@
     <div class="modal-box" style="max-width:320px">
         <div class="modal-header">
             <div style="font-size:3rem; margin-bottom:10px">🎉</div>
-            <h3 style="color:var(--success)">Inviata!</h3>
+            <h3 style="color:var(--success)" data-i18n="successTitle">Inviata!</h3>
         </div>
         <div class="modal-body" style="text-align:center">
-            <p style="color:#64748b">La tua richiesta è stata inviata all'amministratore.</p>
+            <p style="color:#64748b" data-i18n="successBody">La tua richiesta è stata inviata all'amministratore.</p>
         </div>
         <div class="modal-footer" style="justify-content:center">
-            <button class="btn-push btn-success" onclick="closeSuccess()">Ottimo</button>
+            <button class="btn-push btn-success" onclick="closeSuccess()" data-i18n="btnGreat">Ottimo</button>
         </div>
     </div>
 </div>
 
 <header class="app-header">
     <div class="header-top">
-        <div class="brand">📅 Turni<span style="color:var(--primary)">Client</span></div>
-        <button class="btn-help-hero" onclick="toggleModal('helpModal', true)">
-            <span>🎓</span> GUIDE
-        </button>
+        <div class="brand">📅 TSCTurni<span style="color:var(--primary)"> Client</span></div>
+        <div class="header-right-area">
+            <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+                <option value="it">🇮🇹 IT</option>
+                <option value="en">🇬🇧 EN</option>
+                <option value="es">🇪🇸 ES</option>
+            </select>
+            <button class="btn-help-hero" onclick="toggleModal('helpModal', true)">
+                <span>🎓</span> <span data-i18n="btnGuide">GUIDA</span>
+            </button>
+        </div>
     </div>
     <div class="header-toolbar">
         <div class="group-nav">
-            <select id="monthSelect" onchange="renderApp()"></select>
-            <select id="yearSelect" onchange="renderApp()"></select>
+            <select id="monthSelect" class="date-select" onchange="renderApp()"></select>
+            <select id="yearSelect" class="date-select" onchange="renderApp()"></select>
         </div>
         <div class="group-actions">
-            <button class="action-btn btn-print" onclick="window.print()">🖨️ Stampa</button>
+            <button class="action-btn btn-print" onclick="window.print()">🖨️ <span data-i18n="btnPrint">Stampa</span></button>
         </div>
     </div>
 </header>
@@ -349,13 +362,211 @@
 <div id="print-layout">
     <div id="print-title" class="print-header-title"></div>
     <div class="print-grid">
-        <div class="print-col"><table><thead><tr><th colspan="2">Data</th><th>Mattina (06-13)</th><th>Pom (15:30-20:30)</th></tr></thead><tbody id="tbody-left"></tbody></table></div>
-        <div class="print-col"><table><thead><tr><th colspan="2">Data</th><th>Mattina (06-13)</th><th>Pom (15:30-20:30)</th></tr></thead><tbody id="tbody-right"></tbody></table></div>
+        <div class="print-col"><table><thead><tr><th colspan="2" data-i18n="printDate">Data</th><th data-i18n="printAm">Mattina (06-13)</th><th data-i18n="printPm">Pom (15:30-20:30)</th></tr></thead><tbody id="tbody-left"></tbody></table></div>
+        <div class="print-col"><table><thead><tr><th colspan="2" data-i18n="printDate">Data</th><th data-i18n="printAm">Mattina (06-13)</th><th data-i18n="printPm">Pom (15:30-20:30)</th></tr></thead><tbody id="tbody-right"></tbody></table></div>
     </div>
-    <div class="print-footer"><span>Domenica: 07:00 - 13:00</span><span>Festivi (Rosso): 07:00 - 18:00</span></div>
+    <div class="print-footer"><span data-i18n="printSun">Domenica: 07:00 - 13:00</span><span data-i18n="printHol">Festivi (Rosso): 07:00 - 18:00</span></div>
 </div>
 
 <script>
+    // --- TRANSLATIONS CONFIG ---
+    const translations = {
+        it: {
+            btnGuide: "GUIDA",
+            btnPrint: "Stampa",
+            guideTitle: "🎓 Guida Dipendenti",
+            guideSubtitle: "Come usare l'App Turni",
+            demoReport: "Fare una Segnalazione",
+            demoSwap: "Cambio Turno",
+            demoStatus: "Stati Richiesta",
+            demoReportTip: "Tocca la bandierina per iniziare",
+            demoSwapTip: "Usa il tasto Viola per chiedere lo scambio.",
+            demoSent: "Inviata",
+            demoAccepted: "Accettata",
+            demoRejected: "Rifiutata",
+            reqTitle: "📢 Nuova Segnalazione",
+            labelWho: "Chi sei?",
+            labelWhat: "Cosa vuoi fare?",
+            optSwap: "Richiedi Cambio Turno",
+            optAm: "Assente Mattina",
+            optPm: "Assente Pomeriggio",
+            optAll: "Assente Tutto il Giorno",
+            msgConflict: "⚠️ Il collega è già assente per questo turno.",
+            msgSelectAll: "⚠️ Seleziona Chi sei e Cosa vuoi fare.",
+            btnRevoke: "🗑️ Ritira Segnalazione",
+            msgNoRevoke: "Impossibile ritirare segnalazioni passate.",
+            btnCancel: "Annulla",
+            btnSend: "Invia",
+            successTitle: "Inviata!",
+            successBody: "La tua richiesta è stata inviata all'amministratore.",
+            btnGreat: "Ottimo",
+            btnUnderstood: "Ho capito!",
+            msgWait: "⏳ Attesa",
+            msgOk: "✅ OK",
+            msgNo: "❌ NO",
+            statusAcc: "✅ Accettata",
+            statusRej: "❌ Rifiutata",
+            statusWait: "⏳ In Attesa",
+            statusAccDesc: "Confermata dall'Admin.",
+            statusRejDesc: "Non approvata.",
+            statusWaitDesc: "In attesa di approvazione.",
+            reqLabel: "Richiesta:",
+            reqSwap: "🔄 Richiesta Cambio Turno",
+            reqMorning: "Assenza Mattina",
+            reqAfternoon: "Assenza Pomeriggio",
+            reqAllDay: "Assenza Tutto il Giorno",
+            shiftMorning: "Mattina",
+            shiftAfternoon: "Pom.",
+            statusFree: "Libero",
+            statusBoth: "Entrambi",
+            printDate: "Data",
+            printAm: "Mattina (06-13)",
+            printPm: "Pom (15:30-20:30)",
+            printSun: "Domenica: 07:00 - 13:00",
+            printHol: "Festivi (Rosso): 07:00 - 18:00",
+            // Holidays
+            holNewYear: "Capodanno", holEpiphany: "Epifania", holLiberation: "Liberazione",
+            holLabor: "Festa Lavoro", holRepublic: "Repubblica", holFerragosto: "Ferragosto",
+            holSaints: "Ognissanti", holImmaculate: "Immacolata", holChristmas: "Natale",
+            holStephen: "S. Stefano", holEaster: "Pasqua", holMonday: "Pasquetta"
+        },
+        en: {
+            btnGuide: "GUIDE",
+            btnPrint: "Print",
+            guideTitle: "🎓 Staff Guide",
+            guideSubtitle: "How to use the Shift App",
+            demoReport: "Report an Absence",
+            demoSwap: "Swap Shift",
+            demoStatus: "Request Status",
+            demoReportTip: "Tap the flag to start",
+            demoSwapTip: "Use the Purple button to request a swap.",
+            demoSent: "Sent",
+            demoAccepted: "Accepted",
+            demoRejected: "Rejected",
+            reqTitle: "📢 New Report",
+            labelWho: "Who are you?",
+            labelWhat: "What do you want to do?",
+            optSwap: "Request Shift Swap",
+            optAm: "Absent Morning",
+            optPm: "Absent Afternoon",
+            optAll: "Absent All Day",
+            msgConflict: "⚠️ Colleague is already absent for this shift.",
+            msgSelectAll: "⚠️ Select Who you are and What to do.",
+            btnRevoke: "🗑️ Revoke Report",
+            msgNoRevoke: "Cannot revoke past reports.",
+            btnCancel: "Cancel",
+            btnSend: "Send",
+            successTitle: "Sent!",
+            successBody: "Your request has been sent to the admin.",
+            btnGreat: "Great",
+            btnUnderstood: "Got it!",
+            msgWait: "⏳ Wait",
+            msgOk: "✅ OK",
+            msgNo: "❌ NO",
+            statusAcc: "✅ Accepted",
+            statusRej: "❌ Rejected",
+            statusWait: "⏳ Pending",
+            statusAccDesc: "Confirmed by Admin.",
+            statusRejDesc: "Not approved.",
+            statusWaitDesc: "Waiting for approval.",
+            reqLabel: "Request:",
+            reqSwap: "🔄 Shift Swap Request",
+            reqMorning: "Morning Absence",
+            reqAfternoon: "Afternoon Absence",
+            reqAllDay: "All Day Absence",
+            shiftMorning: "Morning",
+            shiftAfternoon: "Aft.",
+            statusFree: "Free",
+            statusBoth: "Both",
+            printDate: "Date",
+            printAm: "Morning (06-13)",
+            printPm: "Aft (15:30-20:30)",
+            printSun: "Sunday: 07:00 - 13:00",
+            printHol: "Holidays (Red): 07:00 - 18:00",
+            // Holidays
+            holNewYear: "New Year", holEpiphany: "Epiphany", holLiberation: "Liberation Day",
+            holLabor: "Labor Day", holRepublic: "Republic Day", holFerragosto: "Ferragosto",
+            holSaints: "All Saints", holImmaculate: "Immaculate", holChristmas: "Christmas",
+            holStephen: "St. Stephen", holEaster: "Easter", holMonday: "Easter Monday"
+        },
+        es: {
+            btnGuide: "GUÍA",
+            btnPrint: "Imprimir",
+            guideTitle: "🎓 Guía Empleados",
+            guideSubtitle: "Cómo usar la App de Turnos",
+            demoReport: "Hacer un Reporte",
+            demoSwap: "Cambio de Turno",
+            demoStatus: "Estados Solicitud",
+            demoReportTip: "Toca la bandera para empezar",
+            demoSwapTip: "Usa el botón Violeta para pedir cambio.",
+            demoSent: "Enviada",
+            demoAccepted: "Aceptada",
+            demoRejected: "Rechazada",
+            reqTitle: "📢 Nuevo Reporte",
+            labelWho: "¿Quién eres?",
+            labelWhat: "¿Qué quieres hacer?",
+            optSwap: "Solicitar Cambio Turno",
+            optAm: "Ausente Mañana",
+            optPm: "Ausente Tarde",
+            optAll: "Ausente Todo el Día",
+            msgConflict: "⚠️ El colega ya está ausente en este turno.",
+            msgSelectAll: "⚠️ Selecciona Quién eres y Qué hacer.",
+            btnRevoke: "🗑️ Retirar Reporte",
+            msgNoRevoke: "No se pueden retirar reportes pasados.",
+            btnCancel: "Cancelar",
+            btnSend: "Enviar",
+            successTitle: "¡Enviada!",
+            successBody: "Tu solicitud ha sido enviada al administrador.",
+            btnGreat: "Genial",
+            btnUnderstood: "¡Entendido!",
+            msgWait: "⏳ Espera",
+            msgOk: "✅ OK",
+            msgNo: "❌ NO",
+            statusAcc: "✅ Aceptada",
+            statusRej: "❌ Rechazada",
+            statusWait: "⏳ Pendiente",
+            statusAccDesc: "Confirmada por el Admin.",
+            statusRejDesc: "No aprobada.",
+            statusWaitDesc: "Esperando aprobación.",
+            reqLabel: "Solicitud:",
+            reqSwap: "🔄 Solicitud Cambio Turno",
+            reqMorning: "Ausencia Mañana",
+            reqAfternoon: "Ausencia Tarde",
+            reqAllDay: "Ausencia Todo el Día",
+            shiftMorning: "Mañana",
+            shiftAfternoon: "Tarde",
+            statusFree: "Libre",
+            statusBoth: "Ambos",
+            printDate: "Fecha",
+            printAm: "Mañana (06-13)",
+            printPm: "Tarde (15:30-20:30)",
+            printSun: "Domingo: 07:00 - 13:00",
+            printHol: "Festivos (Rojo): 07:00 - 18:00",
+            // Holidays
+            holNewYear: "Año Nuevo", holEpiphany: "Epifanía", holLiberation: "Liberación",
+            holLabor: "Día Trabajo", holRepublic: "República", holFerragosto: "Ferragosto",
+            holSaints: "Todos Santos", holImmaculate: "Inmaculada", holChristmas: "Navidad",
+            holStephen: "San Esteban", holEaster: "Pascua", holMonday: "Lunes Pascua"
+        }
+    };
+
+    let currentLang = 'it';
+
+    function t(key) {
+        return translations[currentLang][key] || key;
+    }
+
+    function changeLanguage(lang) {
+        currentLang = lang;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang][key]) {
+                el.innerText = translations[lang][key];
+            }
+        });
+        renderApp(); // Refresh UI
+    }
+
     // CONFIG
     const BIN_ID = "6979e5eb43b1c97be9517651";
     const API_KEY = "$2a$10$LoeF5Ae4yW8YLmCxZF9etOqZpfkhx5zc4u81EreMzPvYRCFztbF0K";
@@ -363,7 +574,6 @@
     const DEFAULT_CONFIG = { p1: "Naio", c1: "#007AFF", g1:"M", p2: "Davide", c2: "#10b981", g2:"M", cb: "#8b5cf6" };
 
     let cloudData = { config: DEFAULT_CONFIG, shifts: {} };
-    const monthNames = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
     const T_AM = "06:00 - 13:00"; const T_PM = "15:30 - 20:30";
     const T_DOM = "07:00 - 13:00"; const T_FEST = "07:00 - 18:00";
 
@@ -395,7 +605,13 @@
 
     // UTILS
     function getEaster(year) { const f=Math.floor,G=year%19,C=f(year/100),H=(C-f(C/4)-f((8*C+13)/25)+19*G+15)%30,I=H-f(H /28)*(1-f(29/(H+1))*f((21-G)/11)),J=(year+f(year/4)+I+2-C+f(C/4))%7,L=I-J,month=3+f((L+40)/44),day=L+28-31*f(month/4); return {month:month-1,day:day}; }
-    function getHolidayName(date) { const d=date.getDate(),m=date.getMonth(),y=date.getFullYear(); if(d===1&&m===0)return "Capodanno"; if(d===6&&m===0)return "Epifania"; if(d===25&&m===3)return "Liberazione"; if(d===1&&m===4)return "Festa Lavoro"; if(d===2&&m===5)return "Repubblica"; if(d===15&&m===7)return "Ferragosto"; if(d===1&&m===10)return "Ognissanti"; if(d===8&&m===11)return "Immacolata"; if(d===25&&m===11)return "Natale"; if(d===26&&m===11)return "S. Stefano"; const E=getEaster(y); if(d===E.day&&m===E.month)return "Pasqua"; const PM=new Date(y,E.month,E.day+1); if(d===PM.getDate()&&m===PM.getMonth())return "Pasquetta"; return null; }
+
+    function getHolidayKey(date) {
+        const d=date.getDate(),m=date.getMonth(),y=date.getFullYear();
+        if(d===1&&m===0)return "holNewYear"; if(d===6&&m===0)return "holEpiphany"; if(d===25&&m===3)return "holLiberation"; if(d===1&&m===4)return "holLabor"; if(d===2&&m===5)return "holRepublic"; if(d===15&&m===7)return "holFerragosto"; if(d===1&&m===10)return "holSaints"; if(d===8&&m===11)return "holImmaculate"; if(d===25&&m===11)return "holChristmas"; if(d===26&&m===11)return "holStephen";
+        const E=getEaster(y); if(d===E.day&&m===E.month)return "holEaster"; const PM=new Date(y,E.month,E.day+1); if(d===PM.getDate()&&m===PM.getMonth())return "holMonday";
+        return null;
+    }
 
     function applyTheme() {
         if(!cloudData.config) return;
@@ -407,11 +623,28 @@
 
     async function init() {
         const ms = document.getElementById('monthSelect'), ys = document.getElementById('yearSelect');
-        ms.innerHTML = ""; ys.innerHTML = "";
-        monthNames.forEach((n, i) => { let op = document.createElement('option'); op.value = i; op.innerText = n; if(i === currentMonth) op.selected = true; ms.appendChild(op); });
+
+        renderMonthSelector(); // Init month list
+
         for(let y = currentYear - 1; y <= currentYear + 2; y++) { let op = document.createElement('option'); op.value = y; op.innerText = y; if(y === currentYear) op.selected = true; ys.appendChild(op); }
-        document.getElementById('app-grid').innerHTML = '<div style="text-align:center; grid-column:1/-1; padding:40px">Caricamento...</div>';
-        await fetchCloudData(); applyTheme(); renderApp();
+        document.getElementById('app-grid').innerHTML = '<div style="text-align:center; grid-column:1/-1; padding:40px">Loading...</div>';
+        await fetchCloudData();
+        changeLanguage('it');
+        applyTheme();
+    }
+
+    function renderMonthSelector() {
+        const ms = document.getElementById('monthSelect');
+        ms.innerHTML = "";
+        for(let i=0; i<12; i++) {
+            let date = new Date(currentYear, i, 1);
+            let name = date.toLocaleString(currentLang, { month: 'long' });
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+            let op = document.createElement('option');
+            op.value = i; op.innerText = name;
+            if(i === currentMonth) op.selected = true;
+            ms.appendChild(op);
+        }
     }
 
     // --- DEMO LOGIC ---
@@ -438,6 +671,11 @@
         const cfg = cloudData.config || DEFAULT_CONFIG;
         const cont = document.getElementById('userSelectContainer');
 
+        // Translate Date Title
+        let mName = new Date(currentYear, currentMonth, 1).toLocaleString(currentLang, { month: 'long' });
+        mName = mName.charAt(0).toUpperCase() + mName.slice(1);
+        document.getElementById('reqDateTitle').innerText = `${day} ${mName} ${currentYear}`;
+
         cont.innerHTML = `
             <div class="user-card" onclick="selectUser('${cfg.p1}', this)">
                 <div class="user-icon">${getAvatar(cfg.p1)}</div><div class="user-name">${cfg.p1}</div>
@@ -459,7 +697,6 @@
         document.getElementById('newRequestOptions').style.display = 'block';
         document.getElementById('existingRequestInfo').style.display = 'none';
         document.getElementById('btnSend').style.display = 'none';
-        document.getElementById('reqDateTitle').innerText = `${day} ${monthNames[currentMonth]} ${currentYear}`;
 
         toggleModal('requestModal', true);
     }
@@ -481,14 +718,24 @@
             document.getElementById('existingRequestInfo').style.display = 'block';
             document.getElementById('btnSend').style.display = 'none';
 
-            const dictType = { 'swap': '🔄 Richiesta Cambio Turno', 'no_am': 'Assenza Mattina', 'no_pm': 'Assenza Pomeriggio', 'no_all': 'Assenza Tutto il Giorno' };
+            const dictType = { 'swap': t('reqSwap'), 'no_am': t('reqMorning'), 'no_pm': t('reqAfternoon'), 'no_all': t('reqAllDay') };
             let statusHtml = "", bgStyle = "";
-            if(myReq.status === 'accepted') { statusHtml = `<h3 style="margin:0 0 5px 0; color:#065f46">✅ Accettata</h3><p style="margin:0; font-size:0.9rem">Confermata dall'Admin.</p>`; bgStyle = "background:#d1fae5; border-color:#a7f3d0; color:#065f46"; }
-            else if(myReq.status === 'rejected') { statusHtml = `<h3 style="margin:0 0 5px 0; color:#991b1b">❌ Rifiutata</h3><p style="margin:0; font-size:0.9rem">Non approvata.</p>`; bgStyle = "background:#fee2e2; border-color:#fecaca; color:#991b1b"; }
-            else { statusHtml = `<h3 style="margin:0 0 5px 0; color:#b45309">⏳ In Attesa</h3><p style="margin:0; font-size:0.9rem">In attesa di approvazione.</p>`; bgStyle = "background:#fff7ed; border-color:#fed7aa; color:#c2410c"; }
+
+            if(myReq.status === 'accepted') {
+                statusHtml = `<h3 style="margin:0 0 5px 0; color:#065f46">${t('statusAcc')}</h3><p style="margin:0; font-size:0.9rem">${t('statusAccDesc')}</p>`;
+                bgStyle = "background:#d1fae5; border-color:#a7f3d0; color:#065f46";
+            }
+            else if(myReq.status === 'rejected') {
+                statusHtml = `<h3 style="margin:0 0 5px 0; color:#991b1b">${t('statusRej')}</h3><p style="margin:0; font-size:0.9rem">${t('statusRejDesc')}</p>`;
+                bgStyle = "background:#fee2e2; border-color:#fecaca; color:#991b1b";
+            }
+            else {
+                statusHtml = `<h3 style="margin:0 0 5px 0; color:#b45309">${t('statusWait')}</h3><p style="margin:0; font-size:0.9rem">${t('statusWaitDesc')}</p>`;
+                bgStyle = "background:#fff7ed; border-color:#fed7aa; color:#c2410c";
+            }
 
             document.getElementById('existingReqDetails').style.cssText = `padding:15px; border-radius:12px; border:1px solid; margin-bottom:15px; text-align:left; ${bgStyle}`;
-            document.getElementById('existingReqDetails').innerHTML = `${statusHtml}<hr style="border:0; border-top:1px solid rgba(0,0,0,0.1); margin:10px 0;"><strong>Richiesta:</strong><br>${dictType[myReq.type]}`;
+            document.getElementById('existingReqDetails').innerHTML = `${statusHtml}<hr style="border:0; border-top:1px solid rgba(0,0,0,0.1); margin:10px 0;"><strong>${t('reqLabel')}</strong><br>${dictType[myReq.type]}`;
 
             const today = new Date(); today.setHours(0,0,0,0);
             const shiftDate = new Date(currentYear, currentMonth, selectedDayForReq);
@@ -566,6 +813,9 @@
     function renderApp() {
         currentMonth = parseInt(document.getElementById('monthSelect').value);
         currentYear = parseInt(document.getElementById('yearSelect').value);
+
+        renderMonthSelector();
+
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
         const db = loadDB();
         const grid = document.getElementById('app-grid');
@@ -573,18 +823,22 @@
         const printTitle = document.getElementById('print-title');
 
         grid.innerHTML = ""; if(tbL) tbL.innerHTML = ""; if(tbR) tbR.innerHTML = "";
-        if(printTitle) printTitle.innerText = `${monthNames[currentMonth]} ${currentYear} - TURNI`;
+
+        let mName = new Date(currentYear, currentMonth, 1).toLocaleString(currentLang, {month: 'long'});
+        mName = mName.charAt(0).toUpperCase() + mName.slice(1);
+        if(printTitle) printTitle.innerText = `${mName} ${currentYear} - TURNI`;
 
         const today = new Date();
 
         for(let i=1; i<=daysInMonth; i++) {
             const date = new Date(currentYear, currentMonth, i);
             const dayWeek = date.getDay();
-            const holName = getHolidayName(date);
-            const isSpecialHoliday = (holName !== null);
+            const holKey = getHolidayKey(date);
+            const holName = holKey ? t(holKey) : null;
+            const isSpecialHoliday = (holKey !== null);
             const isSunday = (dayWeek === 0);
             const isHolidayMode = isSpecialHoliday || isSunday;
-            const dayShort = date.toLocaleDateString('it-IT', {weekday: 'short'});
+            const dayShort = date.toLocaleDateString(currentLang, {weekday: 'short'});
             const rowData = db[i] || {};
 
             const card = document.createElement('div');
@@ -599,9 +853,9 @@
                 const rej = rowData.requests.find(r => r.status === 'rejected');
                 const pen = rowData.requests.find(r => !r.status);
 
-                if (acc) requestBadge = `<span class="status-pill st-acc" ${clickAttr}>✅ OK</span>`;
-                else if (pen) requestBadge = `<span class="status-pill st-wait" ${clickAttr}>⏳ Attesa</span>`;
-                else if (rej) requestBadge = `<span class="status-pill st-rej" ${clickAttr}>❌ NO</span>`;
+                if (acc) requestBadge = `<span class="status-pill st-acc" ${clickAttr}>${t('msgOk')}</span>`;
+                else if (pen) requestBadge = `<span class="status-pill st-wait" ${clickAttr}>${t('msgWait')}</span>`;
+                else if (rej) requestBadge = `<span class="status-pill st-rej" ${clickAttr}>${t('msgNo')}</span>`;
             }
 
             const headerHtml = `
@@ -618,7 +872,7 @@
                 card.innerHTML = `${headerHtml}<div class="card-body"><div class="shift-row"><div class="shift-info"><span class="shift-icon">${isSpecialHoliday?'⭐':'☕'}</span><span class="shift-time">${isSpecialHoliday?T_FEST:T_DOM}</span></div>${renderBadge(worker)}</div></div>`;
             } else {
                 const w1 = rowData['am'] || '-'; const w2 = rowData['pm'] || '-';
-                card.innerHTML = `${headerHtml}<div class="card-body"><div class="shift-row"><div class="shift-info"><span class="shift-icon">☀️ Mattina</span><span class="shift-time">${T_AM}</span></div>${renderBadge(w1)}</div><div class="shift-row"><div class="shift-info"><span class="shift-icon">🌙 Pom.</span><span class="shift-time">${T_PM}</span></div>${renderBadge(w2)}</div></div>`;
+                card.innerHTML = `${headerHtml}<div class="card-body"><div class="shift-row"><div class="shift-info"><span class="shift-icon">☀️ ${t('shiftMorning')}</span><span class="shift-time">${T_AM}</span></div>${renderBadge(w1)}</div><div class="shift-row"><div class="shift-info"><span class="shift-icon">🌙 ${t('shiftAfternoon')}</span><span class="shift-time">${T_PM}</span></div>${renderBadge(w2)}</div></div>`;
             }
             grid.appendChild(card);
 
@@ -632,7 +886,7 @@
                     const worker = rowData['hol'] || '-';
                     const hTxt = isSpecialHoliday ? `<span style="font-size:7pt; color:red; display:block; font-weight:bold">${holName.toUpperCase()}</span>` : '';
                     let printTime = isSpecialHoliday ? "07-18" : "07-13";
-                    let wTxt = (worker === 'Entrambi') ? `<span class="p-name t-both">ENTRAMBI</span>` : (worker!=='-' ? `<span class="p-name ${getColClass(worker)}">${worker}</span>` : '');
+                    let wTxt = (worker === 'Entrambi') ? `<span class="p-name t-both">${t('statusBoth').toUpperCase()}</span>` : (worker!=='-' ? `<span class="p-name ${getColClass(worker)}">${worker}</span>` : '');
                     tdContent = `<td colspan="2">${hTxt}Orario ${printTime}: ${wTxt}</td>`;
                 } else {
                     const w1 = rowData['am'] || '-'; const w2 = rowData['pm'] || '-';
@@ -652,7 +906,12 @@
         if(n === cfg.p1) cls = 'badge-p1';
         if(n === cfg.p2) cls = 'badge-p2';
         if(n === 'Entrambi') cls = 'badge-both';
-        return `<span class="badge ${cls}">${n==='-'?'Libero':n}</span>`;
+
+        let display = n;
+        if(n === '-') display = t('statusFree');
+        if(n === 'Entrambi') display = t('statusBoth');
+
+        return `<span class="badge ${cls}">${display}</span>`;
     }
     function getColClass(n) {
         const cfg = cloudData.config || DEFAULT_CONFIG;

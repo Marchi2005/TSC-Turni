@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-   <title>TSCTurni Admin</title>
+    <title>TSCTurni Admin</title>
 
     <link rel="icon" type="image/png" href="TSCIconAdmin_Clear.png">
     <link rel="icon" type="image/png" href="TSCIconAdmin_Dark.png" media="(prefers-color-scheme: dark)">
-
     <link rel="apple-touch-icon" href="TSCIconAdmin_Clear.png">
-
     <link rel="manifest" href="manifest_admin.json">
 
     <meta name="theme-color" content="#6366f1">
@@ -72,6 +70,12 @@
 
         .header-right-area { display: flex; gap: 10px; align-items: center; }
 
+        .lang-select {
+            padding: 6px; border-radius: 12px; border: 1px solid #e2e8f0;
+            background: white; font-size: 1rem; cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); outline: none;
+        }
+
         .btn-help-hero {
             background: linear-gradient(135deg, var(--primary), var(--accent-purple));
             color: white; border: none; padding: 8px 16px;
@@ -99,7 +103,7 @@
 
         .header-toolbar { padding: 0 20px 15px 20px; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
         .group-nav { display: flex; gap: 10px; flex-grow: 1; min-width: 200px; }
-        select { flex: 1; width: 100%; padding: 10px 12px; border-radius: 10px; border: 2px solid #e2e8f0; background: white; font-size: 14px; font-weight: 700; color: #475569; -webkit-appearance: none; outline: none; cursor: pointer; }
+        select.date-select { flex: 1; width: 100%; padding: 10px 12px; border-radius: 10px; border: 2px solid #e2e8f0; background: white; font-size: 14px; font-weight: 700; color: #475569; -webkit-appearance: none; outline: none; cursor: pointer; }
         .group-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: center; }
         .action-btn { border: none; border-radius: 10px; padding: 10px 14px; font-size: 13px; font-weight: 800; color: white; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: transform 0.1s; }
         .action-btn:active { transform: translateY(2px); box-shadow: none !important; }
@@ -293,48 +297,48 @@
 <div id="helpModal" class="modal-overlay">
     <div class="modal-box wide">
         <div class="modal-header">
-            <h3>🎓 Guida Interattiva</h3>
-            <div class="modal-subtitle">Clicca sulle voci per vedere la demo</div>
+            <h3 data-i18n="guideTitle">🎓 Guida Interattiva</h3>
+            <div class="modal-subtitle" data-i18n="guideSubtitle">Clicca sulle voci per vedere la demo</div>
         </div>
         <div class="guide-container">
             <div class="guide-menu">
-                <div class="guide-menu-item active" onclick="showDemo('assign', this)"><span class="icon">🖱️</span> Assegnazione Turni</div>
-                <div class="guide-menu-item" onclick="showDemo('swap', this)"><span class="icon">🔄</span> Cambio Turno</div>
-                <div class="guide-menu-item" onclick="showDemo('req', this)"><span class="icon">📩</span> Ricezione Richieste</div>
-                <div class="guide-menu-item" onclick="showDemo('accept', this)"><span class="icon">✅</span> Accettare Richieste</div>
+                <div class="guide-menu-item active" onclick="showDemo('assign', this)"><span class="icon">🖱️</span> <span data-i18n="demoAssign">Assegnazione Turni</span></div>
+                <div class="guide-menu-item" onclick="showDemo('swap', this)"><span class="icon">🔄</span> <span data-i18n="demoSwap">Cambio Turno</span></div>
+                <div class="guide-menu-item" onclick="showDemo('req', this)"><span class="icon">📩</span> <span data-i18n="demoReq">Ricezione Richieste</span></div>
+                <div class="guide-menu-item" onclick="showDemo('accept', this)"><span class="icon">✅</span> <span data-i18n="demoAccept">Accettare Richieste</span></div>
             </div>
             <div class="guide-demo-area">
                 <div id="demo-assign" class="demo-scene demo-assign active">
-                    <div class="fake-card"><div class="fake-date">12 Lun</div><div class="fake-row"><span>Mattina</span><span class="fake-badge"></span></div></div>
-                    <div class="cursor-hand">👆</div><p style="position:absolute; bottom:10px; font-size:0.8rem; color:#64748b">1 Clic = Blu, 2 Clic = Verde</p>
+                    <div class="fake-card"><div class="fake-date">12 Lun</div><div class="fake-row"><span data-i18n="shiftMorning">Mattina</span><span class="fake-badge"></span></div></div>
+                    <div class="cursor-hand">👆</div><p style="position:absolute; bottom:10px; font-size:0.8rem; color:#64748b" data-i18n="demoAssignTip">1 Clic = Blu, 2 Clic = Verde</p>
                 </div>
                 <div id="demo-swap" class="demo-scene">
-                    <div class="fake-req-swap"><strong>🔄 Cambio Turno</strong><br>Davide chiede cambio.<br></div>
+                    <div class="fake-req-swap"><strong data-i18n="reqSwap">🔄 Cambio Turno</strong><br>Davide...<br></div>
                     <div class="swap-anim-box"><div class="s-box s1">N</div><div style="align-self:center">⚡</div><div class="s-box s2">D</div></div>
-                    <p style="position:absolute; bottom:10px; font-size:0.8rem; color:#64748b">I turni si invertono in automatico</p>
+                    <p style="position:absolute; bottom:10px; font-size:0.8rem; color:#64748b" data-i18n="demoSwapTip">I turni si invertono in automatico</p>
                 </div>
                 <div id="demo-req" class="demo-scene">
                     <div class="fake-card-req"><div class="demo-triangle"><span class="demo-symbol">!</span></div><span style="font-size:2.5rem">📅</span></div>
-                    <p style="position:absolute; bottom:10px; font-size:0.8rem; color:#64748b">Il triangolo indica una richiesta</p>
+                    <p style="position:absolute; bottom:10px; font-size:0.8rem; color:#64748b" data-i18n="demoReqTip">Il triangolo indica una richiesta</p>
                 </div>
                 <div id="demo-accept" class="demo-scene demo-accept">
-                    <div class="fake-req-acc"><strong>☀️ Assenza Mattina</strong><br><span style="font-size:0.8rem; color:#666">Naio - 10:30</span><br><span class="btn-fake btn-fake-ok">✅ Accetta</span></div>
-                    <div class="cursor-hand">👆</div><p style="position:absolute; bottom:10px; font-size:0.8rem; color:#64748b">Approva per aggiornare i turni</p>
+                    <div class="fake-req-acc"><strong data-i18n="reqMorning">☀️ Assenza Mattina</strong><br><span style="font-size:0.8rem; color:#666">Naio - 10:30</span><br><span class="btn-fake btn-fake-ok" data-i18n="btnAccept">✅ Accetta</span></div>
+                    <div class="cursor-hand">👆</div><p style="position:absolute; bottom:10px; font-size:0.8rem; color:#64748b" data-i18n="demoAcceptTip">Approva per aggiornare i turni</p>
                 </div>
             </div>
         </div>
-        <div class="modal-footer"><button class="btn-push btn-primary" onclick="toggleModal('helpModal', false)">Ho capito, grazie!</button></div>
+        <div class="modal-footer"><button class="btn-push btn-primary" onclick="toggleModal('helpModal', false)" data-i18n="btnUnderstood">Ho capito, grazie!</button></div>
     </div>
 </div>
 
 <div id="settingsModal" class="modal-overlay">
     <div class="modal-box">
-        <div class="modal-header"><h3>🎨 Personalizzazione</h3><div class="modal-subtitle">Definisci nomi e colori del team</div></div>
+        <div class="modal-header"><h3 data-i18n="settingsTitle">🎨 Personalizzazione</h3><div class="modal-subtitle" data-i18n="settingsSubtitle">Definisci nomi e colori del team</div></div>
         <div class="modal-body">
             <div class="setting-card">
                 <div class="setting-icon">👤</div>
                 <div class="setting-content">
-                    <label>Dipendente 1</label>
+                    <label data-i18n="labelEmp1">Dipendente 1</label>
                     <input type="text" id="inName1" placeholder="Nome">
                     <div class="gender-toggle">
                         <span class="g-btn" id="g1-m" onclick="setGender(1,'M')">👨</span>
@@ -347,7 +351,7 @@
             <div class="setting-card">
                 <div class="setting-icon">👤</div>
                 <div class="setting-content">
-                    <label>Dipendente 2</label>
+                    <label data-i18n="labelEmp2">Dipendente 2</label>
                     <input type="text" id="inName2" placeholder="Nome">
                     <div class="gender-toggle">
                         <span class="g-btn" id="g2-m" onclick="setGender(2,'M')">👨</span>
@@ -357,61 +361,61 @@
                 </div>
                 <div class="color-wrapper"><input type="color" id="inCol2"></div>
             </div>
-            <div class="setting-card"><div class="setting-icon">👥</div><div class="setting-content"><label>Turno Doppio</label><input type="text" value="Entrambi" disabled style="color:#94a3b8; font-style:italic"></div><div class="color-wrapper"><input type="color" id="inColBoth"></div></div>
+            <div class="setting-card"><div class="setting-icon">👥</div><div class="setting-content"><label data-i18n="labelDouble">Turno Doppio</label><input type="text" value="Entrambi" disabled style="color:#94a3b8; font-style:italic" id="lblBoth"></div><div class="color-wrapper"><input type="color" id="inColBoth"></div></div>
         </div>
-        <div class="modal-footer"><button class="btn-push btn-secondary" onclick="toggleModal('settingsModal', false)" style="width:auto">Annulla</button><button class="btn-push btn-primary" onclick="saveConfig()">Salva</button></div>
+        <div class="modal-footer"><button class="btn-push btn-secondary" onclick="toggleModal('settingsModal', false)" style="width:auto" data-i18n="btnCancel">Annulla</button><button class="btn-push btn-primary" onclick="saveConfig()" data-i18n="btnSave">Salva</button></div>
     </div>
 </div>
 
 <div id="autoModal" class="modal-overlay">
     <div class="modal-box" style="max-width:380px">
-        <div class="modal-header"><div style="font-size:3rem; margin-bottom:10px">🪄</div><h3>Generazione Auto</h3></div>
-        <div class="modal-body" style="text-align:center"><p style="color:#64748b">Il sistema assegnerà automaticamente i turni mancanti rispettando i festivi.<br><br>Vuoi procedere?</p></div>
-        <div class="modal-footer" style="justify-content:center"><button class="btn-push btn-secondary" onclick="toggleModal('autoModal', false)">Annulla</button><button class="btn-push btn-auto" onclick="confirmAuto()">Procedi</button></div>
+        <div class="modal-header"><div style="font-size:3rem; margin-bottom:10px">🪄</div><h3 data-i18n="autoTitle">Generazione Auto</h3></div>
+        <div class="modal-body" style="text-align:center"><p style="color:#64748b" data-i18n="autoBody">Il sistema assegnerà automaticamente i turni mancanti rispettando i festivi.<br><br>Vuoi procedere?</p></div>
+        <div class="modal-footer" style="justify-content:center"><button class="btn-push btn-secondary" onclick="toggleModal('autoModal', false)" data-i18n="btnCancel">Annulla</button><button class="btn-push btn-auto" onclick="confirmAuto()" data-i18n="btnProceed">Procedi</button></div>
     </div>
 </div>
 
 <div id="conflictModal" class="modal-overlay">
     <div class="modal-box" style="max-width:380px">
-        <div class="modal-header"><div style="font-size:3rem; margin-bottom:10px; color:var(--warning)">⚠️</div><h3 style="color:#b45309">Attenzione!</h3></div>
-        <div class="modal-body" style="text-align:center"><p id="conflictMsgText" style="color:#374151; font-weight:600; font-size:1.1rem; margin-bottom:10px"></p><p style="color:#64748b; font-size:0.9rem">Questa persona ha inviato una richiesta di assenza per questo turno.</p></div>
+        <div class="modal-header"><div style="font-size:3rem; margin-bottom:10px; color:var(--warning)">⚠️</div><h3 style="color:#b45309" data-i18n="conflictTitle">Attenzione!</h3></div>
+        <div class="modal-body" style="text-align:center"><p id="conflictMsgText" style="color:#374151; font-weight:600; font-size:1.1rem; margin-bottom:10px"></p><p style="color:#64748b; font-size:0.9rem" data-i18n="conflictBody">Questa persona ha inviato una richiesta di assenza per questo turno.</p></div>
         <div class="modal-footer" style="flex-direction:column; gap:10px">
-            <button class="btn-push btn-primary" onclick="resolveConflict('next')">⏩ Passa al Prossimo</button>
-            <button class="btn-push btn-secondary" onclick="resolveConflict('force')">⚠️ Forza Inserimento</button>
-            <button class="btn-push btn-secondary" style="background:#f1f5f9; color:#94a3b8; box-shadow:none" onclick="toggleModal('conflictModal', false)">Annulla</button>
+            <button class="btn-push btn-primary" onclick="resolveConflict('next')" data-i18n="btnNext">⏩ Passa al Prossimo</button>
+            <button class="btn-push btn-secondary" onclick="resolveConflict('force')" data-i18n="btnForce">⚠️ Forza Inserimento</button>
+            <button class="btn-push btn-secondary" style="background:#f1f5f9; color:#94a3b8; box-shadow:none" onclick="toggleModal('conflictModal', false)" data-i18n="btnCancel">Annulla</button>
         </div>
     </div>
 </div>
 
 <div id="resetModal" class="modal-overlay">
     <div class="modal-box" style="max-width:380px">
-        <div class="modal-header"><div style="font-size:3rem; margin-bottom:10px">🗑️</div><h3>Reset Mese</h3></div>
-        <div class="modal-body" style="text-align:center"><p style="color:#64748b">Vuoi davvero cancellare tutti i turni di questo mese?</p></div>
-        <div class="modal-footer" style="justify-content:center"><button class="btn-push btn-secondary" onclick="toggleModal('resetModal', false)">Annulla</button><button class="btn-push btn-danger" onclick="performReset()">Conferma Reset</button></div>
+        <div class="modal-header"><div style="font-size:3rem; margin-bottom:10px">🗑️</div><h3 data-i18n="resetTitle">Reset Mese</h3></div>
+        <div class="modal-body" style="text-align:center"><p style="color:#64748b" data-i18n="resetBody">Vuoi davvero cancellare tutti i turni di questo mese?</p></div>
+        <div class="modal-footer" style="justify-content:center"><button class="btn-push btn-secondary" onclick="toggleModal('resetModal', false)" data-i18n="btnCancel">Annulla</button><button class="btn-push btn-danger" onclick="performReset()" data-i18n="btnConfirmReset">Conferma Reset</button></div>
     </div>
 </div>
 
 <div id="acceptModal" class="modal-overlay">
     <div class="modal-box" style="max-width:380px">
-        <div class="modal-header"><div style="font-size:3rem; margin-bottom:10px">✅</div><h3 style="color:var(--success-shadow)">Accetta Richiesta</h3></div>
-        <div class="modal-body" style="text-align:center"><p style="color:#64748b">Confermi l'operazione? Il calendario verrà aggiornato.</p></div>
-        <div class="modal-footer" style="justify-content:center"><button class="btn-push btn-secondary" onclick="toggleModal('acceptModal', false)">Annulla</button><button class="btn-push btn-success" onclick="finalizeRequest('accepted')">Conferma</button></div>
+        <div class="modal-header"><div style="font-size:3rem; margin-bottom:10px">✅</div><h3 style="color:var(--success-shadow)" data-i18n="acceptTitle">Accetta Richiesta</h3></div>
+        <div class="modal-body" style="text-align:center"><p style="color:#64748b" data-i18n="acceptBody">Confermi l'operazione? Il calendario verrà aggiornato.</p></div>
+        <div class="modal-footer" style="justify-content:center"><button class="btn-push btn-secondary" onclick="toggleModal('acceptModal', false)" data-i18n="btnCancel">Annulla</button><button class="btn-push btn-success" onclick="finalizeRequest('accepted')" data-i18n="btnConfirm">Conferma</button></div>
     </div>
 </div>
 
 <div id="rejectModal" class="modal-overlay">
     <div class="modal-box" style="max-width:380px">
-        <div class="modal-header"><div style="font-size:3rem; margin-bottom:10px">❌</div><h3 style="color:var(--danger-shadow)">Rifiuta Richiesta</h3></div>
-        <div class="modal-body" style="text-align:center"><p style="color:#64748b">Sei sicuro di voler rifiutare questa richiesta?</p></div>
-        <div class="modal-footer" style="justify-content:center"><button class="btn-push btn-secondary" onclick="toggleModal('rejectModal', false)">Annulla</button><button class="btn-push btn-danger" onclick="finalizeRequest('rejected')">Rifiuta</button></div>
+        <div class="modal-header"><div style="font-size:3rem; margin-bottom:10px">❌</div><h3 style="color:var(--danger-shadow)" data-i18n="rejectTitle">Rifiuta Richiesta</h3></div>
+        <div class="modal-body" style="text-align:center"><p style="color:#64748b" data-i18n="rejectBody">Sei sicuro di voler rifiutare questa richiesta?</p></div>
+        <div class="modal-footer" style="justify-content:center"><button class="btn-push btn-secondary" onclick="toggleModal('rejectModal', false)" data-i18n="btnCancel">Annulla</button><button class="btn-push btn-danger" onclick="finalizeRequest('rejected')" data-i18n="btnReject">Rifiuta</button></div>
     </div>
 </div>
 
 <div id="manageReqModal" class="modal-overlay">
     <div class="modal-box">
-        <div class="modal-header"><h3>📩 Richieste</h3><div class="modal-subtitle" id="manageReqTitle"></div></div>
+        <div class="modal-header"><h3 data-i18n="reqTitle">📩 Richieste</h3><div class="modal-subtitle" id="manageReqTitle"></div></div>
         <div class="modal-body"><div id="reqListContainer" class="req-container"></div></div>
-        <div class="modal-footer"><button class="btn-push btn-secondary" onclick="toggleModal('manageReqModal', false)">Chiudi</button></div>
+        <div class="modal-footer"><button class="btn-push btn-secondary" onclick="toggleModal('manageReqModal', false)" data-i18n="btnClose">Chiudi</button></div>
     </div>
 </div>
 
@@ -420,27 +424,271 @@
         <div class="brand">📅 TSCTurni<span style="color:var(--primary)"> Admin</span></div>
         <div class="header-right-area">
             <div id="saveStatus"><span>⏳</span></div>
-            <button class="btn-help-hero" onclick="toggleModal('helpModal', true)"><span>🎓</span> GUIDE</button>
+            <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+                <option value="it">🇮🇹 IT</option>
+                <option value="en">🇬🇧 EN</option>
+                <option value="es">🇪🇸 ES</option>
+            </select>
+            <button class="btn-help-hero" onclick="toggleModal('helpModal', true)"><span>🎓</span> <span data-i18n="btnGuide">GUIDA</span></button>
             <button class="btn-icon-head" onclick="toggleSettings(true)" title="Impostazioni">⚙️</button>
         </div>
     </div>
     <div class="header-toolbar">
-        <div class="group-nav"><select id="monthSelect" onchange="renderApp()"></select><select id="yearSelect" onchange="renderApp()"></select></div>
-        <div class="group-actions"><button class="action-btn btn-auto" onclick="toggleModal('autoModal', true)">🪄 Auto</button><button class="action-btn btn-reset" onclick="toggleModal('resetModal', true)">🗑️</button><button class="action-btn btn-print" onclick="window.print()">🖨️</button></div>
+        <div class="group-nav"><select id="monthSelect" class="date-select" onchange="renderApp()"></select><select id="yearSelect" class="date-select" onchange="renderApp()"></select></div>
+        <div class="group-actions"><button class="action-btn btn-auto" onclick="toggleModal('autoModal', true)">🪄 <span data-i18n="btnAuto">Auto</span></button><button class="action-btn btn-reset" onclick="toggleModal('resetModal', true)">🗑️</button><button class="action-btn btn-print" onclick="window.print()">🖨️</button></div>
     </div>
 </header>
 
 <div id="app-grid" class="main-container"></div>
-<div id="print-layout"><div id="print-title" class="print-header-title"></div><div class="print-grid"><div class="print-col"><table><thead><tr><th colspan="2">Data</th><th>Mattina (06-13)</th><th>Pom (15:30-20:30)</th></tr></thead><tbody id="tbody-left"></tbody></table></div><div class="print-col"><table><thead><tr><th colspan="2">Data</th><th>Mattina (06-13)</th><th>Pom (15:30-20:30)</th></tr></thead><tbody id="tbody-right"></tbody></table></div></div><div class="print-footer"><span>Domenica: 07:00 - 13:00</span><span>Festivi (Rosso): 07:00 - 18:00</span></div></div>
+<div id="print-layout">
+    <div id="print-title" class="print-header-title"></div>
+    <div class="print-grid">
+        <div class="print-col"><table><thead><tr><th colspan="2" data-i18n="printDate">Data</th><th data-i18n="printAm">Mattina (06-13)</th><th data-i18n="printPm">Pom (15:30-20:30)</th></tr></thead><tbody id="tbody-left"></tbody></table></div>
+        <div class="print-col"><table><thead><tr><th colspan="2" data-i18n="printDate">Data</th><th data-i18n="printAm">Mattina (06-13)</th><th data-i18n="printPm">Pom (15:30-20:30)</th></tr></thead><tbody id="tbody-right"></tbody></table></div>
+    </div>
+    <div class="print-footer"><span data-i18n="printSun">Domenica: 07:00 - 13:00</span><span data-i18n="printHol">Festivi (Rosso): 07:00 - 18:00</span></div>
+</div>
 
 <script>
+    // --- TRANSLATIONS CONFIG ---
+    const translations = {
+        it: {
+            btnGuide: "GUIDA",
+            btnAuto: "Auto",
+            guideTitle: "🎓 Guida Interattiva",
+            guideSubtitle: "Clicca sulle voci per vedere la demo",
+            demoAssign: "Assegnazione Turni",
+            demoSwap: "Cambio Turno",
+            demoReq: "Ricezione Richieste",
+            demoAccept: "Accettare Richieste",
+            demoAssignTip: "1 Clic = Blu, 2 Clic = Verde",
+            demoSwapTip: "I turni si invertono in automatico",
+            demoReqTip: "Il triangolo indica una richiesta",
+            demoAcceptTip: "Approva per aggiornare i turni",
+            settingsTitle: "🎨 Personalizzazione",
+            settingsSubtitle: "Definisci nomi e colori del team",
+            labelEmp1: "Dipendente 1",
+            labelEmp2: "Dipendente 2",
+            labelDouble: "Turno Doppio",
+            btnCancel: "Annulla",
+            btnSave: "Salva",
+            autoTitle: "Generazione Auto",
+            autoBody: "Il sistema assegnerà automaticamente i turni mancanti rispettando i festivi.<br><br>Vuoi procedere?",
+            btnProceed: "Procedi",
+            conflictTitle: "Attenzione!",
+            conflictBody: "Questa persona ha inviato una richiesta di assenza per questo turno.",
+            btnNext: "⏩ Passa al Prossimo",
+            btnForce: "⚠️ Forza Inserimento",
+            resetTitle: "Reset Mese",
+            resetBody: "Vuoi davvero cancellare tutti i turni di questo mese?",
+            btnConfirmReset: "Conferma Reset",
+            acceptTitle: "Accetta Richiesta",
+            acceptBody: "Confermi l'operazione? Il calendario verrà aggiornato.",
+            btnConfirm: "Conferma",
+            rejectTitle: "Rifiuta Richiesta",
+            rejectBody: "Sei sicuro di voler rifiutare questa richiesta?",
+            btnReject: "Rifiuta",
+            reqTitle: "📩 Richieste",
+            btnClose: "Chiudi",
+            btnUnderstood: "Ho capito, grazie!",
+            msgSaving: "Salvataggio...",
+            msgSaved: "Salvato",
+            msgError: "Errore",
+            msgAbsent: "è ASSENTE",
+            msgNoReq: "Nessuna richiesta",
+            msgReqAcc: "Accettata",
+            msgReqRej: "Rifiutata",
+            btnAccept: "Accetta",
+            reqMorning: "Assenza Mattina",
+            reqAfternoon: "Assenza Pomeriggio",
+            reqAllDay: "Assenza Tutto Giorno",
+            reqSwap: "Cambio Turno",
+            shiftMorning: "Mattina",
+            shiftAfternoon: "Pomeriggio",
+            shiftFull: "Intera",
+            statusTurn: "Tocca",
+            statusFree: "Libero",
+            statusBoth: "Entrambi",
+            printDate: "Data",
+            printAm: "Mattina (06-13)",
+            printPm: "Pom (15:30-20:30)",
+            printSun: "Domenica: 07:00 - 13:00",
+            printHol: "Festivi (Rosso): 07:00 - 18:00",
+            // Holidays
+            holNewYear: "Capodanno", holEpiphany: "Epifania", holLiberation: "Liberazione",
+            holLabor: "Festa Lavoro", holRepublic: "Repubblica", holFerragosto: "Ferragosto",
+            holSaints: "Ognissanti", holImmaculate: "Immacolata", holChristmas: "Natale",
+            holStephen: "S. Stefano", holEaster: "Pasqua", holMonday: "Pasquetta"
+        },
+        en: {
+            btnGuide: "GUIDE",
+            btnAuto: "Auto",
+            guideTitle: "🎓 Interactive Guide",
+            guideSubtitle: "Click items to see the demo",
+            demoAssign: "Assign Shifts",
+            demoSwap: "Swap Shift",
+            demoReq: "Receive Requests",
+            demoAccept: "Accept Requests",
+            demoAssignTip: "1 Click = Blue, 2 Clicks = Green",
+            demoSwapTip: "Shifts swap automatically",
+            demoReqTip: "Triangle indicates a request",
+            demoAcceptTip: "Approve to update schedule",
+            settingsTitle: "🎨 Customization",
+            settingsSubtitle: "Define team names and colors",
+            labelEmp1: "Employee 1",
+            labelEmp2: "Employee 2",
+            labelDouble: "Double Shift",
+            btnCancel: "Cancel",
+            btnSave: "Save",
+            autoTitle: "Auto Generation",
+            autoBody: "System will automatically assign missing shifts respecting holidays.<br><br>Proceed?",
+            btnProceed: "Proceed",
+            conflictTitle: "Warning!",
+            conflictBody: "This person has sent an absence request for this shift.",
+            btnNext: "⏩ Skip to Next",
+            btnForce: "⚠️ Force Insert",
+            resetTitle: "Reset Month",
+            resetBody: "Really delete all shifts for this month?",
+            btnConfirmReset: "Confirm Reset",
+            acceptTitle: "Accept Request",
+            acceptBody: "Confirm operation? Schedule will be updated.",
+            btnConfirm: "Confirm",
+            rejectTitle: "Reject Request",
+            rejectBody: "Are you sure you want to reject this request?",
+            btnReject: "Reject",
+            reqTitle: "📩 Requests",
+            btnClose: "Close",
+            btnUnderstood: "Got it, thanks!",
+            msgSaving: "Saving...",
+            msgSaved: "Saved",
+            msgError: "Error",
+            msgAbsent: "is ABSENT",
+            msgNoReq: "No requests",
+            msgReqAcc: "Accepted",
+            msgReqRej: "Rejected",
+            btnAccept: "Accept",
+            reqMorning: "Morning Absence",
+            reqAfternoon: "Afternoon Absence",
+            reqAllDay: "Full Day Absence",
+            reqSwap: "Swap Shift",
+            shiftMorning: "Morning",
+            shiftAfternoon: "Afternoon",
+            shiftFull: "Full",
+            statusTurn: "Tap",
+            statusFree: "Free",
+            statusBoth: "Both",
+            printDate: "Date",
+            printAm: "Morning (06-13)",
+            printPm: "Aft (15:30-20:30)",
+            printSun: "Sunday: 07:00 - 13:00",
+            printHol: "Holidays (Red): 07:00 - 18:00",
+            // Holidays
+            holNewYear: "New Year", holEpiphany: "Epiphany", holLiberation: "Liberation Day",
+            holLabor: "Labor Day", holRepublic: "Republic Day", holFerragosto: "Ferragosto",
+            holSaints: "All Saints", holImmaculate: "Immaculate", holChristmas: "Christmas",
+            holStephen: "St. Stephen", holEaster: "Easter", holMonday: "Easter Monday"
+        },
+        es: {
+            btnGuide: "GUÍA",
+            btnAuto: "Auto",
+            guideTitle: "🎓 Guía Interactiva",
+            guideSubtitle: "Haz clic para ver la demo",
+            demoAssign: "Asignar Turnos",
+            demoSwap: "Cambio de Turno",
+            demoReq: "Recibir Solicitudes",
+            demoAccept: "Aceptar Solicitudes",
+            demoAssignTip: "1 Clic = Azul, 2 Clics = Verde",
+            demoSwapTip: "Los turnos se invierten automáticamente",
+            demoReqTip: "El triángulo indica una solicitud",
+            demoAcceptTip: "Aprueba para actualizar el horario",
+            settingsTitle: "🎨 Personalización",
+            settingsSubtitle: "Define nombres y colores del equipo",
+            labelEmp1: "Empleado 1",
+            labelEmp2: "Empleado 2",
+            labelDouble: "Doble Turno",
+            btnCancel: "Cancelar",
+            btnSave: "Guardar",
+            autoTitle: "Generación Auto",
+            autoBody: "El sistema asignará automáticamente los turnos faltantes respetando festivos.<br><br>¿Proceder?",
+            btnProceed: "Proceder",
+            conflictTitle: "¡Atención!",
+            conflictBody: "Esta persona ha enviado una solicitud de ausencia.",
+            btnNext: "⏩ Saltar al Siguiente",
+            btnForce: "⚠️ Forzar Inserción",
+            resetTitle: "Reiniciar Mes",
+            resetBody: "¿Realmente quieres borrar todos los turnos?",
+            btnConfirmReset: "Confirmar Reset",
+            acceptTitle: "Aceptar Solicitud",
+            acceptBody: "¿Confirmar operación? El calendario se actualizará.",
+            btnConfirm: "Confirmar",
+            rejectTitle: "Rechazar Solicitud",
+            rejectBody: "¿Seguro que quieres rechazar esta solicitud?",
+            btnReject: "Rechazar",
+            reqTitle: "📩 Solicitudes",
+            btnClose: "Cerrar",
+            btnUnderstood: "¡Entendido!",
+            msgSaving: "Guardando...",
+            msgSaved: "Guardado",
+            msgError: "Error",
+            msgAbsent: "está AUSENTE",
+            msgNoReq: "Sin solicitudes",
+            msgReqAcc: "Aceptada",
+            msgReqRej: "Rechazada",
+            btnAccept: "Aceptar",
+            reqMorning: "Ausencia Mañana",
+            reqAfternoon: "Ausencia Tarde",
+            reqAllDay: "Ausencia Día Completo",
+            reqSwap: "Cambio de Turno",
+            shiftMorning: "Mañana",
+            shiftAfternoon: "Tarde",
+            shiftFull: "Completo",
+            statusTurn: "Toca",
+            statusFree: "Libre",
+            statusBoth: "Ambos",
+            printDate: "Fecha",
+            printAm: "Mañana (06-13)",
+            printPm: "Tarde (15:30-20:30)",
+            printSun: "Domingo: 07:00 - 13:00",
+            printHol: "Festivos (Rojo): 07:00 - 18:00",
+            // Holidays
+            holNewYear: "Año Nuevo", holEpiphany: "Epifanía", holLiberation: "Liberación",
+            holLabor: "Día Trabajo", holRepublic: "República", holFerragosto: "Ferragosto",
+            holSaints: "Todos Santos", holImmaculate: "Inmaculada", holChristmas: "Navidad",
+            holStephen: "San Esteban", holEaster: "Pascua", holMonday: "Lunes Pascua"
+        }
+    };
+
+    let currentLang = 'it';
+
+    function t(key) {
+        return translations[currentLang][key] || key;
+    }
+
+    function changeLanguage(lang) {
+        currentLang = lang;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang][key]) {
+                el.innerText = translations[lang][key];
+            }
+        });
+
+        // Update placeholders
+        document.getElementById('inName1').placeholder = (lang === 'en' ? "Name" : "Nome");
+        document.getElementById('inName2').placeholder = (lang === 'en' ? "Name" : "Nome");
+
+        // Update specific text in JS
+        document.getElementById('lblBoth').value = t('statusBoth');
+
+        renderApp(); // Re-render to update dates and dynamic text
+    }
+
     // CONFIG
     const BIN_ID = "6979e5eb43b1c97be9517651";
     const API_KEY = "$2a$10$LoeF5Ae4yW8YLmCxZF9etOqZpfkhx5zc4u81EreMzPvYRCFztbF0K";
     const URL_BIN = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
     let cloudData = { config: { p1: "Naio", c1: "#007AFF", g1:"M", p2: "Davide", c2: "#10b981", g2:"M", cb: "#8b5cf6" }, shifts: {} };
-    const monthNames = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
 
     let currentMonth = new Date().getMonth();
     let currentYear = new Date().getFullYear();
@@ -457,14 +705,14 @@
         const el = document.getElementById('saveStatus');
         el.className = 'show'; // Ensure visible
         if (state === 'saving') {
-            el.innerHTML = '<span>⏳</span> Salvataggio...';
+            el.innerHTML = `<span>⏳</span> ${t('msgSaving')}`;
             el.classList.add('saving'); el.classList.remove('saved', 'error');
         } else if (state === 'saved') {
-            el.innerHTML = '<span>✅</span> Salvato';
+            el.innerHTML = `<span>✅</span> ${t('msgSaved')}`;
             el.classList.add('saved'); el.classList.remove('saving', 'error');
             setTimeout(() => el.classList.remove('show'), 2000); // Hide after 2s
         } else if (state === 'error') {
-            el.innerHTML = '<span>❌</span> Errore';
+            el.innerHTML = `<span>❌</span> ${t('msgError')}`;
             el.classList.add('error'); el.classList.remove('saving', 'saved');
         }
     }
@@ -483,7 +731,7 @@
             showStatus('saved');
         } catch (e) {
             showStatus('error');
-            alert("Errore salvataggio");
+            alert(t('msgError'));
         }
     }
 
@@ -502,21 +750,42 @@
         }, 2000);
     }
 
-    function getHolidayName(date) {
+    function getHolidayKey(date) {
         const d = date.getDate(), m = date.getMonth(), y = date.getFullYear();
-        if (d===1&&m===0) return "Capodanno"; if (d===6&&m===0) return "Epifania"; if (d===25&&m===3) return "Liberazione"; if (d===1&&m===4) return "Festa Lavoro"; if (d===2&&m===5) return "Repubblica"; if (d===15&&m===7) return "Ferragosto"; if (d===1&&m===10) return "Ognissanti"; if (d===8&&m===11) return "Immacolata"; if (d===25&&m===11) return "Natale"; if (d===26&&m===11) return "S. Stefano";
+        if (d===1&&m===0) return "holNewYear"; if (d===6&&m===0) return "holEpiphany"; if (d===25&&m===3) return "holLiberation"; if (d===1&&m===4) return "holLabor"; if (d===2&&m===5) return "holRepublic"; if (d===15&&m===7) return "holFerragosto"; if (d===1&&m===10) return "holSaints"; if (d===8&&m===11) return "holImmaculate"; if (d===25&&m===11) return "holChristmas"; if (d===26&&m===11) return "holStephen";
         const a=y%19, b=Math.floor(y/100), c=y%100, d1=Math.floor(b/4), e=b%4, f=Math.floor((b+8)/25), g=Math.floor((b-f+1)/3), h=(19*a+b-d1-g+15)%30, i=Math.floor(c/4), k=c%4, l=(32+2*e+2*i-h-k)%7, m1=Math.floor((a+11*h+22*l)/451), mon=Math.floor((h+l-7*m1+114)/31)-1, day=((h+l-7*m1+114)%31)+1;
-        if (d===day && m===mon) return "Pasqua"; const pm = new Date(y, mon, day+1); if(d===pm.getDate() && m===pm.getMonth()) return "Pasquetta"; return null;
+        if (d===day && m===mon) return "holEaster"; const pm = new Date(y, mon, day+1); if(d===pm.getDate() && m===pm.getMonth()) return "holMonday";
+        return null;
     }
 
     function applyTheme() { const r = document.documentElement.style, c = cloudData.config; r.setProperty('--color-emp1', c.c1); r.setProperty('--color-emp2', c.c2); r.setProperty('--color-both', c.cb); }
 
     async function init() {
         const ms = document.getElementById('monthSelect'), ys = document.getElementById('yearSelect');
-        monthNames.forEach((n,i)=>{ let op=document.createElement('option'); op.value=i; op.innerText=n; if(i===currentMonth)op.selected=true; ms.appendChild(op); });
+        // Populate months dynamically based on language
+        renderMonthSelector();
+
         for(let y=currentYear-1; y<=currentYear+2; y++){ let op=document.createElement('option'); op.value=y; op.innerText=y; if(y===currentYear)op.selected=true; ys.appendChild(op); }
-        document.getElementById('app-grid').innerHTML = '<div style="padding:50px; text-align:center">Caricamento...</div>';
-        await fetchCloudData(); applyTheme(); renderApp();
+        document.getElementById('app-grid').innerHTML = '<div style="padding:50px; text-align:center">Loading...</div>';
+        await fetchCloudData();
+        changeLanguage('it'); // Start with Italian
+        applyTheme();
+        // renderApp called by changeLanguage
+    }
+
+    function renderMonthSelector() {
+        const ms = document.getElementById('monthSelect');
+        ms.innerHTML = "";
+        for(let i=0; i<12; i++) {
+            let date = new Date(currentYear, i, 1);
+            let name = date.toLocaleString(currentLang, { month: 'long' });
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+            let op = document.createElement('option');
+            op.value = i;
+            op.innerText = name;
+            if(i === currentMonth) op.selected = true;
+            ms.appendChild(op);
+        }
     }
 
     function showDemo(type, el) {
@@ -541,43 +810,30 @@
     function startMagicEffect() {
         const header = document.querySelector('#autoModal .modal-header');
         const magicKittens = ['🐱', '🐈', '🙀', '😽', '😻', '😹', '🐾'];
-
-        // Duration: 4 seconds
         let duration = 4000;
         let end = Date.now() + duration;
-
         clearMagic();
         magicInterval = setInterval(() => {
-            if (Date.now() > end) {
-                clearMagic();
-                return;
-            }
-
-            // Burst of kittens
+            if (Date.now() > end) { clearMagic(); return; }
             for (let i = 0; i < 3; i++) {
                 const k = document.createElement('div');
                 k.className = 'magic-kitten';
                 k.innerText = magicKittens[Math.floor(Math.random() * magicKittens.length)];
-                k.style.left = '50%';
-                k.style.top = '40px';
+                k.style.left = '50%'; k.style.top = '40px';
                 header.appendChild(k);
-
                 const angle = Math.random() * Math.PI * 2;
                 const velocity = Math.random() * 100 + 60;
                 const tx = Math.cos(angle) * velocity;
                 const ty = Math.sin(angle) * velocity;
                 const rot = Math.random() * 360;
-
                 requestAnimationFrame(() => {
                     k.style.transform = `translate(${tx}px, ${ty}px) rotate(${rot}deg) scale(${Math.random() * 0.5 + 0.5})`;
                     k.style.opacity = '0';
                 });
-
                 setTimeout(() => k.remove(), 1200);
             }
         }, 100);
     }
-
     function clearMagic() {
         clearInterval(magicInterval);
         document.querySelectorAll('.magic-kitten').forEach(k => k.remove());
@@ -605,7 +861,10 @@
 
     function openManageModal(day) {
         selectedDayForManage = day;
-        document.getElementById('manageReqTitle').innerText = `${day} ${monthNames[currentMonth]}`;
+        let date = new Date(currentYear, currentMonth, day);
+        let mName = date.toLocaleString(currentLang, { month: 'long' });
+        mName = mName.charAt(0).toUpperCase() + mName.slice(1);
+        document.getElementById('manageReqTitle').innerText = `${day} ${mName}`;
         renderRequestList();
         toggleModal('manageReqModal', true);
     }
@@ -621,16 +880,16 @@
         const list = document.getElementById('reqListContainer'); list.innerHTML = "";
         const db = loadDB();
         let reqs = (db[selectedDayForManage] && db[selectedDayForManage].requests) ? [...db[selectedDayForManage].requests] : [];
-        if (reqs.length === 0) { list.innerHTML = `<div class="req-empty-state"><div style="font-size:2rem;">🍃</div>Nessuna richiesta</div>`; return; }
+        if (reqs.length === 0) { list.innerHTML = `<div class="req-empty-state"><div style="font-size:2rem;">🍃</div>${t('msgNoReq')}</div>`; return; }
         reqs.sort((a, b) => (!a.status && b.status) ? -1 : 1);
-        const dict = { 'no_am': 'Non può ☀️ MATTINA', 'no_pm': 'Non può 🌙 POMERIGGIO', 'no_all': 'Assente 🚫 TUTTO GIORNO', 'swap': '🔄 Vuole fare CAMBIO TURNO' };
+        const dict = { 'no_am': t('reqMorning'), 'no_pm': t('reqAfternoon'), 'no_all': t('reqAllDay'), 'swap': t('reqSwap') };
         reqs.forEach(r => {
             const realIdx = db[selectedDayForManage].requests.indexOf(r);
             const isDone = (r.status === 'accepted' || r.status === 'rejected');
-            const timeStr = r.ts ? new Date(r.ts).toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) : '';
+            const timeStr = r.ts ? new Date(r.ts).toLocaleTimeString(currentLang === 'en' ? 'en-US' : 'it-IT', {hour:'2-digit', minute:'2-digit'}) : '';
             let actionHtml = '';
-            if(isDone) { actionHtml = `<span style="font-weight:bold; color:${r.status==='accepted'?'var(--success)':'var(--danger)'}">${r.status==='accepted'?'✅ Accettata':'❌ Rifiutata'}</span>`; }
-            else { actionHtml = `<div style="display:flex; gap:5px; width:100%"><button class="btn-mini btn-mini-rej" onclick="processRequest(${realIdx}, 'reject')">Rifiuta</button><button class="btn-mini btn-mini-acc" onclick="processRequest(${realIdx}, 'accept')">✅ Accetta</button></div>`; }
+            if(isDone) { actionHtml = `<span style="font-weight:bold; color:${r.status==='accepted'?'var(--success)':'var(--danger)'}">${r.status==='accepted'?'✅ '+t('msgReqAcc'):'❌ '+t('msgReqRej')}</span>`; }
+            else { actionHtml = `<div style="display:flex; gap:5px; width:100%"><button class="btn-mini btn-mini-rej" onclick="processRequest(${realIdx}, 'reject')">${t('btnReject')}</button><button class="btn-mini btn-mini-acc" onclick="processRequest(${realIdx}, 'accept')">✅ ${t('btnAccept')}</button></div>`; }
             const cardClass = `req-card ${isDone?'done':''} ${r.type==='swap'?'type-swap':''}`;
             const div = document.createElement('div'); div.className = cardClass;
             div.innerHTML = `<div class="req-header"><div class="req-user">${getAvatar(r.who)} ${r.who}</div><div style="font-size:0.8rem; color:#94a3b8">${timeStr}</div></div><div class="req-body"><strong>${dict[r.type]}</strong></div><div class="req-actions" style="justify-content:flex-end">${actionHtml}</div>`;
@@ -686,7 +945,7 @@
     function checkAndAssign(d, s, val, h) {
         if(!isWorkerAvailable(d, s, val)) {
             pendingConflict = { d, s, val, h };
-            document.getElementById('conflictMsgText').innerText = `${val} è ASSENTE`;
+            document.getElementById('conflictMsgText').innerText = `${val} ${t('msgAbsent')}`;
             toggleModal('conflictModal', true);
             return;
         }
@@ -715,7 +974,7 @@
     function generateAuto() {
         const cfg = cloudData.config; const dim = new Date(currentYear, currentMonth+1, 0).getDate(); let db = loadDB(); let sunIdx=0, consAM=0, lastAM=null;
         for(let i=1; i<=dim; i++) {
-            const date = new Date(currentYear, currentMonth, i); const dw = date.getDay(), isHol = (getHolidayName(date)!==null), isSun=(dw===0);
+            const date = new Date(currentYear, currentMonth, i); const dw = date.getDay(), isHol = (getHolidayKey(date)!==null), isSun=(dw===0);
             if(!db[i]) db[i]={};
             if(isHol) db[i].hol='Entrambi';
             else if(isSun) { db[i].hol=(sunIdx%2===0)?cfg.p1:cfg.p2; sunIdx++; }
@@ -756,18 +1015,32 @@
     function renderApp() {
         currentMonth = parseInt(document.getElementById('monthSelect').value);
         currentYear = parseInt(document.getElementById('yearSelect').value);
+        
+        // Re-render months names in selector in case language changed
+        renderMonthSelector(); 
+        
         const dim = new Date(currentYear, currentMonth+1, 0).getDate();
         const db = loadDB();
         const cfg = cloudData.config;
         const grid = document.getElementById('app-grid');
         const tbL = document.getElementById('tbody-left'), tbR = document.getElementById('tbody-right');
         grid.innerHTML=""; tbL.innerHTML=""; tbR.innerHTML="";
-        document.getElementById('print-title').innerText = `${monthNames[currentMonth]} ${currentYear}`;
+        
+        let mName = new Date(currentYear, currentMonth, 1).toLocaleString(currentLang, {month: 'long'});
+        mName = mName.charAt(0).toUpperCase() + mName.slice(1);
+        document.getElementById('print-title').innerText = `${mName} ${currentYear}`;
+        
         const today = new Date();
         for(let i=1; i<=dim; i++) {
             const date = new Date(currentYear, currentMonth, i);
-            const dw = date.getDay(), holName = getHolidayName(date), isHol = (holName!==null), isSun=(dw===0), isModeH = isHol||isSun;
-            const dShort = date.toLocaleDateString('it-IT',{weekday:'short'});
+            const dw = date.getDay();
+            const holKey = getHolidayKey(date);
+            const holName = holKey ? t(holKey) : null;
+            const isHol = (holKey !== null);
+            const isSun = (dw === 0);
+            const isModeH = isHol || isSun;
+            const dShort = date.toLocaleDateString(currentLang, {weekday:'short'});
+            
             const row = db[i]||{};
             const hasReq = (row.requests && row.requests.length>0);
             const isToday = (i===today.getDate() && currentMonth===today.getMonth() && currentYear===today.getFullYear());
@@ -784,11 +1057,31 @@
             grid.appendChild(card);
             const tr = document.createElement('tr'); if(isModeH) tr.className='print-hol-row';
             const tdD = `<td class="td-date">${i}</td><td class="td-day">${dShort.toUpperCase()}</td>`;
-            let tdC = isModeH ? `<td colspan="2">${isHol?holName.toUpperCase()+' ':''}Orario ${isHol?'07-18':'07-13'}: ${row.hol||'-'}</td>` : `<td>${row.am||'-'}</td><td>${row.pm||'-'}</td>`;
+            let tdC = isModeH ? `<td colspan="2">${isHol?holName.toUpperCase()+' ':''}Orario ${isHol?'07-18':'07-13'}: ${renderPrintName(row.hol)}</td>` : `<td>${renderPrintName(row.am)}</td><td>${renderPrintName(row.pm)}</td>`;
             tr.innerHTML = tdD+tdC; if(i<=16) tbL.appendChild(tr); else tbR.appendChild(tr);
         }
     }
-    function renderBadge(n) { const c=cloudData.config; let cl='badge-empty'; if(n===c.p1)cl='badge-p1'; if(n===c.p2)cl='badge-p2'; if(n==='Entrambi')cl='badge-both'; return `<span class="badge ${cl}">${n==='-'?'Tocca':n}</span>`; }
+    
+    function renderBadge(n) { 
+        const c=cloudData.config; 
+        let cl='badge-empty'; 
+        if(n===c.p1) cl='badge-p1'; 
+        if(n===c.p2) cl='badge-p2'; 
+        if(n==='Entrambi') cl='badge-both'; 
+        
+        let display = n;
+        if(n === '-') display = t('statusTurn');
+        if(n === 'Entrambi') display = t('statusBoth');
+        
+        return `<span class="badge ${cl}">${display}</span>`; 
+    }
+    
+    function renderPrintName(n) {
+        if(!n || n==='-') return '-';
+        if(n==='Entrambi') return t('statusBoth');
+        return n;
+    }
+    
     function getColClass(n) { const c=cloudData.config; if(n===c.p1)return 't-p1'; if(n===c.p2)return 't-p2'; if(n==='Entrambi')return 't-both'; return ''; }
     init();
 </script>

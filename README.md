@@ -1,55 +1,59 @@
-# 📅 TSC Turni - Cloud Edition (v3.0 - Magic & Kittens Update)
+# 📅 TSC Turni - Shift Management System (v3.6)
 
-Web App per la gestione operativa dei turni del **Tabacchi San Clemente**, aggiornata con **sincronizzazione Cloud**, interfaccia **Glassmorphism** e nuove animazioni interattive.
+Piattaforma Web App (PWA) per la gestione operativa dei turni del **Tabacchi San Clemente**, dotata di **sincronizzazione Cloud in tempo reale** e interfaccia utente responsive ottimizzata per dispositivi mobili.
 
-Progettata per semplificare la comunicazione tra Amministrazione e Dipendenti con un tocco di magia.
+Il sistema facilita il coordinamento tra l'Amministrazione e il Personale, gestendo l'assegnazione dei turni, le ferie e le richieste di sostituzione con un flusso di lavoro automatizzato.
 
-## ✨ Novità della Versione 3.0
+## ✨ Novità della Versione 3.1 (International & UI Update)
 
-* **🎨 UI Premium:** Design completamente ridisegnato in stile "Glassmorphism" con sfocature, ombre e pulsanti 3D.
-* **🧙‍♂️ Magic Auto-Fill:** Generazione automatica dei turni con animazione "Esplosione Magica" dalla bacchetta.
-* **🐱 Kitten Reset:** Vuoi cancellare tutto? Preparati a una pioggia di gattini nel cestino!
-* **🌈 Inclusività:** Nuove opzioni per gli Avatar. Nelle impostazioni è possibile scegliere il sesso (Uomo 👨, Donna 👩, Non-Binary 🧑) per ogni dipendente.
-* **💾 Smart Auto-Save:** Salvataggio automatico intelligente per evitare errori durante l'inserimento rapido.
-* **🚫 Zero Browser Alerts:** Tutti i messaggi di conferma (accetta, rifiuta, conflitti) sono ora gestiti tramite modali personalizzati eleganti.
+* **🌐 Supporto Multilingua (i18n):** L'intera interfaccia è ora localizzata in **Italiano**, **Inglese** e **Spagnolo**, con rilevamento automatico e persistenza delle preferenze utente.
+* **📱 PWA Avanzata & Icone Dedicate:** Implementazione di icone applicative distinte per **Admin** e **Dipendenti** per migliorare la riconoscibilità sulla Home Screen. Supporto nativo per **Dark Mode** e icone iOS trasparenti.
+* **🎨 UI/UX Refactoring:** Interfaccia "Glassmorphism" modernizzata per migliorare la leggibilità e l'accessibilità, con modali di conferma nativi (eliminazione degli alert del browser).
+* **🤖 Algoritmo di Assegnazione Automatica:** Funzione "Auto-Fill" ottimizzata per riempire i turni vuoti rispettando la rotazione e le festività.
 
 ## 🚀 Funzionalità Principali
 
-* **☁️ Cloud Sync (JSONBin):** I dati sono sincronizzati in tempo reale. Le modifiche dell'Admin appaiono istantaneamente sui telefoni dei dipendenti.
-* **👮 Interfaccia Admin (`admin.html`):**
-    * Gestione completa turni (click singolo/doppio).
-    * Gestione richieste con feedback visivo immediato (Modali Verde/Rosso).
-    * Risoluzione conflitti guidata.
-* **👷 Interfaccia Client (`index.html`):**
-    * Visualizzazione turni in sola lettura.
-    * Sistema di richiesta ferie/cambio turno semplificato.
-    * Icone dinamiche basate sulla scelta di genere.
-* **🚩 Sistema Segnalazioni:**
-    * **Controllo Conflitti:** Il sistema avvisa se un collega è già assente.
-    * **Workflow:** L'Admin accetta (aggiornamento automatico calendario) o rifiuta.
-* **🖨️ Stampa A4:** Layout pulito e ottimizzato per la stampa cartacea (senza elementi dell'interfaccia).
+### ☁️ Core System
+* **Cloud Sync (JSONBin):** Architettura serverless che garantisce la sincronizzazione istantanea dei dati tra tutti i dispositivi connessi.
+* **Smart Auto-Save:** Sistema di salvataggio automatico con debounce per prevenire la perdita di dati e ridurre le chiamate API.
 
-## 📦 Installazione / Accesso
+### 👮 Modulo Amministratore (`admin.html`)
+* **Gestione Turni Granulare:** Assegnazione rapida tramite interazione click/tap (Ciclo: Mattina / Pomeriggio / Entrambi).
+* **Gestione Richieste:** Dashboard centralizzata per approvare o rifiutare le richieste di ferie/cambio turno con risoluzione automatica dei conflitti.
+* **Profili Utente Personalizzabili:** Configurazione anagrafica (Nome, Colore) e impostazione di genere (M/F/NB) per l'adattamento dinamico degli avatar.
+* **Stampa Report:** Layout di stampa A4 ottimizzato per la generazione di copie cartacee del calendario mensile.
 
-L'applicazione è accessibile via browser (non richiede installazione dagli store).
+### 👷 Modulo Dipendenti (`index.html`)
+* **Visualizzazione Read-Only:** Accesso al calendario turni in modalità sola lettura.
+* **Sistema di Segnalazione:** Interfaccia semplificata per inviare richieste di:
+    * Assenza (Mattina/Pomeriggio/Giornaliera).
+    * Cambio Turno.
+* **Stato Richieste:** Feedback visivo sullo stato della richiesta (In Attesa / Accettata / Rifiutata).
 
-### 👮 Per l'Amministratore
-Link privato per la gestione (**Salvare nei preferiti e non condividere**):
-👉 `https://marchi2005.github.io/TSC-Turni/admin.html`
+## 📦 Installazione e Accesso
 
-### 👷 Per i Dipendenti
-Link pubblico da distribuire allo staff:
-👉 `https://marchi2005.github.io/TSC-Turni/`
+L'applicazione è distribuita come Progressive Web App (PWA) e non richiede installazione tramite Store.
 
-**Installazione su Smartphone (PWA):**
-1.  Apri il link con **Chrome** (Android) o **Safari** (iOS).
-2.  Premi il tasto Condividi (iOS) o Menu (Android).
-3.  Seleziona **"Aggiungi a schermata Home"**.
+### 🔗 Link di Accesso
 
-## 🛠️ Tecnologie
+* **Pannello Amministratore (Accesso Riservato):**
+    👉 `https://marchi2005.github.io/TSC-Turni/admin.html`
+    *(Salvare questo link e non condividerlo con il personale)*
 
-* **Frontend:** HTML5, CSS3 (CSS Variables, Flexbox, Grid, Animations), Vanilla JS.
-* **Backend/Database:** JSONBin.io (API REST).
+* **Portale Dipendenti (Accesso Pubblico):**
+    👉 `https://marchi2005.github.io/TSC-Turni/`
+
+### 📲 Installazione su Dispositivi Mobili
+Per un'esperienza ottimale, si consiglia di aggiungere la Web App alla schermata Home:
+1.  Aprire il link in **Chrome** (Android) o **Safari** (iOS).
+2.  Selezionare "Aggiungi a schermata Home" dal menu del browser.
+3.  L'app verrà installata con l'icona specifica (**Admin** o **Dipendenti**) in base al link utilizzato.
+
+## 🛠️ Stack Tecnologico
+
+* **Frontend:** HTML5, CSS3 (CSS Variables, Flexbox, Grid), Vanilla JavaScript (ES6+).
+* **Backend/Storage:** JSONBin.io (REST API).
+* **Localizzazione:** Implementazione JS custom basata su dizionari JSON.
 * **Hosting:** GitHub Pages.
 
 ---
