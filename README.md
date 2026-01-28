@@ -4,7 +4,7 @@ Piattaforma Web App (PWA) per la gestione operativa dei turni del **Tabacchi San
 
 Il sistema facilita il coordinamento tra l'Amministrazione e il Personale, gestendo l'assegnazione dei turni, le ferie e le richieste di sostituzione con un flusso di lavoro automatizzato.
 
-## ✨ Novità della Versione 3.1ì6 (International & UI Update)
+## ✨ Novità della Versione 3.6 (International & UI Update)
 
 * **🌐 Supporto Multilingua (i18n):** L'intera interfaccia è ora localizzata in **Italiano**, **Inglese** e **Spagnolo**, con rilevamento automatico e persistenza delle preferenze utente.
 * **📱 PWA Avanzata & Icone Dedicate:** Implementazione di icone applicative distinte per **Admin** e **Dipendenti** per migliorare la riconoscibilità sulla Home Screen. Supporto nativo per **Dark Mode** e icone iOS trasparenti.
