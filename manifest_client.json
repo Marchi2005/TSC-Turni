@@ -8,7 +8,7 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "TSCIcona_0.png",
+      "src": "TSCIconClient_Clear.png",
       "sizes": "1024x1024",
       "type": "image/png"
     }
