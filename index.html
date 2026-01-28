@@ -2,93 +2,657 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manutenzione in Corso</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Turni - Accesso Dipendenti</title>
     <style>
+        :root {
+            /* COLORI FUNZIONALI */
+            --color-emp1: #007AFF;
+            --color-emp2: #10b981;
+            --color-both: #8b5cf6;
+
+            /* PALETTE UI */
+            --bg-body: #f8fafc;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --primary-shadow: #4338ca;
+
+            --danger: #ef4444;
+            --danger-shadow: #b91c1c;
+
+            --success: #10b981;
+            --success-shadow: #047857;
+
+            --secondary: #94a3b8;
+            --secondary-shadow: #64748b;
+
+            --accent-purple: #a855f7;
+            --accent-yellow: #f59e0b;
+            --warning: #f59e0b;
+            --warning-light: #fff7ed;
+            --warning-text: #c2410c;
+
+            --bg-glass: rgba(255, 255, 255, 0.95);
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+
+            --holiday-bg: #fee2e2;
+            --holiday-border: #fecaca;
+            --swap: #8b5cf6;
+            --swap-bg: #f3e8ff;
+            --swap-text: #7e22ce;
+            --swap-border: #d8b4fe;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f3f4f6;
-            color: #1f2937;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            text-align: center;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            margin: 0; padding: 0;
+            color: var(--text-main);
+            padding-bottom: 80px;
+            min-height: 100vh;
         }
 
-        .card {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            max-width: 400px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* Centra tutto il contenuto */
+        /* --- HEADER --- */
+        .app-header {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
         }
 
-        /* STILE PER IL LOGO */
-        .logo-img {
-            max-width: 200px; /* Larghezza massima */
-            height: auto;     /* Mantiene le proporzioni */
-            margin-bottom: 20px;
-            display: block;
+        .header-top { padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .brand { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; color: #1e293b; }
+
+        .btn-help-hero {
+            background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+            color: white; border: none; padding: 8px 16px;
+            border-radius: 20px; font-weight: 700; font-size: 0.9rem;
+            cursor: pointer; display: flex; align-items: center; gap: 6px;
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            animation: pulse-purple 3s infinite;
+        }
+        .btn-help-hero:active { transform: scale(0.95); }
+        @keyframes pulse-purple {
+            0% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(168, 85, 247, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
         }
 
-        .icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            display: inline-block;
-            animation: bounce 2s infinite;
+        .header-toolbar { padding: 0 20px 15px 20px; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .group-nav { display: flex; gap: 10px; flex-grow: 1; min-width: 200px; }
+        select { flex: 1; width: 100%; padding: 10px 12px; border-radius: 10px; border: 2px solid #e2e8f0; background: white; font-size: 14px; font-weight: 700; color: #475569; -webkit-appearance: none; outline: none; cursor: pointer; }
+
+        .action-btn { border: none; border-radius: 10px; padding: 10px 14px; font-size: 13px; font-weight: 800; color: white; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: transform 0.1s; }
+        .action-btn:active { transform: translateY(2px); box-shadow: none !important; }
+        .btn-print { background: #334155; box-shadow: 0 3px 0 #1e293b; }
+
+        /* --- MODALI --- */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-box.wide { max-width: 750px; }
+        .modal-box { background: var(--bg-glass); width: 100%; max-width: 480px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.5); overflow: hidden; display: flex; flex-direction: column; animation: modalAppear 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes modalAppear { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+        .modal-header { padding: 25px 25px 15px; text-align: center; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .modal-header h3 { margin: 0; font-size: 1.5rem; font-weight: 800; color: #1e293b; letter-spacing: -0.5px; }
+        .modal-subtitle { color: #64748b; font-size: 0.9rem; margin-top: 5px; }
+        .modal-body { padding: 20px 25px; }
+        .modal-footer { padding: 20px; display: flex; justify-content: flex-end; gap: 10px; background: rgba(248, 250, 252, 0.5); border-top: 1px solid rgba(0,0,0,0.05); }
+
+        /* GUIDE */
+        .guide-container { display: flex; flex-direction: column; gap: 20px; padding: 20px; }
+        @media (min-width: 600px) { .guide-container { flex-direction: row; height: 320px; } }
+        .guide-menu { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .guide-menu-item { padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.2s; border: 2px solid transparent; display: flex; align-items: center; gap: 10px; font-weight: 600; color: #475569; }
+        .guide-menu-item:hover { background: white; transform: translateX(5px); }
+        .guide-menu-item.active { background: #e0e7ff; border-color: var(--primary); color: var(--primary); }
+        .guide-demo-area { flex: 1.3; background: #f1f5f9; border-radius: 16px; border: 1px solid #cbd5e1; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .demo-scene { width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        .demo-scene.active { display: flex; }
+
+        /* DEMO ANIMATIONS */
+        .fake-flag { font-size: 2rem; animation: pulse 2s infinite; cursor: pointer; }
+        .cursor-hand { font-size: 2.5rem; position: absolute; z-index: 10; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2)); }
+        .demo-flag .cursor-hand { animation: clickFlag 3s infinite; }
+        @keyframes clickFlag { 0% { transform: translate(50px, 50px); } 40% { transform: translate(0,0) scale(0.9); } 100% { transform: translate(50px, 50px); } }
+        .fake-swap-btn { background: var(--swap-bg); color: var(--swap-text); border: 2px solid var(--swap-border); padding: 10px 20px; border-radius: 12px; font-weight: bold; }
+        .demo-swap .fake-swap-btn { animation: btnPulse 2s infinite; }
+        @keyframes btnPulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .status-demo { display: flex; gap: 10px; align-items: center; }
+        .st-pill { padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; }
+
+        /* BOTTONI 3D */
+        .btn-push { border: none; border-radius: 14px; padding: 12px 20px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.1s; color: white; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;}
+        .btn-push:active { transform: translateY(4px) !important; box-shadow: 0 0px 0px !important; }
+        .btn-push:hover { transform: translateY(1px); }
+
+        .btn-primary { background: var(--primary); box-shadow: 0 4px 0px var(--primary-shadow); }
+        .btn-danger { background: var(--danger); box-shadow: 0 4px 0px var(--danger-shadow); }
+        .btn-success { background: var(--success); box-shadow: 0 4px 0px var(--success-shadow); }
+        .btn-secondary { background: #f1f5f9; color: #475569; box-shadow: 0 4px 0px #cbd5e1; }
+
+        .btn-flag { background: var(--warning-light); color: var(--warning-text); border: 1px solid #fed7aa; border-radius: 8px; padding: 6px 10px; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 5px; cursor: pointer; transition: background 0.2s; }
+
+        /* USER SELECTION CARDS */
+        .user-selector { display: flex; gap: 15px; margin-bottom: 20px; }
+        .user-card {
+            flex: 1; padding: 15px; background: white; border: 2px solid #e2e8f0; border-radius: 16px;
+            text-align: center; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 5px;
         }
+        .user-card:hover { transform: translateY(-2px); border-color: #cbd5e1; }
+        .user-card.selected { border-color: var(--primary); background: #e0e7ff; color: var(--primary); box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2); }
+        .user-icon { font-size: 1.8rem; }
+        .user-name { font-weight: 800; }
 
-        h1 {
-            color: #2563eb;
-            margin: 0 0 15px 0;
-            font-size: 1.8rem;
+        /* OPTION LIST */
+        .option-list { display: flex; flex-direction: column; gap: 8px; }
+        .btn-option {
+            width: 100%; padding: 14px; border: 2px solid transparent; border-radius: 14px;
+            font-weight: 700; text-align: left; background: #f1f5f9; color: #475569;
+            cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 12px;
         }
+        .btn-option:hover { background: #e2e8f0; }
+        .btn-option.selected { border-color: var(--primary); background: white; color: var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .btn-option.swap { background: var(--swap-bg); color: var(--swap-text); border: 2px solid var(--swap-border); }
+        .btn-option.swap.selected { border-color: var(--swap); background: white; box-shadow: 0 4px 10px rgba(126, 34, 206, 0.15); }
+        .btn-option.disabled { opacity: 0.5; cursor: not-allowed; text-decoration: line-through; }
 
-        p {
-            color: #6b7280;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
+        /* GRID & CARDS */
+        .main-container { padding: 20px; max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+        .day-card { background: var(--card-bg); border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        .day-card.is-today { border: 2px solid var(--primary); box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.2); transform: scale(1.02); z-index: 10; }
+        .day-card.is-holiday { background-color: var(--holiday-bg); border-color: var(--holiday-border); }
+        .card-header { padding: 12px 18px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+        .date-display { font-size: 1.2rem; font-weight: 800; color: #334155; }
+        .day-label { font-size: 0.8rem; text-transform: uppercase; font-weight: 700; color: #94a3b8; letter-spacing: 0.5px; }
+        .header-actions { display: flex; gap: 5px; align-items: center; }
+        .status-pill { font-size: 0.7rem; padding: 4px 8px; border-radius: 6px; font-weight: bold; }
+        .st-wait { background: #fef3c7; color: #b45309; }
+        .st-acc { background: #d1fae5; color: #065f46; }
+        .st-rej { background: #fee2e2; color: #991b1b; }
 
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #2563eb;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
+        .card-body { padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+        .shift-row { background: #f8fafc; border-radius: 14px; padding: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid transparent; }
+        .shift-info { display: flex; flex-direction: column; }
+        .shift-time { font-size: 0.75rem; color: #64748b; font-weight: 700; }
+        .badge { padding: 6px 14px; border-radius: 30px; font-weight: 700; font-size: 0.9rem; min-width: 80px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.06); }
+        .badge-empty { background: white; border: 2px dashed #cbd5e1; color: #cbd5e1; box-shadow: none; }
+        .badge-p1 { background: var(--color-emp1); color: white; }
+        .badge-p2 { background: var(--color-emp2); color: white; }
+        .badge-both { background: var(--color-both); color: white; }
 
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-            40% {transform: translateY(-10px);}
-            60% {transform: translateY(-5px);}
+        /* PRINT */
+        #print-layout { display: none; }
+        @media print {
+            @page { size: A4 landscape; margin: 8mm; }
+            body { background: white; margin: 0; padding: 0; overflow: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .app-header, .main-container, .modal-overlay { display: none !important; }
+            #print-layout { display: block !important; width: 100%; }
+            .print-header-title { text-align: center; font-size: 20pt; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; border-bottom: 3px solid #000; padding-bottom: 5px; }
+            .print-grid { display: flex; gap: 20px; width: 100%; align-items: flex-start; }
+            .print-col { flex: 1; }
+            table { width: 100%; border-collapse: collapse; font-family: 'Arial', sans-serif; }
+            th { background: #eee; border: 1px solid #000; font-size: 10pt; padding: 5px; text-transform: uppercase; font-weight: bold; }
+            td { border: 1px solid #000; padding: 2px 5px; height: 25px; vertical-align: middle; font-size: 10pt; text-align: center; }
+            .td-date { width: 30px; font-weight: 800; background: #f3f4f6; }
+            .td-day { width: 40px; font-size: 8pt; text-transform: uppercase; color: #444; }
+            tr.print-hol-row td { background-color: #fff0f0 !important; }
+            .p-name { font-weight: 800; display: block; width: 100%; }
+            .t-p1 { color: var(--color-emp1); }
+            .t-p2 { color: var(--color-emp2); }
+            .t-both { color: var(--color-both); font-style: italic; }
+            .print-footer { margin-top: 15px; font-size: 9pt; color: #444; border-top: 1px solid #ccc; padding-top: 8px; display: flex; justify-content: space-between; font-style: italic; }
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <img src="logo.svg" alt="Logo Tabacchi San Clemente" class="logo-img">
-        
-        <div class="icon">🚧</div>
-        <h1>Sito in Manutenzione</h1>
-        <p>Stiamo aggiornando il sistema dei turni per offrirti un servizio migliore.<br><br>Torneremo online il prima possibile!</p>
-        
-        <div class="loader"></div>
-        <p style="font-size: 0.8rem; margin-top: 15px; color: #9ca3af;">Ci scusiamo per il disagio.</p>
-    </div>
+<div id="helpModal" class="modal-overlay">
+    <div class="modal-box wide">
+        <div class="modal-header">
+            <h3>🎓 Guida Dipendenti</h3>
+            <div class="modal-subtitle">Come usare l'App Turni</div>
+        </div>
 
+        <div class="guide-container">
+            <div class="guide-menu">
+                <div class="guide-menu-item active" onclick="showDemo('req', this)">
+                    <span class="icon">🚩</span> Fare una Segnalazione
+                </div>
+                <div class="guide-menu-item" onclick="showDemo('swap', this)">
+                    <span class="icon">🔄</span> Cambio Turno
+                </div>
+                <div class="guide-menu-item" onclick="showDemo('status', this)">
+                    <span class="icon">🎨</span> Stati Richiesta
+                </div>
+            </div>
+
+            <div class="guide-demo-area">
+                <div id="demo-req" class="demo-scene demo-flag active">
+                    <div style="background:white; padding:15px; border-radius:12px; border:1px solid #eee; display:flex; align-items:center; gap:10px">
+                        <span style="font-weight:bold; color:#333">12 Lun</span>
+                        <button class="btn-flag">⚑</button>
+                    </div>
+                    <div class="cursor-hand">👆</div>
+                    <p style="position:absolute; bottom:10px; font-size:0.8rem; color:#64748b">Tocca la bandierina per iniziare</p>
+                </div>
+
+                <div id="demo-swap" class="demo-scene demo-swap">
+                    <button class="fake-swap-btn">🔄 Richiedi Cambio Turno</button>
+                    <p style="margin-top:20px; font-size:0.9rem; color:#64748b">Usa il tasto Viola per chiedere lo scambio.</p>
+                </div>
+
+                <div id="demo-status" class="demo-scene">
+                    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start">
+                        <div class="status-demo"><span class="st-pill st-wait">⏳ Attesa</span> <span style="font-size:0.8rem">Inviata</span></div>
+                        <div class="status-demo"><span class="st-pill st-acc">✅ OK</span> <span style="font-size:0.8rem">Accettata</span></div>
+                        <div class="status-demo"><span class="st-pill st-rej">❌ NO</span> <span style="font-size:0.8rem">Rifiutata</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn-push btn-primary" onclick="toggleModal('helpModal', false)">Ho capito!</button>
+        </div>
+    </div>
+</div>
+
+<div id="requestModal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>📢 Nuova Segnalazione</h3>
+            <p id="reqDateTitle" class="modal-subtitle"></p>
+        </div>
+
+        <div class="modal-body">
+            <div class="req-section">
+                <span style="display:block; font-weight:bold; margin-bottom:10px; color:#475569; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.5px">Chi sei?</span>
+                <div class="user-selector" id="userSelectContainer">
+                </div>
+            </div>
+
+            <div id="newRequestOptions">
+                <span style="display:block; font-weight:bold; margin-bottom:10px; color:#475569; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.5px">Cosa vuoi fare?</span>
+                <div class="option-list">
+                    <button id="opt-swap" class="btn-option swap" onclick="selectIssue('swap', this)"><span>🔄</span> Richiedi Cambio Turno</button>
+                    <button id="opt-am" class="btn-option" onclick="selectIssue('no_am', this)"><span>🌅</span> Assente Mattina</button>
+                    <button id="opt-pm" class="btn-option" onclick="selectIssue('no_pm', this)"><span>🌆</span> Assente Pomeriggio</button>
+                    <button id="opt-all" class="btn-option" onclick="selectIssue('no_all', this)"><span>🚫</span> Assente Tutto il Giorno</button>
+                </div>
+                <div id="conflictMsg" style="display:none; color:#ef4444; font-size:0.8rem; margin-top:10px; font-weight:bold; background:#fee2e2; padding:10px; border-radius:10px; border:1px solid #fecaca; text-align:center">⚠️ Il collega è già assente per questo turno.</div>
+                <div id="formErrorMsg" style="display:none; color:#ef4444; font-size:0.8rem; margin-top:10px; font-weight:bold; text-align:center">⚠️ Seleziona Chi sei e Cosa vuoi fare.</div>
+            </div>
+
+            <div id="existingRequestInfo" style="display:none; text-align:center;">
+                <div id="existingReqDetails" style="background:#fff7ed; padding:15px; border-radius:12px; border:1px solid #fed7aa; margin-bottom:15px; color:#c2410c; text-align:left"></div>
+                <button id="btnRevoke" class="btn-push btn-danger" onclick="deleteRequest()">🗑️ Ritira Segnalazione</button>
+                <p id="revokeMsg" style="display:none; font-size:0.8rem; color:#94a3b8; margin-top:5px;">Impossibile ritirare segnalazioni passate.</p>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn-push btn-secondary" onclick="toggleModal('requestModal', false)" style="width:auto">Annulla</button>
+            <button id="btnSend" class="btn-push btn-primary" onclick="submitRequest()" style="display:none">Invia</button>
+        </div>
+    </div>
+</div>
+
+<div id="successModal" class="modal-overlay">
+    <div class="modal-box" style="max-width:320px">
+        <div class="modal-header">
+            <div style="font-size:3rem; margin-bottom:10px">🎉</div>
+            <h3 style="color:var(--success)">Inviata!</h3>
+        </div>
+        <div class="modal-body" style="text-align:center">
+            <p style="color:#64748b">La tua richiesta è stata inviata all'amministratore.</p>
+        </div>
+        <div class="modal-footer" style="justify-content:center">
+            <button class="btn-push btn-success" onclick="closeSuccess()">Ottimo</button>
+        </div>
+    </div>
+</div>
+
+<header class="app-header">
+    <div class="header-top">
+        <div class="brand">📅 Turni<span style="color:var(--primary)">Client</span></div>
+        <button class="btn-help-hero" onclick="toggleModal('helpModal', true)">
+            <span>🎓</span> GUIDE
+        </button>
+    </div>
+    <div class="header-toolbar">
+        <div class="group-nav">
+            <select id="monthSelect" onchange="renderApp()"></select>
+            <select id="yearSelect" onchange="renderApp()"></select>
+        </div>
+        <div class="group-actions">
+            <button class="action-btn btn-print" onclick="window.print()">🖨️ Stampa</button>
+        </div>
+    </div>
+</header>
+
+<div id="app-grid" class="main-container"></div>
+
+<div id="print-layout">
+    <div id="print-title" class="print-header-title"></div>
+    <div class="print-grid">
+        <div class="print-col"><table><thead><tr><th colspan="2">Data</th><th>Mattina (06-13)</th><th>Pom (15:30-20:30)</th></tr></thead><tbody id="tbody-left"></tbody></table></div>
+        <div class="print-col"><table><thead><tr><th colspan="2">Data</th><th>Mattina (06-13)</th><th>Pom (15:30-20:30)</th></tr></thead><tbody id="tbody-right"></tbody></table></div>
+    </div>
+    <div class="print-footer"><span>Domenica: 07:00 - 13:00</span><span>Festivi (Rosso): 07:00 - 18:00</span></div>
+</div>
+
+<script>
+    // CONFIG
+    const BIN_ID = "6979e5eb43b1c97be9517651";
+    const API_KEY = "$2a$10$LoeF5Ae4yW8YLmCxZF9etOqZpfkhx5zc4u81EreMzPvYRCFztbF0K";
+    const URL_BIN = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+    const DEFAULT_CONFIG = { p1: "Naio", c1: "#007AFF", g1:"M", p2: "Davide", c2: "#10b981", g2:"M", cb: "#8b5cf6" };
+
+    let cloudData = { config: DEFAULT_CONFIG, shifts: {} };
+    const monthNames = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+    const T_AM = "06:00 - 13:00"; const T_PM = "15:30 - 20:30";
+    const T_DOM = "07:00 - 13:00"; const T_FEST = "07:00 - 18:00";
+
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+    let selectedDayForReq = null;
+    let selectedUser = null;
+    let selectedIssueType = null;
+
+    async function fetchCloudData() {
+        try {
+            const res = await fetch(URL_BIN + '/latest', { headers: { 'X-Master-Key': API_KEY } });
+            if (res.ok) {
+                const json = await res.json();
+                if(json.record) {
+                    cloudData = json.record;
+                    if (!cloudData.config || !cloudData.config.p1) cloudData.config = DEFAULT_CONFIG;
+                    if (!cloudData.shifts) cloudData.shifts = {};
+                }
+            }
+        } catch (e) { console.error("Errore fetch:", e); }
+    }
+
+    async function syncCloud() {
+        try { await fetch(URL_BIN, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY }, body: JSON.stringify(cloudData) }); } catch (e) { alert("Errore connessione"); }
+    }
+
+    function loadDB() { if (!cloudData.shifts) cloudData.shifts = {}; return cloudData.shifts[`${currentYear}_${currentMonth}`] || {}; }
+
+    // UTILS
+    function getEaster(year) { const f=Math.floor,G=year%19,C=f(year/100),H=(C-f(C/4)-f((8*C+13)/25)+19*G+15)%30,I=H-f(H /28)*(1-f(29/(H+1))*f((21-G)/11)),J=(year+f(year/4)+I+2-C+f(C/4))%7,L=I-J,month=3+f((L+40)/44),day=L+28-31*f(month/4); return {month:month-1,day:day}; }
+    function getHolidayName(date) { const d=date.getDate(),m=date.getMonth(),y=date.getFullYear(); if(d===1&&m===0)return "Capodanno"; if(d===6&&m===0)return "Epifania"; if(d===25&&m===3)return "Liberazione"; if(d===1&&m===4)return "Festa Lavoro"; if(d===2&&m===5)return "Repubblica"; if(d===15&&m===7)return "Ferragosto"; if(d===1&&m===10)return "Ognissanti"; if(d===8&&m===11)return "Immacolata"; if(d===25&&m===11)return "Natale"; if(d===26&&m===11)return "S. Stefano"; const E=getEaster(y); if(d===E.day&&m===E.month)return "Pasqua"; const PM=new Date(y,E.month,E.day+1); if(d===PM.getDate()&&m===PM.getMonth())return "Pasquetta"; return null; }
+
+    function applyTheme() {
+        if(!cloudData.config) return;
+        const r = document.documentElement.style; const cfg = cloudData.config;
+        r.setProperty('--color-emp1', cfg.c1 || "#007AFF");
+        r.setProperty('--color-emp2', cfg.c2 || "#10b981");
+        r.setProperty('--color-both', cfg.cb || "#8b5cf6");
+    }
+
+    async function init() {
+        const ms = document.getElementById('monthSelect'), ys = document.getElementById('yearSelect');
+        ms.innerHTML = ""; ys.innerHTML = "";
+        monthNames.forEach((n, i) => { let op = document.createElement('option'); op.value = i; op.innerText = n; if(i === currentMonth) op.selected = true; ms.appendChild(op); });
+        for(let y = currentYear - 1; y <= currentYear + 2; y++) { let op = document.createElement('option'); op.value = y; op.innerText = y; if(y === currentYear) op.selected = true; ys.appendChild(op); }
+        document.getElementById('app-grid').innerHTML = '<div style="text-align:center; grid-column:1/-1; padding:40px">Caricamento...</div>';
+        await fetchCloudData(); applyTheme(); renderApp();
+    }
+
+    // --- DEMO LOGIC ---
+    function showDemo(type, el) {
+        document.querySelectorAll('.guide-menu-item').forEach(i => i.classList.remove('active')); el.classList.add('active');
+        document.querySelectorAll('.demo-scene').forEach(s => s.classList.remove('active')); document.getElementById('demo-'+type).classList.add('active');
+    }
+    function toggleModal(id, show) {
+        const m = document.getElementById(id);
+        if(show) { m.style.display = 'flex'; m.offsetHeight; m.classList.add('active'); }
+        else { m.classList.remove('active'); setTimeout(() => m.style.display = 'none', 300); }
+    }
+
+    function getAvatar(name) {
+        const c = cloudData.config || DEFAULT_CONFIG;
+        if(name === c.p1) return c.g1 === 'F' ? '👩' : (c.g1 === 'NB' ? '🧑' : '👨');
+        if(name === c.p2) return c.g2 === 'F' ? '👩' : (c.g2 === 'NB' ? '🧑' : '👨');
+        return '👤';
+    }
+
+    // --- REQUEST LOGIC ---
+    function openReqModal(day) {
+        selectedDayForReq = day; selectedUser = null; selectedIssueType = null;
+        const cfg = cloudData.config || DEFAULT_CONFIG;
+        const cont = document.getElementById('userSelectContainer');
+
+        cont.innerHTML = `
+            <div class="user-card" onclick="selectUser('${cfg.p1}', this)">
+                <div class="user-icon">${getAvatar(cfg.p1)}</div><div class="user-name">${cfg.p1}</div>
+            </div>
+            <div class="user-card" onclick="selectUser('${cfg.p2}', this)">
+                <div class="user-icon">${getAvatar(cfg.p2)}</div><div class="user-name">${cfg.p2}</div>
+            </div>
+        `;
+
+        document.querySelectorAll('.btn-option').forEach(b => {
+            b.classList.remove('selected'); b.classList.remove('selected-swap'); b.classList.remove('disabled'); b.disabled = false;
+            const btnId = b.id;
+            if(btnId === 'opt-swap') b.onclick = function() { selectIssue('swap', this); };
+            else if (btnId.startsWith('opt-')) b.onclick = function() { selectIssue('no_' + btnId.split('-')[1], this); };
+        });
+
+        document.getElementById('conflictMsg').style.display = 'none';
+        document.getElementById('formErrorMsg').style.display = 'none';
+        document.getElementById('newRequestOptions').style.display = 'block';
+        document.getElementById('existingRequestInfo').style.display = 'none';
+        document.getElementById('btnSend').style.display = 'none';
+        document.getElementById('reqDateTitle').innerText = `${day} ${monthNames[currentMonth]} ${currentYear}`;
+
+        toggleModal('requestModal', true);
+    }
+
+    function selectUser(name, el) {
+        selectedUser = name;
+        document.querySelectorAll('.user-card').forEach(b => b.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('formErrorMsg').style.display = 'none';
+
+        const db = loadDB();
+        const dayData = db[selectedDayForReq] || {};
+        const reqs = dayData.requests || [];
+
+        const myReq = reqs.find(r => r.who === name);
+
+        if(myReq) {
+            document.getElementById('newRequestOptions').style.display = 'none';
+            document.getElementById('existingRequestInfo').style.display = 'block';
+            document.getElementById('btnSend').style.display = 'none';
+
+            const dictType = { 'swap': '🔄 Richiesta Cambio Turno', 'no_am': 'Assenza Mattina', 'no_pm': 'Assenza Pomeriggio', 'no_all': 'Assenza Tutto il Giorno' };
+            let statusHtml = "", bgStyle = "";
+            if(myReq.status === 'accepted') { statusHtml = `<h3 style="margin:0 0 5px 0; color:#065f46">✅ Accettata</h3><p style="margin:0; font-size:0.9rem">Confermata dall'Admin.</p>`; bgStyle = "background:#d1fae5; border-color:#a7f3d0; color:#065f46"; }
+            else if(myReq.status === 'rejected') { statusHtml = `<h3 style="margin:0 0 5px 0; color:#991b1b">❌ Rifiutata</h3><p style="margin:0; font-size:0.9rem">Non approvata.</p>`; bgStyle = "background:#fee2e2; border-color:#fecaca; color:#991b1b"; }
+            else { statusHtml = `<h3 style="margin:0 0 5px 0; color:#b45309">⏳ In Attesa</h3><p style="margin:0; font-size:0.9rem">In attesa di approvazione.</p>`; bgStyle = "background:#fff7ed; border-color:#fed7aa; color:#c2410c"; }
+
+            document.getElementById('existingReqDetails').style.cssText = `padding:15px; border-radius:12px; border:1px solid; margin-bottom:15px; text-align:left; ${bgStyle}`;
+            document.getElementById('existingReqDetails').innerHTML = `${statusHtml}<hr style="border:0; border-top:1px solid rgba(0,0,0,0.1); margin:10px 0;"><strong>Richiesta:</strong><br>${dictType[myReq.type]}`;
+
+            const today = new Date(); today.setHours(0,0,0,0);
+            const shiftDate = new Date(currentYear, currentMonth, selectedDayForReq);
+            if(shiftDate > today) { document.getElementById('btnRevoke').style.display = 'block'; document.getElementById('revokeMsg').style.display = 'none'; }
+            else { document.getElementById('btnRevoke').style.display = 'none'; document.getElementById('revokeMsg').style.display = 'block'; }
+
+        } else {
+            document.getElementById('newRequestOptions').style.display = 'block';
+            document.getElementById('existingRequestInfo').style.display = 'none';
+
+            const cfg = cloudData.config || DEFAULT_CONFIG;
+            const otherUser = (name === cfg.p1) ? cfg.p2 : cfg.p1;
+            const otherReq = reqs.find(r => r.who === otherUser && r.status === 'accepted');
+
+            ['opt-swap', 'opt-am', 'opt-pm', 'opt-all'].forEach(id => {
+                 const btn = document.getElementById(id); btn.classList.remove('disabled'); btn.disabled = false;
+                 const type = (id==='opt-swap') ? 'swap' : 'no_' + id.split('-')[1];
+                 btn.onclick = function() { selectIssue(type, this); };
+            });
+            document.getElementById('conflictMsg').style.display = 'none';
+
+            if (otherReq) {
+                const disableBtn = (id) => { const b = document.getElementById(id); b.classList.add('disabled'); b.disabled=true; b.onclick=null; };
+                document.getElementById('conflictMsg').style.display = 'block';
+                if (otherReq.type === 'no_am') { disableBtn('opt-am'); disableBtn('opt-all'); disableBtn('opt-swap'); }
+                else if (otherReq.type === 'no_pm') { disableBtn('opt-pm'); disableBtn('opt-all'); disableBtn('opt-swap'); }
+                else if (otherReq.type === 'no_all') { disableBtn('opt-am'); disableBtn('opt-pm'); disableBtn('opt-all'); disableBtn('opt-swap'); }
+            }
+        }
+    }
+
+    function selectIssue(type, el) {
+        selectedIssueType = type;
+        document.querySelectorAll('.btn-option').forEach(b => {
+            b.classList.remove('selected'); b.classList.remove('selected-swap');
+        });
+        if(type === 'swap') el.classList.add('selected-swap'); else el.classList.add('selected');
+        document.getElementById('btnSend').style.display = 'block';
+        document.getElementById('formErrorMsg').style.display = 'none';
+    }
+
+    function submitRequest() {
+        if(!selectedUser || !selectedIssueType) {
+            document.getElementById('formErrorMsg').style.display = 'block';
+            return;
+        }
+        const key = `${currentYear}_${currentMonth}`;
+        if(!cloudData.shifts[key]) cloudData.shifts[key] = {};
+        if(!cloudData.shifts[key][selectedDayForReq]) cloudData.shifts[key][selectedDayForReq] = {};
+
+        let dayObj = cloudData.shifts[key][selectedDayForReq];
+        if(!dayObj.requests) dayObj.requests = [];
+        dayObj.requests.push({ who: selectedUser, type: selectedIssueType, ts: new Date().toISOString() });
+
+        syncCloud();
+        toggleModal('requestModal', false);
+        toggleModal('successModal', true); // Show success instead of alert
+    }
+
+    function closeSuccess() {
+        toggleModal('successModal', false);
+        renderApp();
+    }
+
+    function deleteRequest() {
+        if(!selectedUser) return;
+        const key = `${currentYear}_${currentMonth}`;
+        let dayObj = cloudData.shifts[key][selectedDayForReq];
+        if(dayObj && dayObj.requests) {
+            dayObj.requests = dayObj.requests.filter(r => r.who !== selectedUser);
+            syncCloud(); toggleModal('requestModal', false); renderApp();
+        }
+    }
+
+    function renderApp() {
+        currentMonth = parseInt(document.getElementById('monthSelect').value);
+        currentYear = parseInt(document.getElementById('yearSelect').value);
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        const db = loadDB();
+        const grid = document.getElementById('app-grid');
+        const tbL = document.getElementById('tbody-left'); const tbR = document.getElementById('tbody-right');
+        const printTitle = document.getElementById('print-title');
+
+        grid.innerHTML = ""; if(tbL) tbL.innerHTML = ""; if(tbR) tbR.innerHTML = "";
+        if(printTitle) printTitle.innerText = `${monthNames[currentMonth]} ${currentYear} - TURNI`;
+
+        const today = new Date();
+
+        for(let i=1; i<=daysInMonth; i++) {
+            const date = new Date(currentYear, currentMonth, i);
+            const dayWeek = date.getDay();
+            const holName = getHolidayName(date);
+            const isSpecialHoliday = (holName !== null);
+            const isSunday = (dayWeek === 0);
+            const isHolidayMode = isSpecialHoliday || isSunday;
+            const dayShort = date.toLocaleDateString('it-IT', {weekday: 'short'});
+            const rowData = db[i] || {};
+
+            const card = document.createElement('div');
+            const isToday = (i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear());
+            card.className = `day-card ${isHolidayMode ? 'is-holiday' : ''} ${isToday ? 'is-today' : ''}`;
+
+            let requestBadge = "";
+            const clickAttr = `onclick="event.stopPropagation(); openReqModal(${i})"`;
+
+            if (rowData.requests && rowData.requests.length > 0) {
+                const acc = rowData.requests.find(r => r.status === 'accepted');
+                const rej = rowData.requests.find(r => r.status === 'rejected');
+                const pen = rowData.requests.find(r => !r.status);
+
+                if (acc) requestBadge = `<span class="status-pill st-acc" ${clickAttr}>✅ OK</span>`;
+                else if (pen) requestBadge = `<span class="status-pill st-wait" ${clickAttr}>⏳ Attesa</span>`;
+                else if (rej) requestBadge = `<span class="status-pill st-rej" ${clickAttr}>❌ NO</span>`;
+            }
+
+            const headerHtml = `
+                <div class="card-header">
+                    <div class="date-group"><span class="date-display">${i}</span><span class="day-label">${dayShort}</span></div>
+                    <div class="header-actions">
+                        ${requestBadge}
+                        <button class="btn-flag" onclick="openReqModal(${i})">⚑</button>
+                    </div>
+                </div>`;
+
+            if(isHolidayMode) {
+                const worker = rowData['hol'] || '-';
+                card.innerHTML = `${headerHtml}<div class="card-body"><div class="shift-row"><div class="shift-info"><span class="shift-icon">${isSpecialHoliday?'⭐':'☕'}</span><span class="shift-time">${isSpecialHoliday?T_FEST:T_DOM}</span></div>${renderBadge(worker)}</div></div>`;
+            } else {
+                const w1 = rowData['am'] || '-'; const w2 = rowData['pm'] || '-';
+                card.innerHTML = `${headerHtml}<div class="card-body"><div class="shift-row"><div class="shift-info"><span class="shift-icon">☀️ Mattina</span><span class="shift-time">${T_AM}</span></div>${renderBadge(w1)}</div><div class="shift-row"><div class="shift-info"><span class="shift-icon">🌙 Pom.</span><span class="shift-time">${T_PM}</span></div>${renderBadge(w2)}</div></div>`;
+            }
+            grid.appendChild(card);
+
+            // Print Logic
+            if (tbL && tbR) {
+                const tr = document.createElement('tr');
+                if(isHolidayMode) tr.className = 'print-hol-row';
+                const tdDate = `<td class="td-date">${i}</td><td class="td-day">${dayShort.toUpperCase()}</td>`;
+                let tdContent = '';
+                if(isHolidayMode) {
+                    const worker = rowData['hol'] || '-';
+                    const hTxt = isSpecialHoliday ? `<span style="font-size:7pt; color:red; display:block; font-weight:bold">${holName.toUpperCase()}</span>` : '';
+                    let printTime = isSpecialHoliday ? "07-18" : "07-13";
+                    let wTxt = (worker === 'Entrambi') ? `<span class="p-name t-both">ENTRAMBI</span>` : (worker!=='-' ? `<span class="p-name ${getColClass(worker)}">${worker}</span>` : '');
+                    tdContent = `<td colspan="2">${hTxt}Orario ${printTime}: ${wTxt}</td>`;
+                } else {
+                    const w1 = rowData['am'] || '-'; const w2 = rowData['pm'] || '-';
+                    const t1 = (w1 !== '-') ? `<span class="p-name ${getColClass(w1)}">${w1}</span>` : '';
+                    const t2 = (w2 !== '-') ? `<span class="p-name ${getColClass(w2)}">${w2}</span>` : '';
+                    tdContent = `<td>${t1}</td><td>${t2}</td>`;
+                }
+                tr.innerHTML = tdDate + tdContent;
+                if(i <= 16) tbL.appendChild(tr); else tbR.appendChild(tr);
+            }
+        }
+    }
+
+    function renderBadge(n) {
+        const cfg = cloudData.config || DEFAULT_CONFIG;
+        let cls = 'badge-empty';
+        if(n === cfg.p1) cls = 'badge-p1';
+        if(n === cfg.p2) cls = 'badge-p2';
+        if(n === 'Entrambi') cls = 'badge-both';
+        return `<span class="badge ${cls}">${n==='-'?'Libero':n}</span>`;
+    }
+    function getColClass(n) {
+        const cfg = cloudData.config || DEFAULT_CONFIG;
+        if(n===cfg.p1) return 't-p1';
+        if(n===cfg.p2) return 't-p2';
+        if(n==='Entrambi') return 't-both';
+        return '';
+    }
+
+    init();
+</script>
 </body>
 </html>

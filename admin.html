@@ -6,197 +6,253 @@
     <title>Gestione Turni - Admin</title>
     <style>
         :root {
+            /* COLORI FUNZIONALI */
             --color-emp1: #007AFF;
             --color-emp2: #10b981;
             --color-both: #8b5cf6;
-            
-            --bg-body: #f3f4f6;
-            --card-bg: #ffffff;
-            --text-main: #1f2937;
-            --primary: #2563eb;
+
+            /* PALETTE UI */
+            --bg-body: #f8fafc;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --primary-shadow: #4338ca;
+
             --danger: #ef4444;
+            --danger-shadow: #b91c1c;
+
             --success: #10b981;
+            --success-shadow: #047857;
+
+            --secondary: #94a3b8;
+            --secondary-shadow: #64748b;
+
+            --accent-purple: #a855f7;
+            --accent-yellow: #f59e0b;
             --warning: #f59e0b;
-            --swap: #8b5cf6; /* Colore viola per swap */
+
+            --bg-glass: rgba(255, 255, 255, 0.95);
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+
             --holiday-bg: #fee2e2;
             --holiday-border: #fecaca;
+            --swap: #8b5cf6;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-body);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
             margin: 0; padding: 0;
             color: var(--text-main);
-            padding-bottom: 60px;
+            padding-bottom: 80px;
+            min-height: 100vh;
         }
 
-        /* HEADER */
+        /* --- HEADER --- */
         .app-header {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             position: sticky; top: 0; z-index: 100;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
         }
 
-        .header-top {
-            padding: 15px 20px 10px 20px;
-            display: flex; justify-content: space-between; align-items: center;
+        .header-top { padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .brand { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; color: #1e293b; }
+
+        .header-right-area { display: flex; gap: 10px; align-items: center; }
+
+        .btn-help-hero {
+            background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+            color: white; border: none; padding: 8px 16px;
+            border-radius: 20px; font-weight: 700; font-size: 0.9rem;
+            cursor: pointer; display: flex; align-items: center; gap: 6px;
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            animation: pulse-purple 3s infinite;
         }
-        .brand { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; color: #111; }
+        .btn-help-hero:active { transform: scale(0.95); }
 
-        .header-toolbar {
-            padding: 0 15px 15px 15px;
-            display: flex; gap: 10px; flex-wrap: wrap;
-            justify-content: space-between; align-items: center;
+        @keyframes pulse-purple {
+            0% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(168, 85, 247, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
         }
 
-        .group-nav { display: flex; gap: 8px; flex: 1; min-width: 140px; }
-        .group-actions { display: flex; gap: 8px; }
-
-        select {
-            padding: 8px 12px; border-radius: 10px; border: 1px solid #e5e7eb;
-            background: #f9fafb; font-size: 14px; font-weight: 600; color: #374151;
-            width: 100%; -webkit-appearance: none;
-        }
-
-        .action-btn {
-            border: none; border-radius: 10px; padding: 8px 14px;
-            font-size: 14px; font-weight: 700; color: white;
-            display: flex; align-items: center; gap: 6px;
-            cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .action-btn:active { transform: scale(0.96); opacity: 0.9; }
-
-        .btn-auto { background: var(--warning); color: #fff; }
-        .btn-reset { background: var(--danger); }
-        .btn-print { background: #1f2937; }
-
-        .header-actions-group { display: flex; gap: 10px; }
         .btn-icon-head {
-            width: 38px; height: 38px; border-radius: 50%; border: 2px solid #e5e7eb;
-            background: white; color: var(--primary); font-weight: bold; font-size: 1.2rem;
+            width: 40px; height: 40px; border-radius: 12px; border: 1px solid #e2e8f0;
+            background: white; color: #64748b; font-size: 1.2rem;
             cursor: pointer; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.1s;
+            box-shadow: 0 3px 0 #e2e8f0; transition: transform 0.1s;
         }
-        .btn-icon-head:active { transform: scale(0.95); }
+        .btn-icon-head:active { transform: translateY(3px); box-shadow: 0 0 0; }
 
-        /* GRIGLIA & CARD */
-        .main-container {
-            padding: 20px; max-width: 1000px; margin: 0 auto;
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px;
+        .header-toolbar { padding: 0 20px 15px 20px; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .group-nav { display: flex; gap: 10px; flex-grow: 1; min-width: 200px; }
+        select { flex: 1; width: 100%; padding: 10px 12px; border-radius: 10px; border: 2px solid #e2e8f0; background: white; font-size: 14px; font-weight: 700; color: #475569; -webkit-appearance: none; outline: none; cursor: pointer; }
+        .group-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: center; }
+        .action-btn { border: none; border-radius: 10px; padding: 10px 14px; font-size: 13px; font-weight: 800; color: white; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: transform 0.1s; }
+        .action-btn:active { transform: translateY(2px); box-shadow: none !important; }
+        .btn-auto { background: var(--accent-yellow); box-shadow: 0 3px 0 #d97706; }
+        .btn-reset { background: var(--danger); box-shadow: 0 3px 0 var(--danger-shadow); }
+        .btn-print { background: #334155; box-shadow: 0 3px 0 #1e293b; }
+
+        /* SAVE STATUS INDICATOR */
+        #saveStatus {
+            font-size: 0.8rem; font-weight: 700; padding: 6px 12px; border-radius: 20px;
+            background: #e2e8f0; color: #64748b; display: flex; align-items: center; gap: 5px;
+            transition: all 0.3s ease; opacity: 0;
         }
+        #saveStatus.show { opacity: 1; }
+        #saveStatus.saving { background: #fef3c7; color: #d97706; }
+        #saveStatus.saved { background: #dcfce7; color: #166534; }
+        #saveStatus.error { background: #fee2e2; color: #991b1b; }
 
-        .day-card {
-            background: var(--card-bg); border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f3f4f6;
+
+        /* --- MODALI --- */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-box.wide { max-width: 750px; }
+        .modal-box {
+            background: var(--bg-glass); width: 100%; max-width: 480px; border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.5);
             overflow: hidden; display: flex; flex-direction: column;
-            position: relative; transition: transform 0.2s;
+            animation: modalAppear 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
         }
-        
-        .day-card.is-today {
-            border: 3px solid var(--primary) !important;
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.25) !important;
-            transform: scale(1.02); z-index: 10;
+        @keyframes modalAppear { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .modal-header { padding: 25px 25px 15px; text-align: center; border-bottom: 1px solid rgba(0,0,0,0.05); position: relative; z-index: 2; }
+        .modal-header h3 { margin: 0; font-size: 1.5rem; font-weight: 800; color: #1e293b; letter-spacing: -0.5px; }
+        .modal-subtitle { color: #64748b; font-size: 0.9rem; margin-top: 5px; }
+        .modal-body { padding: 15px 25px 25px; position: relative; z-index: 2; }
+
+        /* ANIMAZIONE: GATTINI CADENTI (RESET) */
+        .falling-kitten {
+            position: absolute; top: -50px; font-size: 24px; pointer-events: none; z-index: 1;
+            animation: fall linear forwards;
         }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(400px) rotate(360deg); opacity: 0; }
+        }
+
+        /* ANIMAZIONE: GATTINI ESPLOSIVI (AUTO) */
+        .magic-kitten {
+            position: absolute; font-size: 20px; pointer-events: none; z-index: 100;
+            transition: transform 1.2s ease-out, opacity 1.2s ease-in;
+        }
+
+        /* Guide Content */
+        .guide-container { display: flex; flex-direction: column; gap: 20px; padding: 20px; }
+        @media (min-width: 600px) { .guide-container { flex-direction: row; height: 350px; } }
+        .guide-menu { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .guide-menu-item { padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.2s; border: 2px solid transparent; display: flex; align-items: center; gap: 10px; font-weight: 600; color: #475569; }
+        .guide-menu-item:hover { background: white; transform: translateX(5px); }
+        .guide-menu-item.active { background: #e0e7ff; border-color: var(--primary); color: var(--primary); }
+        .guide-demo-area { flex: 1.3; background: #f1f5f9; border-radius: 16px; border: 1px solid #cbd5e1; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+
+        /* Settings Card Styling */
+        .setting-card { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.6); padding: 15px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.8); margin-bottom: 12px; transition: transform 0.2s; }
+        .setting-card:hover { transform: translateY(-2px); background: rgba(255,255,255,0.9); }
+        .setting-icon { font-size: 1.5rem; background: white; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); color: #64748b; }
+        .setting-content { flex: 1; }
+        .setting-content label { font-size: 0.75rem; text-transform: uppercase; font-weight: 800; color: #94a3b8; display: block; margin-bottom: 2px; }
+        .setting-content input { width: 100%; border: none; background: transparent; font-weight: 700; font-size: 1.05rem; color: #1e293b; padding: 0; outline: none; }
+        .color-wrapper { width: 45px; height: 45px; border-radius: 50%; overflow: hidden; border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.2s; position: relative; }
+        .color-wrapper:hover { transform: scale(1.1); }
+        .color-wrapper input[type="color"] { position: absolute; top: -10px; left: -10px; width: 70px; height: 70px; border: none; cursor: pointer; padding: 0; }
+
+        /* Gender Toggle Styles */
+        .gender-toggle { display: flex; gap: 5px; margin-top: 5px; background: rgba(0,0,0,0.05); padding: 3px; border-radius: 8px; width: fit-content; }
+        .g-btn { cursor: pointer; padding: 2px 6px; border-radius: 6px; opacity: 0.4; filter: grayscale(1); transition: 0.2s; font-size: 1.2rem; user-select: none; }
+        .g-btn:hover { opacity: 0.7; }
+        .g-btn.active { opacity: 1; filter: grayscale(0); background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transform: scale(1.1); }
+
+        /* DEMO ANIMATIONS */
+        .demo-scene { width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; position: relative; }
+        .demo-scene.active { display: flex; }
+        .fake-card { width: 160px; padding: 15px; background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); position: relative; border: 1px solid #f1f5f9; display:flex; flex-direction:column; gap:10px;}
+        .fake-date { font-weight: 800; font-size: 1.1rem; color: #334155; }
+        .fake-row { background: #f8fafc; padding: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid transparent;}
+        .fake-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; transition: 0.3s; width: 60px; text-align: center;}
+        .cursor-hand { font-size: 2.5rem; position: absolute; z-index: 10; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2)); }
+        .demo-assign .cursor-hand { animation: clickBadge 4s infinite; }
+        .demo-assign .fake-badge { animation: badgeCycle 4s infinite; }
+        @keyframes clickBadge { 0% { top: 120px; left: 120px; transform: scale(1); } 20% { top: 65px; left: 100px; transform: scale(1); } 25% { transform: scale(0.8); } 30% { transform: scale(1); } 45% { transform: scale(0.8); } 50% { transform: scale(1); } 70% { top: 120px; left: 120px; } 100% { top: 120px; left: 120px; } }
+        @keyframes badgeCycle { 0%, 24% { background: white; color: #cbd5e1; border: 2px dashed #cbd5e1; content:'-'; } 25%, 49% { background: var(--color-emp1); color: white; border: none; } 50%, 100% { background: var(--color-emp2); color: white; border: none; } }
+        .fake-badge::after { content: '-'; }
+        .demo-assign .fake-badge::after { animation: textCycle 4s infinite; }
+        @keyframes textCycle { 0%, 24% { content: '-'; } 25%, 49% { content: 'Naio'; } 50%, 100% { content: 'Davide'; } }
+        .fake-req-swap { width: 90%; background: white; border-left: 5px solid var(--swap); border-radius: 8px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; text-align: left; }
+        .swap-anim-box { display: flex; gap: 15px; margin-top: 15px; justify-content: center; background: #fff; padding: 10px; border-radius: 12px; }
+        .s-box { padding: 8px 15px; border-radius: 8px; font-weight: bold; color: white; min-width: 60px; text-align: center;}
+        .s1 { background: var(--color-emp1); animation: swapMove1 3s infinite ease-in-out; }
+        .s2 { background: var(--color-emp2); animation: swapMove2 3s infinite ease-in-out; }
+        @keyframes swapMove1 { 0%, 30% { transform: translateX(0); } 70%, 100% { transform: translateX(85px); } }
+        @keyframes swapMove2 { 0%, 30% { transform: translateX(0); } 70%, 100% { transform: translateX(-85px); } }
+        .fake-card-req { width: 140px; height: 100px; background: white; border-radius: 16px; border: 1px solid #e2e8f0; position: relative; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .demo-triangle { position: absolute; top: 0; right: 0; width: 0; height: 0; border-style: solid; border-width: 0 45px 45px 0; border-color: transparent var(--warning) transparent transparent; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2)); animation: triPulse 2s infinite; }
+        .demo-symbol { position: absolute; top: 5px; right: 7px; font-size: 14px; color: black; font-weight: 900; }
+        @keyframes triPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .fake-req-acc { width: 90%; background: white; border-left: 5px solid #e2e8f0; border-radius: 8px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: left; transition: 0.3s; }
+        .btn-fake { padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; display: inline-block; margin-top: 8px; cursor: pointer; }
+        .btn-fake-ok { background: var(--success); color: white; box-shadow: 0 3px 0 #047857; }
+        .demo-accept .cursor-hand { animation: clickAccept 3s infinite; }
+        .demo-accept .fake-req-acc { animation: reqStatusChange 3s infinite; }
+        @keyframes clickAccept { 0% { top: 150px; left: 150px; transform: scale(1); } 30% { top: 90px; left: 120px; transform: scale(1); } 40% { transform: scale(0.8); } 100% { top: 90px; left: 120px; transform: scale(0.8); } }
+        @keyframes reqStatusChange { 0%, 40% { border-left-color: #e2e8f0; opacity: 1; } 41% { border-left-color: var(--success); background: #f0fdf4; } 80% { border-left-color: var(--success); background: #f0fdf4; opacity: 0; transform: translateY(-10px); } 100% { opacity: 0; } }
+
+        .modal-footer { padding: 20px; display: flex; justify-content: flex-end; background: rgba(248, 250, 252, 0.5); position: relative; z-index: 2; }
+        .btn-push { border: none; border-radius: 14px; padding: 12px 20px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.1s; color: white; width: 100%; }
+        .btn-push:active { transform: translateY(4px) !important; box-shadow: 0 0px 0px !important; }
+        .btn-push:hover { transform: translateY(1px); }
+        .btn-primary { background: var(--primary); box-shadow: 0 4px 0px var(--primary-shadow); }
+        .btn-danger { background: var(--danger); box-shadow: 0 4px 0px var(--danger-shadow); }
+        .btn-success { background: var(--success); box-shadow: 0 4px 0px var(--success-shadow); }
+        .btn-secondary { background: #f1f5f9; color: #475569; box-shadow: 0 4px 0px #cbd5e1; }
+
+        /* --- STILE SPECIFICO PER SCHEDE RICHIESTE --- */
+        .req-container { max-height: 50vh; overflow-y: auto; padding: 5px; }
+        .req-card { background: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03); border: 1px solid #f1f5f9; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 8px; }
+        .req-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--warning); }
+        .req-card.type-swap::before { background: var(--swap); }
+        .req-card.done { opacity: 0.6; filter: grayscale(0.8); }
+        .req-header { display: flex; justify-content: space-between; align-items: center; }
+        .req-user { font-weight: 800; font-size: 1rem; color: #1e293b; }
+        .req-time { font-size: 0.75rem; color: #94a3b8; }
+        .req-body { font-size: 0.9rem; color: #475569; line-height: 1.4; }
+        .req-actions { display: flex; gap: 8px; margin-top: 5px; }
+        .btn-mini { flex: 1; padding: 10px; border-radius: 10px; border: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; box-shadow: 0 2px 0 rgba(0,0,0,0.1); transition: transform 0.1s; }
+        .btn-mini:active { transform: translateY(2px); box-shadow: none; }
+        .btn-mini-acc { background: var(--success); color: white; }
+        .btn-mini-rej { background: var(--danger); color: white; box-shadow: 0 2px 0 var(--danger-shadow); }
+
+        /* GRID & CARDS */
+        .main-container { padding: 20px; max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+        .day-card { background: var(--card-bg); border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        .day-card.is-today { border: 2px solid var(--primary); box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.2); transform: scale(1.02); z-index: 10; }
         .day-card.is-holiday { background-color: var(--holiday-bg); border-color: var(--holiday-border); }
-
-        .card-header {
-            padding: 12px 15px; border-bottom: 1px solid #f3f4f6;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .day-card.is-holiday .card-header { background: rgba(255,255,255,0.5); border-color: var(--holiday-border); }
-
-        .date-display { font-size: 1.2rem; font-weight: 800; color: #111; }
-        .day-label { font-size: 0.8rem; text-transform: uppercase; font-weight: 700; color: #9ca3af; letter-spacing: 0.5px; }
+        .card-header { padding: 12px 18px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+        .date-display { font-size: 1.2rem; font-weight: 800; color: #334155; }
+        .day-label { font-size: 0.8rem; text-transform: uppercase; font-weight: 700; color: #94a3b8; letter-spacing: 0.5px; }
         .holiday-tag { font-size: 0.7rem; background: #dc2626; color: white; padding: 3px 8px; border-radius: 6px; font-weight: 800; text-transform: uppercase; margin-top: 2px; display: inline-block;}
-
-        .card-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
-
-        .shift-row {
-            background: #f9fafb; border-radius: 10px; padding: 10px;
-            display: flex; justify-content: space-between; align-items: center;
-            cursor: pointer; user-select: none; border: 1px solid transparent;
-            transition: background 0.1s;
-        }
+        .card-body { padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+        .shift-row { background: #f8fafc; border-radius: 14px; padding: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; border: 1px solid transparent; transition: background 0.1s; }
         .day-card.is-holiday .shift-row { background: rgba(255,255,255,0.7); }
-        .shift-row:active { background: #e5e7eb; }
-
+        .shift-row:active { background: #e2e8f0; }
         .shift-info { display: flex; flex-direction: column; }
         .shift-icon { font-size: 1.2rem; margin-bottom: 2px; }
-        .shift-time { font-size: 0.75rem; color: #6b7280; font-weight: 700; }
-
-        /* BADGES */
-        .badge {
-            padding: 6px 14px; border-radius: 30px; font-weight: 700; font-size: 0.9rem;
-            min-width: 80px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.06);
-        }
-        .badge-empty { background: white; border: 2px dashed #e5e7eb; color: #d1d5db; box-shadow: none; }
+        .shift-time { font-size: 0.75rem; color: #64748b; font-weight: 700; }
+        .badge { padding: 6px 14px; border-radius: 30px; font-weight: 700; font-size: 0.9rem; min-width: 80px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.06); }
+        .badge-empty { background: white; border: 2px dashed #cbd5e1; color: #cbd5e1; box-shadow: none; }
         .badge-p1 { background: var(--color-emp1); color: white; }
         .badge-p2 { background: var(--color-emp2); color: white; }
         .badge-both { background: var(--color-both); color: white; }
+        .warning-triangle { position: absolute; top: 0; right: 0; width: 0; height: 0; border-style: solid; border-width: 0 45px 45px 0; border-color: transparent var(--warning) transparent transparent; cursor: pointer; z-index: 20; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2)); }
+        .warning-symbol { position: absolute; top: 5px; right: 7px; font-size: 14px; color: black; font-weight: 900; pointer-events: none; }
 
-        /* TRIANGOLO AVVISO */
-        .warning-triangle {
-            position: absolute; top: 0; right: 0;
-            width: 0; height: 0;
-            border-style: solid;
-            border-width: 0 45px 45px 0;
-            border-color: transparent var(--warning) transparent transparent;
-            cursor: pointer; z-index: 20;
-            transition: opacity 0.2s; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
-        }
-        .warning-triangle:hover { opacity: 0.8; }
-        .warning-symbol {
-            position: absolute; top: 5px; right: 7px;
-            font-size: 14px; color: black; font-weight: 900; pointer-events: none;
-        }
-
-        /* MODALS */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.4); backdrop-filter: blur(2px); z-index: 2000; align-items: center; justify-content: center;
-        }
-        .modal-box { background: white; padding: 25px; border-radius: 20px; width: 85%; max-width: 360px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); animation: popIn 0.2s ease-out; }
-        @keyframes popIn { from{transform:scale(0.9);opacity:0} to{transform:scale(1);opacity:1} }
-        
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; font-weight: 700; margin-bottom: 6px; font-size: 0.9rem; color: #374151; }
-        .input-row { display: flex; gap: 10px; align-items: center; }
-        .input-row input[type="text"] { flex-grow: 1; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 16px; }
-        .input-row input[type="color"] { width: 50px; height: 45px; border: none; background: none; cursor: pointer; }
-        
-        .modal-btns { display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; }
-
-        /* STILE LISTA RICHIESTE */
-        .req-container { max-height: 60vh; overflow-y: auto; padding-right: 5px; }
-        .req-empty-state { text-align: center; padding: 40px 20px; color: #9ca3af; font-style: italic; background: #f9fafb; border-radius: 12px; border: 2px dashed #e5e7eb; }
-        .req-card {
-            background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 15px; margin-bottom: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); position: relative; overflow: hidden;
-        }
-        .req-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--warning); }
-        .req-card.type-swap::before { background: var(--swap); } /* Viola per swap */
-        
-        .req-card.done::before { background: #9ca3af; }
-        .req-card.done { opacity: 0.8; }
-
-        .req-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #f3f4f6; }
-        .req-user { font-weight: 800; font-size: 1.1rem; color: #111; display: flex; align-items: center; gap: 8px; }
-        .req-ts { font-size: 0.75rem; color: #6b7280; background: #f3f4f6; padding: 3px 8px; border-radius: 6px; }
-        .req-body { margin-bottom: 15px; color: #374151; font-size: 0.95rem; line-height: 1.4; }
-        .req-body strong { color: var(--warning-text); }
-        .req-actions { display: flex; gap: 10px; }
-        .req-status { font-weight: bold; font-size: 0.9rem; text-align: right; width: 100%; display:block; padding: 5px;}
-
-        .btn-act {
-            flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: 700; font-size: 0.9rem; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 6px;
-            transition: transform 0.1s, opacity 0.2s;
-        }
-        .btn-act:active { transform: scale(0.96); }
-        .btn-acc { background: #10b981; color: white; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
-        .btn-rej { background: white; border: 2px solid #ef4444; color: #ef4444; }
+        /* INPUTS */
+        .input-group { margin-bottom: 15px; } .input-group label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: #475569; } .input-row { display: flex; gap: 10px; align-items: center; } input[type="text"] { flex-grow: 1; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; font-weight: 600; color: #334155; outline: none; } input[type="text"]:focus { border-color: var(--primary); } input[type="color"] { width: 50px; height: 50px; border: none; background: none; cursor: pointer; border-radius: 12px; overflow: hidden; }
 
         /* PRINT */
         #print-layout { display: none; }
@@ -224,341 +280,507 @@
 </head>
 <body>
 
-    <div id="settingsModal" class="modal-overlay">
-        <div class="modal-box">
-            <h3>🎨 Personalizzazione</h3>
-            <div class="input-group"><label>Dipendente 1</label><div class="input-row"><input type="text" id="inName1"><input type="color" id="inCol1"></div></div>
-            <div class="input-group"><label>Dipendente 2</label><div class="input-row"><input type="text" id="inName2"><input type="color" id="inCol2"></div></div>
-            <div class="input-group"><label>Colore "Entrambi"</label><div class="input-row"><input type="text" value="Entrambi" disabled><input type="color" id="inColBoth"></div></div>
-            <div class="modal-btns">
-                <button onclick="toggleSettings(false)" style="padding: 10px 18px; background: #f3f4f6; border:none; border-radius:10px; font-weight:bold;">Chiudi</button>
-                <button onclick="saveConfig()" style="padding: 10px 18px; background: var(--primary); color:white; border:none; border-radius:10px; font-weight:bold;">Salva</button>
+<div id="helpModal" class="modal-overlay">
+    <div class="modal-box wide">
+        <div class="modal-header">
+            <h3>🎓 Guida Interattiva</h3>
+            <div class="modal-subtitle">Clicca sulle voci per vedere la demo</div>
+        </div>
+        <div class="guide-container">
+            <div class="guide-menu">
+                <div class="guide-menu-item active" onclick="showDemo('assign', this)"><span class="icon">🖱️</span> Assegnazione Turni</div>
+                <div class="guide-menu-item" onclick="showDemo('swap', this)"><span class="icon">🔄</span> Cambio Turno</div>
+                <div class="guide-menu-item" onclick="showDemo('req', this)"><span class="icon">📩</span> Ricezione Richieste</div>
+                <div class="guide-menu-item" onclick="showDemo('accept', this)"><span class="icon">✅</span> Accettare Richieste</div>
             </div>
+            <div class="guide-demo-area">
+                <div id="demo-assign" class="demo-scene demo-assign active">
+                    <div class="fake-card"><div class="fake-date">12 Lun</div><div class="fake-row"><span>Mattina</span><span class="fake-badge"></span></div></div>
+                    <div class="cursor-hand">👆</div><p style="position:absolute; bottom:10px; font-size:0.8rem; color:#64748b">1 Clic = Blu, 2 Clic = Verde</p>
+                </div>
+                <div id="demo-swap" class="demo-scene">
+                    <div class="fake-req-swap"><strong>🔄 Cambio Turno</strong><br>Davide chiede cambio.<br></div>
+                    <div class="swap-anim-box"><div class="s-box s1">N</div><div style="align-self:center">⚡</div><div class="s-box s2">D</div></div>
+                    <p style="position:absolute; bottom:10px; font-size:0.8rem; color:#64748b">I turni si invertono in automatico</p>
+                </div>
+                <div id="demo-req" class="demo-scene">
+                    <div class="fake-card-req"><div class="demo-triangle"><span class="demo-symbol">!</span></div><span style="font-size:2.5rem">📅</span></div>
+                    <p style="position:absolute; bottom:10px; font-size:0.8rem; color:#64748b">Il triangolo indica una richiesta</p>
+                </div>
+                <div id="demo-accept" class="demo-scene demo-accept">
+                    <div class="fake-req-acc"><strong>☀️ Assenza Mattina</strong><br><span style="font-size:0.8rem; color:#666">Naio - 10:30</span><br><span class="btn-fake btn-fake-ok">✅ Accetta</span></div>
+                    <div class="cursor-hand">👆</div><p style="position:absolute; bottom:10px; font-size:0.8rem; color:#64748b">Approva per aggiornare i turni</p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"><button class="btn-push btn-primary" onclick="toggleModal('helpModal', false)">Ho capito, grazie!</button></div>
+    </div>
+</div>
+
+<div id="settingsModal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-header"><h3>🎨 Personalizzazione</h3><div class="modal-subtitle">Definisci nomi e colori del team</div></div>
+        <div class="modal-body">
+            <div class="setting-card">
+                <div class="setting-icon">👤</div>
+                <div class="setting-content">
+                    <label>Dipendente 1</label>
+                    <input type="text" id="inName1" placeholder="Nome">
+                    <div class="gender-toggle">
+                        <span class="g-btn" id="g1-m" onclick="setGender(1,'M')">👨</span>
+                        <span class="g-btn" id="g1-f" onclick="setGender(1,'F')">👩</span>
+                        <span class="g-btn" id="g1-nb" onclick="setGender(1,'NB')">🧑</span>
+                    </div>
+                </div>
+                <div class="color-wrapper"><input type="color" id="inCol1"></div>
+            </div>
+            <div class="setting-card">
+                <div class="setting-icon">👤</div>
+                <div class="setting-content">
+                    <label>Dipendente 2</label>
+                    <input type="text" id="inName2" placeholder="Nome">
+                    <div class="gender-toggle">
+                        <span class="g-btn" id="g2-m" onclick="setGender(2,'M')">👨</span>
+                        <span class="g-btn" id="g2-f" onclick="setGender(2,'F')">👩</span>
+                        <span class="g-btn" id="g2-nb" onclick="setGender(2,'NB')">🧑</span>
+                    </div>
+                </div>
+                <div class="color-wrapper"><input type="color" id="inCol2"></div>
+            </div>
+            <div class="setting-card"><div class="setting-icon">👥</div><div class="setting-content"><label>Turno Doppio</label><input type="text" value="Entrambi" disabled style="color:#94a3b8; font-style:italic"></div><div class="color-wrapper"><input type="color" id="inColBoth"></div></div>
+        </div>
+        <div class="modal-footer"><button class="btn-push btn-secondary" onclick="toggleModal('settingsModal', false)" style="width:auto">Annulla</button><button class="btn-push btn-primary" onclick="saveConfig()">Salva</button></div>
+    </div>
+</div>
+
+<div id="autoModal" class="modal-overlay">
+    <div class="modal-box" style="max-width:380px">
+        <div class="modal-header"><div style="font-size:3rem; margin-bottom:10px">🪄</div><h3>Generazione Auto</h3></div>
+        <div class="modal-body" style="text-align:center"><p style="color:#64748b">Il sistema assegnerà automaticamente i turni mancanti rispettando i festivi.<br><br>Vuoi procedere?</p></div>
+        <div class="modal-footer" style="justify-content:center"><button class="btn-push btn-secondary" onclick="toggleModal('autoModal', false)">Annulla</button><button class="btn-push btn-auto" onclick="confirmAuto()">Procedi</button></div>
+    </div>
+</div>
+
+<div id="conflictModal" class="modal-overlay">
+    <div class="modal-box" style="max-width:380px">
+        <div class="modal-header"><div style="font-size:3rem; margin-bottom:10px; color:var(--warning)">⚠️</div><h3 style="color:#b45309">Attenzione!</h3></div>
+        <div class="modal-body" style="text-align:center"><p id="conflictMsgText" style="color:#374151; font-weight:600; font-size:1.1rem; margin-bottom:10px"></p><p style="color:#64748b; font-size:0.9rem">Questa persona ha inviato una richiesta di assenza per questo turno.</p></div>
+        <div class="modal-footer" style="flex-direction:column; gap:10px">
+            <button class="btn-push btn-primary" onclick="resolveConflict('next')">⏩ Passa al Prossimo</button>
+            <button class="btn-push btn-secondary" onclick="resolveConflict('force')">⚠️ Forza Inserimento</button>
+            <button class="btn-push btn-secondary" style="background:#f1f5f9; color:#94a3b8; box-shadow:none" onclick="toggleModal('conflictModal', false)">Annulla</button>
         </div>
     </div>
+</div>
 
-    <div id="resetModal" class="modal-overlay">
-        <div class="modal-box" style="text-align: center;">
-            <div style="font-size: 3rem; margin-bottom: 10px;">🗑️</div>
-            <h3>Reset Mese</h3>
-            <p style="color: #6b7280;">Stai per cancellare tutti i turni del mese corrente.</p>
-            <div class="modal-btns" style="justify-content: center;">
-                <button onclick="toggleReset(false)" style="padding: 12px 20px; background: #f3f4f6; border:none; border-radius:10px; font-weight:bold;">Annulla</button>
-                <button onclick="performReset()" style="padding: 12px 20px; background: var(--danger); color:white; border:none; border-radius:10px; font-weight:bold;">Conferma</button>
-            </div>
+<div id="resetModal" class="modal-overlay">
+    <div class="modal-box" style="max-width:380px">
+        <div class="modal-header"><div style="font-size:3rem; margin-bottom:10px">🗑️</div><h3>Reset Mese</h3></div>
+        <div class="modal-body" style="text-align:center"><p style="color:#64748b">Vuoi davvero cancellare tutti i turni di questo mese?</p></div>
+        <div class="modal-footer" style="justify-content:center"><button class="btn-push btn-secondary" onclick="toggleModal('resetModal', false)">Annulla</button><button class="btn-push btn-danger" onclick="performReset()">Conferma Reset</button></div>
+    </div>
+</div>
+
+<div id="acceptModal" class="modal-overlay">
+    <div class="modal-box" style="max-width:380px">
+        <div class="modal-header"><div style="font-size:3rem; margin-bottom:10px">✅</div><h3 style="color:var(--success-shadow)">Accetta Richiesta</h3></div>
+        <div class="modal-body" style="text-align:center"><p style="color:#64748b">Confermi l'operazione? Il calendario verrà aggiornato.</p></div>
+        <div class="modal-footer" style="justify-content:center"><button class="btn-push btn-secondary" onclick="toggleModal('acceptModal', false)">Annulla</button><button class="btn-push btn-success" onclick="finalizeRequest('accepted')">Conferma</button></div>
+    </div>
+</div>
+
+<div id="rejectModal" class="modal-overlay">
+    <div class="modal-box" style="max-width:380px">
+        <div class="modal-header"><div style="font-size:3rem; margin-bottom:10px">❌</div><h3 style="color:var(--danger-shadow)">Rifiuta Richiesta</h3></div>
+        <div class="modal-body" style="text-align:center"><p style="color:#64748b">Sei sicuro di voler rifiutare questa richiesta?</p></div>
+        <div class="modal-footer" style="justify-content:center"><button class="btn-push btn-secondary" onclick="toggleModal('rejectModal', false)">Annulla</button><button class="btn-push btn-danger" onclick="finalizeRequest('rejected')">Rifiuta</button></div>
+    </div>
+</div>
+
+<div id="manageReqModal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-header"><h3>📩 Richieste</h3><div class="modal-subtitle" id="manageReqTitle"></div></div>
+        <div class="modal-body"><div id="reqListContainer" class="req-container"></div></div>
+        <div class="modal-footer"><button class="btn-push btn-secondary" onclick="toggleModal('manageReqModal', false)">Chiudi</button></div>
+    </div>
+</div>
+
+<header class="app-header">
+    <div class="header-top">
+        <div class="brand">📅 Turni<span style="color:var(--primary)">Admin</span></div>
+        <div class="header-right-area">
+            <div id="saveStatus"><span>⏳</span></div>
+            <button class="btn-help-hero" onclick="toggleModal('helpModal', true)"><span>🎓</span> GUIDE</button>
+            <button class="btn-icon-head" onclick="toggleSettings(true)" title="Impostazioni">⚙️</button>
         </div>
     </div>
-
-    <div id="manageReqModal" class="modal-overlay">
-        <div class="modal-box">
-            <h3>📩 Gestione Richieste</h3>
-            <p id="manageReqTitle" style="color: #6b7280; margin-top:-10px; margin-bottom: 15px; font-weight:600"></p>
-            <div id="reqListContainer" class="req-container"></div>
-            <div class="modal-btns">
-                <button onclick="document.getElementById('manageReqModal').style.display='none'; renderApp()" style="padding: 10px 18px; background: #f3f4f6; border:none; border-radius:10px; font-weight:bold;">Chiudi</button>
-            </div>
-        </div>
+    <div class="header-toolbar">
+        <div class="group-nav"><select id="monthSelect" onchange="renderApp()"></select><select id="yearSelect" onchange="renderApp()"></select></div>
+        <div class="group-actions"><button class="action-btn btn-auto" onclick="toggleModal('autoModal', true)">🪄 Auto</button><button class="action-btn btn-reset" onclick="toggleModal('resetModal', true)">🗑️</button><button class="action-btn btn-print" onclick="window.print()">🖨️</button></div>
     </div>
+</header>
 
-    <header class="app-header">
-        <div class="header-top">
-            <div class="brand">📅 Turni<span style="color:var(--primary)">Admin</span></div>
-            <div class="header-actions-group">
-                <button class="btn-icon-head" onclick="toggleSettings(true)" title="Impostazioni">⚙️</button>
-            </div>
-        </div>
-        <div class="header-toolbar">
-            <div class="group-nav">
-                <select id="monthSelect" onchange="renderApp()"></select>
-                <select id="yearSelect" onchange="renderApp()"></select>
-            </div>
-            <div class="group-actions">
-                <button class="action-btn btn-auto" onclick="generateAuto()">🪄 Auto</button>
-                <button class="action-btn btn-reset" onclick="toggleReset(true)">🗑️</button>
-                <button class="action-btn btn-print" onclick="window.print()">🖨️</button>
-            </div>
-        </div>
-    </header>
+<div id="app-grid" class="main-container"></div>
+<div id="print-layout"><div id="print-title" class="print-header-title"></div><div class="print-grid"><div class="print-col"><table><thead><tr><th colspan="2">Data</th><th>Mattina (06-13)</th><th>Pom (15:30-20:30)</th></tr></thead><tbody id="tbody-left"></tbody></table></div><div class="print-col"><table><thead><tr><th colspan="2">Data</th><th>Mattina (06-13)</th><th>Pom (15:30-20:30)</th></tr></thead><tbody id="tbody-right"></tbody></table></div></div><div class="print-footer"><span>Domenica: 07:00 - 13:00</span><span>Festivi (Rosso): 07:00 - 18:00</span></div></div>
 
-    <div id="app-grid" class="main-container"></div>
+<script>
+    // CONFIG
+    const BIN_ID = "6979e5eb43b1c97be9517651";
+    const API_KEY = "$2a$10$LoeF5Ae4yW8YLmCxZF9etOqZpfkhx5zc4u81EreMzPvYRCFztbF0K";
+    const URL_BIN = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-    <div id="print-layout">
-        <div id="print-title" class="print-header-title"></div>
-        <div class="print-grid">
-            <div class="print-col"><table><thead><tr><th colspan="2">Data</th><th>Mattina (06-13)</th><th>Pom (15:30-20:30)</th></tr></thead><tbody id="tbody-left"></tbody></table></div>
-            <div class="print-col"><table><thead><tr><th colspan="2">Data</th><th>Mattina (06-13)</th><th>Pom (15:30-20:30)</th></tr></thead><tbody id="tbody-right"></tbody></table></div>
-        </div>
-        <div class="print-footer"><span>Domenica: 07:00 - 13:00</span><span>Festivi (Rosso): 07:00 - 18:00</span></div>
-    </div>
+    let cloudData = { config: { p1: "Naio", c1: "#007AFF", g1:"M", p2: "Davide", c2: "#10b981", g2:"M", cb: "#8b5cf6" }, shifts: {} };
+    const monthNames = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
 
-    <script>
-        // CONFIG
-        const BIN_ID = "6979e5eb43b1c97be9517651";
-        const API_KEY = "$2a$10$LoeF5Ae4yW8YLmCxZF9etOqZpfkhx5zc4u81EreMzPvYRCFztbF0K";
-        const URL_BIN = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-        
-        let cloudData = { config: { p1: "Naio", c1: "#007AFF", p2: "Davide", c2: "#10b981", cb: "#8b5cf6" }, shifts: {} };
-        const monthNames = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
-        
-        let currentMonth = new Date().getMonth();
-        let currentYear = new Date().getFullYear();
-        let selectedDayForManage = null;
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+    let selectedDayForManage = null;
+    let pendingConflict = null;
+    let pendingReqIdx = null;
+    let tempG1 = "M", tempG2 = "M";
+    let saveTimer = null;
+    let kittenInterval = null;
+    let magicInterval = null;
 
-        async function fetchCloudData() {
-            try {
-                const res = await fetch(URL_BIN + '/latest', { headers: { 'X-Master-Key': API_KEY } });
-                if (res.ok) { const json = await res.json(); if(json.record) cloudData = json.record; }
-            } catch (e) { console.error(e); }
+    // Visual Feedback Helper
+    function showStatus(state) {
+        const el = document.getElementById('saveStatus');
+        el.className = 'show'; // Ensure visible
+        if (state === 'saving') {
+            el.innerHTML = '<span>⏳</span> Salvataggio...';
+            el.classList.add('saving'); el.classList.remove('saved', 'error');
+        } else if (state === 'saved') {
+            el.innerHTML = '<span>✅</span> Salvato';
+            el.classList.add('saved'); el.classList.remove('saving', 'error');
+            setTimeout(() => el.classList.remove('show'), 2000); // Hide after 2s
+        } else if (state === 'error') {
+            el.innerHTML = '<span>❌</span> Errore';
+            el.classList.add('error'); el.classList.remove('saving', 'saved');
         }
-        async function syncCloud() {
-            try { await fetch(URL_BIN, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY }, body: JSON.stringify(cloudData) }); } catch (e) { alert("Errore salvataggio"); }
+    }
+
+    async function fetchCloudData() {
+        try {
+            const res = await fetch(URL_BIN + '/latest', { headers: { 'X-Master-Key': API_KEY } });
+            if (res.ok) { const json = await res.json(); if(json.record) cloudData = json.record; }
+        } catch (e) { console.error(e); }
+    }
+
+    async function syncCloud() {
+        showStatus('saving');
+        try {
+            await fetch(URL_BIN, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY }, body: JSON.stringify(cloudData) });
+            showStatus('saved');
+        } catch (e) {
+            showStatus('error');
+            alert("Errore salvataggio");
         }
+    }
 
-        function loadDB() { return cloudData.shifts[`${currentYear}_${currentMonth}`] || {}; }
-        function saveDB(dbObj) { cloudData.shifts[`${currentYear}_${currentMonth}`] = dbObj; renderApp(); syncCloud(); }
+    function loadDB() { return cloudData.shifts[`${currentYear}_${currentMonth}`] || {}; }
 
-        // UTILS
-        function getHolidayName(date) {
-            const d = date.getDate(), m = date.getMonth(), y = date.getFullYear();
-            if (d===1&&m===0) return "Capodanno"; if (d===6&&m===0) return "Epifania"; if (d===25&&m===3) return "Liberazione"; if (d===1&&m===4) return "Festa Lavoro"; if (d===2&&m===5) return "Repubblica"; if (d===15&&m===7) return "Ferragosto"; if (d===1&&m===10) return "Ognissanti"; if (d===8&&m===11) return "Immacolata"; if (d===25&&m===11) return "Natale"; if (d===26&&m===11) return "S. Stefano";
-            const a=y%19, b=Math.floor(y/100), c=y%100, d1=Math.floor(b/4), e=b%4, f=Math.floor((b+8)/25), g=Math.floor((b-f+1)/3), h=(19*a+b-d1-g+15)%30, i=Math.floor(c/4), k=c%4, l=(32+2*e+2*i-h-k)%7, m1=Math.floor((a+11*h+22*l)/451), mon=Math.floor((h+l-7*m1+114)/31)-1, day=((h+l-7*m1+114)%31)+1;
-            if (d===day && m===mon) return "Pasqua"; 
-            const pm = new Date(y, mon, day+1); if(d===pm.getDate() && m===pm.getMonth()) return "Pasquetta";
-            return null;
+    function saveToDB(d, s, val) {
+        let db = loadDB(); if(!db[d]) db[d]={}; db[d][s] = val;
+        cloudData.shifts[`${currentYear}_${currentMonth}`] = db;
+        renderApp();
+
+        // AUTOSAVE LOGIC (Debounce)
+        clearTimeout(saveTimer);
+        showStatus('saving');
+        saveTimer = setTimeout(() => {
+            syncCloud();
+        }, 2000);
+    }
+
+    function getHolidayName(date) {
+        const d = date.getDate(), m = date.getMonth(), y = date.getFullYear();
+        if (d===1&&m===0) return "Capodanno"; if (d===6&&m===0) return "Epifania"; if (d===25&&m===3) return "Liberazione"; if (d===1&&m===4) return "Festa Lavoro"; if (d===2&&m===5) return "Repubblica"; if (d===15&&m===7) return "Ferragosto"; if (d===1&&m===10) return "Ognissanti"; if (d===8&&m===11) return "Immacolata"; if (d===25&&m===11) return "Natale"; if (d===26&&m===11) return "S. Stefano";
+        const a=y%19, b=Math.floor(y/100), c=y%100, d1=Math.floor(b/4), e=b%4, f=Math.floor((b+8)/25), g=Math.floor((b-f+1)/3), h=(19*a+b-d1-g+15)%30, i=Math.floor(c/4), k=c%4, l=(32+2*e+2*i-h-k)%7, m1=Math.floor((a+11*h+22*l)/451), mon=Math.floor((h+l-7*m1+114)/31)-1, day=((h+l-7*m1+114)%31)+1;
+        if (d===day && m===mon) return "Pasqua"; const pm = new Date(y, mon, day+1); if(d===pm.getDate() && m===pm.getMonth()) return "Pasquetta"; return null;
+    }
+
+    function applyTheme() { const r = document.documentElement.style, c = cloudData.config; r.setProperty('--color-emp1', c.c1); r.setProperty('--color-emp2', c.c2); r.setProperty('--color-both', c.cb); }
+
+    async function init() {
+        const ms = document.getElementById('monthSelect'), ys = document.getElementById('yearSelect');
+        monthNames.forEach((n,i)=>{ let op=document.createElement('option'); op.value=i; op.innerText=n; if(i===currentMonth)op.selected=true; ms.appendChild(op); });
+        for(let y=currentYear-1; y<=currentYear+2; y++){ let op=document.createElement('option'); op.value=y; op.innerText=y; if(y===currentYear)op.selected=true; ys.appendChild(op); }
+        document.getElementById('app-grid').innerHTML = '<div style="padding:50px; text-align:center">Caricamento...</div>';
+        await fetchCloudData(); applyTheme(); renderApp();
+    }
+
+    function showDemo(type, el) {
+        document.querySelectorAll('.guide-menu-item').forEach(i => i.classList.remove('active')); el.classList.add('active');
+        document.querySelectorAll('.demo-scene').forEach(s => s.classList.remove('active')); document.getElementById('demo-'+type).classList.add('active');
+    }
+
+    function toggleModal(id, show) {
+        const m = document.getElementById(id);
+        if(show) {
+            m.style.display = 'flex'; m.offsetHeight; m.classList.add('active');
+            if(id === 'resetModal') startKittenRain();
+            if(id === 'autoModal') startMagicEffect();
+        } else {
+            m.classList.remove('active'); setTimeout(() => m.style.display = 'none', 300);
+            if(id === 'resetModal') clearKittens();
+            if(id === 'autoModal') clearMagic();
         }
+    }
 
-        function applyTheme() {
-            const r = document.documentElement.style, c = cloudData.config;
-            r.setProperty('--color-emp1', c.c1); r.setProperty('--color-emp2', c.c2); r.setProperty('--color-both', c.cb);
-        }
+    /* --- MAGIC KITTENS EFFECT --- */
+    function startMagicEffect() {
+        const header = document.querySelector('#autoModal .modal-header');
+        const magicKittens = ['🐱', '🐈', '🙀', '😽', '😻', '😹', '🐾'];
 
-        async function init() {
-            const ms = document.getElementById('monthSelect'), ys = document.getElementById('yearSelect');
-            monthNames.forEach((n,i)=>{ let op=document.createElement('option'); op.value=i; op.innerText=n; if(i===currentMonth)op.selected=true; ms.appendChild(op); });
-            for(let y=currentYear-1; y<=currentYear+2; y++){ let op=document.createElement('option'); op.value=y; op.innerText=y; if(y===currentYear)op.selected=true; ys.appendChild(op); }
-            document.getElementById('app-grid').innerHTML = '<div style="padding:50px; text-align:center">Caricamento...</div>';
-            await fetchCloudData(); applyTheme(); renderApp();
-        }
+        // Duration: 4 seconds
+        let duration = 4000;
+        let end = Date.now() + duration;
 
-        // REQUESTS
-        function openManageModal(day) {
-            selectedDayForManage = day;
-            document.getElementById('manageReqTitle').innerText = `Richieste del ${day} ${monthNames[currentMonth]}`;
-            renderRequestList();
-            document.getElementById('manageReqModal').style.display = 'flex';
-        }
+        clearMagic();
+        magicInterval = setInterval(() => {
+            if (Date.now() > end) {
+                clearMagic();
+                return;
+            }
 
-        function renderRequestList() {
-            const list = document.getElementById('reqListContainer'); list.innerHTML = "";
-            const db = loadDB();
-            let reqs = (db[selectedDayForManage] && db[selectedDayForManage].requests) ? [...db[selectedDayForManage].requests] : [];
-            
-            if (reqs.length === 0) { list.innerHTML = `<div class="req-empty-state"><div style="font-size:2rem;">🍃</div>Nessuna richiesta</div>`; return; }
+            // Burst of kittens
+            for (let i = 0; i < 3; i++) {
+                const k = document.createElement('div');
+                k.className = 'magic-kitten';
+                k.innerText = magicKittens[Math.floor(Math.random() * magicKittens.length)];
+                k.style.left = '50%';
+                k.style.top = '40px';
+                header.appendChild(k);
 
-            // Ordina: Pending prima, poi done
-            reqs.sort((a, b) => (!a.status && b.status) ? -1 : 1);
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 100 + 60;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+                const rot = Math.random() * 360;
 
-            const dict = { 'no_am': 'Non può ☀️ MATTINA', 'no_pm': 'Non può 🌙 POMERIGGIO', 'no_all': 'Assente 🚫 TUTTO GIORNO', 'swap': '🔄 Vuole fare CAMBIO TURNO' };
+                requestAnimationFrame(() => {
+                    k.style.transform = `translate(${tx}px, ${ty}px) rotate(${rot}deg) scale(${Math.random() * 0.5 + 0.5})`;
+                    k.style.opacity = '0';
+                });
 
-            reqs.forEach(r => {
-                const realIdx = db[selectedDayForManage].requests.indexOf(r);
-                const isDone = (r.status === 'accepted' || r.status === 'rejected');
-                const timeStr = r.ts ? new Date(r.ts).toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) : '';
+                setTimeout(() => k.remove(), 1200);
+            }
+        }, 100);
+    }
 
-                let actionHtml = '';
-                if(isDone) {
-                    actionHtml = `<span class="req-status" style="color:${r.status==='accepted'?'#059669':'#dc2626'}">${r.status==='accepted'?'✅ Accettata':'❌ Rifiutata'}</span>`;
-                } else {
-                    actionHtml = `<button class="btn-act btn-rej" onclick="processRequest(${realIdx}, 'reject')">Rifiuta</button>
-                                  <button class="btn-act btn-acc" onclick="processRequest(${realIdx}, 'accept')">✅ Accetta</button>`;
-                }
+    function clearMagic() {
+        clearInterval(magicInterval);
+        document.querySelectorAll('.magic-kitten').forEach(k => k.remove());
+    }
 
-                const cardClass = `req-card ${isDone?'done':''} ${r.type==='swap'?'type-swap':''}`;
+    /* --- KITTEN RAIN LOGIC (RESET) --- */
+    function startKittenRain() {
+        const modalBox = document.querySelector('#resetModal .modal-box');
+        clearKittens();
+        kittenInterval = setInterval(() => {
+            const kittens = ['🐱', '😿', '🙀', '😹', '😽', '😼'];
+            const k = document.createElement('div');
+            k.className = 'falling-kitten';
+            k.innerText = kittens[Math.floor(Math.random() * kittens.length)];
+            k.style.left = Math.random() * 90 + '%';
+            k.style.animationDuration = (Math.random() * 2 + 1) + 's';
+            modalBox.appendChild(k);
+            setTimeout(() => { if(k.parentNode) k.parentNode.removeChild(k); }, 3000);
+        }, 300);
+    }
+    function clearKittens() {
+        clearInterval(kittenInterval);
+        document.querySelectorAll('.falling-kitten').forEach(k => k.remove());
+    }
 
-                const div = document.createElement('div'); div.className = cardClass;
-                div.innerHTML = `
-                    <div class="req-header"><div class="req-user">👤 ${r.who}</div><div class="req-ts">🕒 ${timeStr}</div></div>
-                    <div class="req-body">Richiesta: <br><strong>${dict[r.type]}</strong></div>
-                    <div class="req-actions">${actionHtml}</div>`;
-                list.appendChild(div);
-            });
-        }
+    function openManageModal(day) {
+        selectedDayForManage = day;
+        document.getElementById('manageReqTitle').innerText = `${day} ${monthNames[currentMonth]}`;
+        renderRequestList();
+        toggleModal('manageReqModal', true);
+    }
 
-        function processRequest(idx, action) {
-            let db = loadDB();
-            let req = db[selectedDayForManage].requests[idx];
-            const cfg = cloudData.config;
+    function getAvatar(name) {
+        const c = cloudData.config;
+        if(name === c.p1) return c.g1 === 'F' ? '👩' : (c.g1 === 'NB' ? '🧑' : '👨');
+        if(name === c.p2) return c.g2 === 'F' ? '👩' : (c.g2 === 'NB' ? '🧑' : '👨');
+        return '👤';
+    }
 
-            if (action === 'accept') {
-                let msg = "";
-                if (req.type === 'swap') msg = `Confermi il CAMBIO TURNO per ${req.who}?\nIl sistema invertirà automaticamente Mattina e Pomeriggio.`;
-                else msg = `Confermi assenza di ${req.who}?\nIl sistema assegnerà il turno al collega.`;
-                if (!confirm(msg)) return;
+    function renderRequestList() {
+        const list = document.getElementById('reqListContainer'); list.innerHTML = "";
+        const db = loadDB();
+        let reqs = (db[selectedDayForManage] && db[selectedDayForManage].requests) ? [...db[selectedDayForManage].requests] : [];
+        if (reqs.length === 0) { list.innerHTML = `<div class="req-empty-state"><div style="font-size:2rem;">🍃</div>Nessuna richiesta</div>`; return; }
+        reqs.sort((a, b) => (!a.status && b.status) ? -1 : 1);
+        const dict = { 'no_am': 'Non può ☀️ MATTINA', 'no_pm': 'Non può 🌙 POMERIGGIO', 'no_all': 'Assente 🚫 TUTTO GIORNO', 'swap': '🔄 Vuole fare CAMBIO TURNO' };
+        reqs.forEach(r => {
+            const realIdx = db[selectedDayForManage].requests.indexOf(r);
+            const isDone = (r.status === 'accepted' || r.status === 'rejected');
+            const timeStr = r.ts ? new Date(r.ts).toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) : '';
+            let actionHtml = '';
+            if(isDone) { actionHtml = `<span style="font-weight:bold; color:${r.status==='accepted'?'var(--success)':'var(--danger)'}">${r.status==='accepted'?'✅ Accettata':'❌ Rifiutata'}</span>`; }
+            else { actionHtml = `<div style="display:flex; gap:5px; width:100%"><button class="btn-mini btn-mini-rej" onclick="processRequest(${realIdx}, 'reject')">Rifiuta</button><button class="btn-mini btn-mini-acc" onclick="processRequest(${realIdx}, 'accept')">✅ Accetta</button></div>`; }
+            const cardClass = `req-card ${isDone?'done':''} ${r.type==='swap'?'type-swap':''}`;
+            const div = document.createElement('div'); div.className = cardClass;
+            div.innerHTML = `<div class="req-header"><div class="req-user">${getAvatar(r.who)} ${r.who}</div><div style="font-size:0.8rem; color:#94a3b8">${timeStr}</div></div><div class="req-body"><strong>${dict[r.type]}</strong></div><div class="req-actions" style="justify-content:flex-end">${actionHtml}</div>`;
+            list.appendChild(div);
+        });
+    }
+
+    function processRequest(idx, action) {
+        pendingReqIdx = idx;
+        toggleModal('manageReqModal', false);
+        setTimeout(() => {
+            if(action === 'reject') toggleModal('rejectModal', true);
+            else toggleModal('acceptModal', true);
+        }, 200);
+    }
+
+    function finalizeRequest(status) {
+        toggleModal(status === 'accepted' ? 'acceptModal' : 'rejectModal', false);
+        let db = loadDB();
+        let req = db[selectedDayForManage].requests[pendingReqIdx];
+        const cfg = cloudData.config;
+        req.status = status;
+
+        if(status === 'accepted') {
+            if (req.type === 'swap') {
+                const oldAm = db[selectedDayForManage].am; const oldPm = db[selectedDayForManage].pm;
+                db[selectedDayForManage].am = oldPm; db[selectedDayForManage].pm = oldAm;
             } else {
-                if (!confirm("Rifiutare la richiesta?")) return;
-            }
-
-            req.status = (action === 'accept') ? 'accepted' : 'rejected';
-
-            if(action === 'accept') {
-                // LOGICA ACCETTAZIONE
-                if (req.type === 'swap') {
-                    // INVERTI I TURNI
-                    const oldAm = db[selectedDayForManage].am;
-                    const oldPm = db[selectedDayForManage].pm;
-                    db[selectedDayForManage].am = oldPm;
-                    db[selectedDayForManage].pm = oldAm;
-                } else {
-                    // LOGICA ASSENZA CLASSICA
-                    const substitute = (req.who === cfg.p1) ? cfg.p2 : cfg.p1;
-                    if(db[selectedDayForManage].hol) {
-                         if(db[selectedDayForManage].hol === req.who || db[selectedDayForManage].hol === 'Entrambi') db[selectedDayForManage].hol = substitute;
-                    } else {
-                        if((req.type === 'no_am' || req.type === 'no_all') && db[selectedDayForManage].am === req.who) db[selectedDayForManage].am = substitute;
-                        if((req.type === 'no_pm' || req.type === 'no_all') && db[selectedDayForManage].pm === req.who) db[selectedDayForManage].pm = substitute;
-                    }
-                }
-            }
-            saveDB(db); renderRequestList();
-        }
-
-        // LOGICHE GRID
-        function isWorkerAvailable(day, slot, worker) {
-            if(worker === '-' || worker === 'Entrambi') return true;
-            const db = loadDB();
-            if(!db[day] || !db[day].requests) return true;
-            const req = db[day].requests.find(r => r.who === worker && r.status === 'accepted');
-            if(!req) return true;
-            if(req.type === 'swap') return true; // Swap accettato non è un blocco
-            if(req.type === 'no_all') return false;
-            if(slot === 'am' && req.type === 'no_am') return false;
-            if(slot === 'pm' && req.type === 'no_pm') return false;
-            if(slot === 'hol') return false; 
-            return true;
-        }
-
-        function handleClick(d, s, v, h) { 
-            const nextVal = cycle(v, h);
-            if(!isWorkerAvailable(d, s, nextVal)) {
-                if(!confirm(`⚠️ ${nextVal} ha un'assenza approvata!\nForzare assegnazione?`)) return;
-            }
-            let db = loadDB(); if(!db[d]) db[d]={}; db[d][s] = nextVal; saveDB(db);
-        }
-
-        function cycle(cur, isH) {
-            const c = cloudData.config;
-            if(cur==='-') return c.p1; if(cur===c.p1) return c.p2;
-            if(isH) { if(cur===c.p2) return 'Entrambi'; if(cur==='Entrambi') return '-'; }
-            else { if(cur===c.p2) return '-'; }
-            return '-';
-        }
-
-        function generateAuto() {
-            const cfg = cloudData.config;
-            const dim = new Date(currentYear, currentMonth+1, 0).getDate();
-            let db = loadDB();
-            let sunIdx=0, consAM=0, lastAM=null;
-
-            for(let i=1; i<=dim; i++) {
-                const date = new Date(currentYear, currentMonth, i);
-                const dw = date.getDay(), isHol = (getHolidayName(date)!==null), isSun=(dw===0);
-                if(!db[i]) db[i]={};
-
-                if(isHol) db[i].hol='Entrambi';
-                else if(isSun) { db[i].hol=(sunIdx%2===0)?cfg.p1:cfg.p2; sunIdx++; }
-                else {
-                    let ch;
-                    if(lastAM && consAM>=3) ch=(lastAM===cfg.p1)?cfg.p2:cfg.p1;
-                    else {
-                        if(!lastAM) ch=(Math.random()>0.5)?cfg.p1:cfg.p2;
-                        else {
-                            let p=(consAM<2)?0.7:0.4;
-                            ch=(Math.random()<p)?lastAM:((lastAM===cfg.p1)?cfg.p2:cfg.p1);
-                        }
-                    }
-                    if(ch===lastAM) consAM++; else consAM=1;
-                    lastAM=ch;
-                    db[i].am=ch; db[i].pm=(ch===cfg.p1)?cfg.p2:cfg.p1;
-                }
-            }
-            saveDB(db);
-        }
-
-        function toggleReset(s) { document.getElementById('resetModal').style.display=s?'flex':'none'; }
-        function performReset() { delete cloudData.shifts[`${currentYear}_${currentMonth}`]; toggleReset(false); renderApp(); syncCloud(); }
-
-        function toggleSettings(s) {
-            const m=document.getElementById('settingsModal'); m.style.display=s?'flex':'none';
-            if(s){ const c=cloudData.config; document.getElementById('inName1').value=c.p1; document.getElementById('inCol1').value=c.c1; document.getElementById('inName2').value=c.p2; document.getElementById('inCol2').value=c.c2; document.getElementById('inColBoth').value=c.cb; }
-        }
-        function saveConfig() {
-            const n1=document.getElementById('inName1').value, c1=document.getElementById('inCol1').value;
-            const n2=document.getElementById('inName2').value, c2=document.getElementById('inCol2').value;
-            const cb=document.getElementById('inColBoth').value;
-            cloudData.config = { p1:n1, c1:c1, p2:n2, c2:c2, cb:cb };
-            applyTheme(); toggleSettings(false); renderApp(); syncCloud();
-        }
-
-        function renderApp() {
-            currentMonth = parseInt(document.getElementById('monthSelect').value);
-            currentYear = parseInt(document.getElementById('yearSelect').value);
-            const dim = new Date(currentYear, currentMonth+1, 0).getDate();
-            const db = loadDB();
-            const cfg = cloudData.config;
-            const grid = document.getElementById('app-grid');
-            const tbL = document.getElementById('tbody-left'), tbR = document.getElementById('tbody-right');
-            grid.innerHTML=""; tbL.innerHTML=""; tbR.innerHTML="";
-            document.getElementById('print-title').innerText = `${monthNames[currentMonth]} ${currentYear}`;
-            
-            const today = new Date();
-
-            for(let i=1; i<=dim; i++) {
-                const date = new Date(currentYear, currentMonth, i);
-                const dw = date.getDay(), holName = getHolidayName(date), isHol = (holName!==null), isSun=(dw===0), isModeH = isHol||isSun;
-                const dShort = date.toLocaleDateString('it-IT',{weekday:'short'});
-                const row = db[i]||{};
-                const hasReq = (row.requests && row.requests.length>0);
-                const isToday = (i===today.getDate() && currentMonth===today.getMonth() && currentYear===today.getFullYear());
-
-                const card = document.createElement('div');
-                card.className = `day-card ${isModeH?'is-holiday':''} ${isToday?'is-today':''}`;
-                
-                let tri = hasReq ? `<div class="warning-triangle" onclick="event.stopPropagation(); openManageModal(${i})"><span class="warning-symbol">!</span></div>` : '';
-                
-                if(isModeH) {
-                    const w = row.hol||'-';
-                    card.innerHTML=`${tri}<div class="card-header"><div><span class="date-display">${i}</span> <span class="holiday-tag" style="${isHol?'':'display:none'}">${holName}</span></div><span class="day-label">${dShort}</span></div>
-                    <div class="card-body"><div class="shift-row" onclick="handleClick(${i},'hol','${w}',true)"><div class="shift-info"><span class="shift-icon">${isHol?'⭐':'☕'}</span><span class="shift-time">07:00 - ${isHol?'18:00':'13:00'}</span></div>${renderBadge(w)}</div></div>`;
-                } else {
-                    const w1 = row.am||'-', w2 = row.pm||'-';
-                    card.innerHTML=`${tri}<div class="card-header"><span class="date-display">${i}</span><span class="day-label">${dShort}</span></div>
-                    <div class="card-body">
-                        <div class="shift-row" onclick="handleClick(${i},'am','${w1}',false)"><div class="shift-info"><span class="shift-icon">☀️</span><span class="shift-time">06:00 - 13:00</span></div>${renderBadge(w1)}</div>
-                        <div class="shift-row" onclick="handleClick(${i},'pm','${w2}',false)"><div class="shift-info"><span class="shift-icon">🌙</span><span class="shift-time">15:30 - 20:30</span></div>${renderBadge(w2)}</div>
-                    </div>`;
-                }
-                grid.appendChild(card);
-
-                // Print
-                const tr = document.createElement('tr'); if(isModeH) tr.className='print-hol-row';
-                const tdD = `<td class="td-date">${i}</td><td class="td-day">${dShort.toUpperCase()}</td>`;
-                let tdC = '';
-                if(isModeH) {
-                    const w=row.hol||'-', hT=isHol?`<span style="color:red;font-size:7pt;display:block;font-weight:bold">${holName.toUpperCase()}</span>`:'';
-                    tdC=`<td colspan="2">${hT}Orario ${isHol?'07-18':'07-13'}: <span class="p-name ${getColClass(w)}">${w}</span></td>`;
-                } else {
-                    const w1=row.am||'-', w2=row.pm||'-';
-                    tdC=`<td><span class="p-name ${getColClass(w1)}">${w1}</span></td><td><span class="p-name ${getColClass(w2)}">${w2}</span></td>`;
-                }
-                tr.innerHTML = tdD+tdC;
-                if(i<=16) tbL.appendChild(tr); else tbR.appendChild(tr);
+                const substitute = (req.who === cfg.p1) ? cfg.p2 : cfg.p1;
+                if(db[selectedDayForManage].hol) { if(db[selectedDayForManage].hol === req.who || db[selectedDayForManage].hol === 'Entrambi') db[selectedDayForManage].hol = substitute; }
+                else { if((req.type==='no_am'||req.type==='no_all') && db[selectedDayForManage].am===req.who) db[selectedDayForManage].am=substitute; if((req.type==='no_pm'||req.type==='no_all') && db[selectedDayForManage].pm===req.who) db[selectedDayForManage].pm=substitute; }
             }
         }
+        cloudData.shifts[`${currentYear}_${currentMonth}`] = db; renderApp(); syncCloud();
+    }
 
-        function renderBadge(n) { const c=cloudData.config; let cl='badge-empty'; if(n===c.p1)cl='badge-p1'; if(n===c.p2)cl='badge-p2'; if(n==='Entrambi')cl='badge-both'; return `<span class="badge ${cl}">${n==='-'?'Tocca':n}</span>`; }
-        function getColClass(n) { const c=cloudData.config; if(n===c.p1)return 't-p1'; if(n===c.p2)return 't-p2'; if(n==='Entrambi')return 't-both'; return ''; }
+    function isWorkerAvailable(day, slot, worker) {
+        if(worker === '-' || worker === 'Entrambi') return true;
+        const db = loadDB();
+        if(!db[day] || !db[day].requests) return true;
+        const req = db[day].requests.find(r => r.who === worker && r.status === 'accepted');
+        if(!req) return true;
+        if(req.type === 'swap') return true;
+        if(req.type === 'no_all') return false;
+        if(slot === 'am' && req.type === 'no_am') return false;
+        if(slot === 'pm' && req.type === 'no_pm') return false;
+        if(slot === 'hol') return false;
+        return true;
+    }
 
-        init();
-    </script>
+    function handleClick(d, s, v, h) { let nextVal = cycle(v, h); checkAndAssign(d, s, nextVal, h); }
+
+    function checkAndAssign(d, s, val, h) {
+        if(!isWorkerAvailable(d, s, val)) {
+            pendingConflict = { d, s, val, h };
+            document.getElementById('conflictMsgText').innerText = `${val} è ASSENTE`;
+            toggleModal('conflictModal', true);
+            return;
+        }
+        saveToDB(d, s, val);
+    }
+
+    function resolveConflict(action) {
+        toggleModal('conflictModal', false);
+        if(!pendingConflict) return;
+        const { d, s, val, h } = pendingConflict;
+        if (action === 'force') saveToDB(d, s, val);
+        else if (action === 'next') { let nextVal = cycle(val, h); checkAndAssign(d, s, nextVal, h); }
+        pendingConflict = null;
+    }
+
+    function cycle(cur, isH) {
+        const c = cloudData.config;
+        if(cur==='-') return c.p1; if(cur===c.p1) return c.p2;
+        if(isH) { if(cur===c.p2) return 'Entrambi'; if(cur==='Entrambi') return '-'; }
+        else { if(cur===c.p2) return '-'; }
+        return '-';
+    }
+
+    function confirmAuto() { generateAuto(); toggleModal('autoModal', false); }
+
+    function generateAuto() {
+        const cfg = cloudData.config; const dim = new Date(currentYear, currentMonth+1, 0).getDate(); let db = loadDB(); let sunIdx=0, consAM=0, lastAM=null;
+        for(let i=1; i<=dim; i++) {
+            const date = new Date(currentYear, currentMonth, i); const dw = date.getDay(), isHol = (getHolidayName(date)!==null), isSun=(dw===0);
+            if(!db[i]) db[i]={};
+            if(isHol) db[i].hol='Entrambi';
+            else if(isSun) { db[i].hol=(sunIdx%2===0)?cfg.p1:cfg.p2; sunIdx++; }
+            else {
+                let ch; if(lastAM && consAM>=3) ch=(lastAM===cfg.p1)?cfg.p2:cfg.p1; else { if(!lastAM) ch=(Math.random()>0.5)?cfg.p1:cfg.p2; else { let p=(consAM<2)?0.7:0.4; ch=(Math.random()<p)?lastAM:((lastAM===cfg.p1)?cfg.p2:cfg.p1); } }
+                if(ch===lastAM) consAM++; else consAM=1; lastAM=ch;
+                db[i].am=ch; db[i].pm=(ch===cfg.p1)?cfg.p2:cfg.p1;
+            }
+        }
+        cloudData.shifts[`${currentYear}_${currentMonth}`] = db; renderApp(); syncCloud();
+    }
+
+    function performReset() { delete cloudData.shifts[`${currentYear}_${currentMonth}`]; toggleModal('resetModal', false); renderApp(); syncCloud(); }
+
+    function toggleSettings(s) {
+        toggleModal('settingsModal', s);
+        if(s){
+            const c=cloudData.config;
+            document.getElementById('inName1').value=c.p1; document.getElementById('inCol1').value=c.c1;
+            document.getElementById('inName2').value=c.p2; document.getElementById('inCol2').value=c.c2;
+            document.getElementById('inColBoth').value=c.cb;
+            setGender(1, c.g1 || 'M'); setGender(2, c.g2 || 'M');
+        }
+    }
+    function setGender(num, g) {
+        if(num===1) tempG1 = g; else tempG2 = g;
+        ['m','f','nb'].forEach(k => document.getElementById(`g${num}-${k}`).classList.remove('active'));
+        document.getElementById(`g${num}-${g.toLowerCase()}`).classList.add('active');
+    }
+    function saveConfig() {
+        const n1=document.getElementById('inName1').value, c1=document.getElementById('inCol1').value;
+        const n2=document.getElementById('inName2').value, c2=document.getElementById('inCol2').value;
+        const cb=document.getElementById('inColBoth').value;
+        cloudData.config = { p1:n1, c1:c1, g1:tempG1, p2:n2, c2:c2, g2:tempG2, cb:cb };
+        applyTheme(); toggleSettings(false); renderApp(); syncCloud();
+    }
+
+    function renderApp() {
+        currentMonth = parseInt(document.getElementById('monthSelect').value);
+        currentYear = parseInt(document.getElementById('yearSelect').value);
+        const dim = new Date(currentYear, currentMonth+1, 0).getDate();
+        const db = loadDB();
+        const cfg = cloudData.config;
+        const grid = document.getElementById('app-grid');
+        const tbL = document.getElementById('tbody-left'), tbR = document.getElementById('tbody-right');
+        grid.innerHTML=""; tbL.innerHTML=""; tbR.innerHTML="";
+        document.getElementById('print-title').innerText = `${monthNames[currentMonth]} ${currentYear}`;
+        const today = new Date();
+        for(let i=1; i<=dim; i++) {
+            const date = new Date(currentYear, currentMonth, i);
+            const dw = date.getDay(), holName = getHolidayName(date), isHol = (holName!==null), isSun=(dw===0), isModeH = isHol||isSun;
+            const dShort = date.toLocaleDateString('it-IT',{weekday:'short'});
+            const row = db[i]||{};
+            const hasReq = (row.requests && row.requests.length>0);
+            const isToday = (i===today.getDate() && currentMonth===today.getMonth() && currentYear===today.getFullYear());
+            const card = document.createElement('div');
+            card.className = `day-card ${isModeH?'is-holiday':''} ${isToday?'is-today':''}`;
+            let tri = hasReq ? `<div class="warning-triangle" onclick="event.stopPropagation(); openManageModal(${i})"><span class="warning-symbol">!</span></div>` : '';
+            if(isModeH) {
+                const w = row.hol||'-';
+                card.innerHTML=`${tri}<div class="card-header"><div><span class="date-display">${i}</span> <span class="holiday-tag" style="${isHol?'':'display:none'}">${holName}</span></div><span class="day-label">${dShort}</span></div><div class="card-body"><div class="shift-row" onclick="handleClick(${i},'hol','${w}',true)"><div class="shift-info"><span class="shift-icon">${isHol?'⭐':'☕'}</span><span class="shift-time">07:00 - ${isHol?'18:00':'13:00'}</span></div>${renderBadge(w)}</div></div>`;
+            } else {
+                const w1 = row.am||'-', w2 = row.pm||'-';
+                card.innerHTML=`${tri}<div class="card-header"><span class="date-display">${i}</span><span class="day-label">${dShort}</span></div><div class="card-body"><div class="shift-row" onclick="handleClick(${i},'am','${w1}',false)"><div class="shift-info"><span class="shift-icon">☀️</span><span class="shift-time">06:00 - 13:00</span></div>${renderBadge(w1)}</div><div class="shift-row" onclick="handleClick(${i},'pm','${w2}',false)"><div class="shift-info"><span class="shift-icon">🌙</span><span class="shift-time">15:30 - 20:30</span></div>${renderBadge(w2)}</div></div>`;
+            }
+            grid.appendChild(card);
+            const tr = document.createElement('tr'); if(isModeH) tr.className='print-hol-row';
+            const tdD = `<td class="td-date">${i}</td><td class="td-day">${dShort.toUpperCase()}</td>`;
+            let tdC = isModeH ? `<td colspan="2">${isHol?holName.toUpperCase()+' ':''}Orario ${isHol?'07-18':'07-13'}: ${row.hol||'-'}</td>` : `<td>${row.am||'-'}</td><td>${row.pm||'-'}</td>`;
+            tr.innerHTML = tdD+tdC; if(i<=16) tbL.appendChild(tr); else tbR.appendChild(tr);
+        }
+    }
+    function renderBadge(n) { const c=cloudData.config; let cl='badge-empty'; if(n===c.p1)cl='badge-p1'; if(n===c.p2)cl='badge-p2'; if(n==='Entrambi')cl='badge-both'; return `<span class="badge ${cl}">${n==='-'?'Tocca':n}</span>`; }
+    function getColClass(n) { const c=cloudData.config; if(n===c.p1)return 't-p1'; if(n===c.p2)return 't-p2'; if(n==='Entrambi')return 't-both'; return ''; }
+    init();
+</script>
 </body>
 </html>
